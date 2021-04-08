@@ -1,4 +1,4 @@
-package com.example.customebook.bean;
+package com.iiitb.customebook.bean;
 
 import javax.persistence.*;
 import java.util.ArrayList;

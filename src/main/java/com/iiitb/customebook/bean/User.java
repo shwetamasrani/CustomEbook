@@ -1,4 +1,4 @@
-package com.example.customebook.bean;
+package com.iiitb.customebook.bean;
 import javax.persistence.*;
 
 @Entity
@@ -7,12 +7,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int userId;
 
-    @Column(length=50,nullable = false,unique = true)
-    private String username;
+    @Column(length=50,nullable = true)
+    private String firstName;
 
+    @Column(length=50,nullable = true)
+    private String lastName;
+
+    @Column(nullable = false,unique = true)
+    private String emailId;
 
     @Column(length=50,nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String contactNumber;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private boolean isPublisher;
+
+    @Column(nullable = true)
+    private String CompanyName;
 
 
     public User() {
@@ -27,14 +44,6 @@ public class User {
     }
 
 
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String user_name) {
-        this.username = user_name;
-    }
 
     public String getPassword() {
         return password;

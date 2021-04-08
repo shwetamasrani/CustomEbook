@@ -1,4 +1,4 @@
-package com.example.customebook;
+package com.iiitb.customebook;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.example.customebook.configuration;
+package com.iiitb.customebook.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
