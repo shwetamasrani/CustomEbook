@@ -1,5 +1,6 @@
 package com.iiitb.customebook.bean;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Invoice")
@@ -20,6 +21,9 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user_id;
+
+    @OneToMany(mappedBy = "invoice_id")
+    private List<InvoiceItem> items;
 
     public int getInvoice_id() {
         return invoice_id;
@@ -61,13 +65,22 @@ public class Invoice {
         this.user_id = user_id;
     }
 
+    public List<InvoiceItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<InvoiceItem> items) {
+        this.items = items;
+    }
+
     public Invoice() {
     }
 
-    public Invoice(Character orderStatus, String customEBookName, Double totalPrice, User user_id) {
+    public Invoice(Character orderStatus, String customEBookName, Double totalPrice, User user_id, List<InvoiceItem> items) {
         this.orderStatus = orderStatus;
         this.customEBookName = customEBookName;
         this.totalPrice = totalPrice;
         this.user_id = user_id;
+        this.items = items;
     }
 }

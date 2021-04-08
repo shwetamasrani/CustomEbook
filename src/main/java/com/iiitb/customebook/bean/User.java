@@ -25,14 +25,17 @@ public class User {
     @Column(length=50,nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean isPublisherFlag; //0-> user   1->Publisher
 
-    @Column()
+    @Column(nullable = true)
     private String companyName;
 
     @OneToMany(mappedBy = "user_id")
     private List<Invoice> invoices;
+
+    @OneToMany(mappedBy = "user_id")
+    private List<PublisherUploads> uploaded_books;
 
     public String getCompanyName() {
         return companyName;
