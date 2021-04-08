@@ -1,4 +1,4 @@
-package in.ac.iiitb.customebook.bean;
+package com.example.customebook.bean;
 import javax.persistence.*;
 
 @Entity

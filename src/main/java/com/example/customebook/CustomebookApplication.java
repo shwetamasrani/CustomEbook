@@ -1,7 +1,6 @@
-package in.ac.iiitb.customebook;
+package com.example.customebook;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
