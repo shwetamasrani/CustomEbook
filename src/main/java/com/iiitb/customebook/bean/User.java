@@ -1,5 +1,6 @@
 package com.iiitb.customebook.bean;
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table
@@ -7,7 +8,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int userId;
+    private int user_id;
 
     @Column
     private String firstName;
@@ -30,6 +31,9 @@ public class User {
     @Column()
     private String companyName;
 
+    @OneToMany(mappedBy = "user_id")
+    private List<Invoice> invoices;
+
     public String getCompanyName() {
         return companyName;
     }
@@ -38,12 +42,12 @@ public class User {
         this.companyName = companyName;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public String getFirstName() {
@@ -94,17 +98,25 @@ public class User {
         isPublisherFlag = publisherFlag;
     }
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, Integer contactNumber, String password, Boolean isPublisherFlag, String companyName) {
+    public User(String firstName, String lastName, String email, Integer contactNumber, String password, Boolean isPublisherFlag, String companyName, List<Invoice> invoices) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.contactNumber = contactNumber;
         this.password = password;
         this.isPublisherFlag = isPublisherFlag;
-        this.companyName=companyName;
-
+        this.companyName = companyName;
+        this.invoices = invoices;
     }
 }
