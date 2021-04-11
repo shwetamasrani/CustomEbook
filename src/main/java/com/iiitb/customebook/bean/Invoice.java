@@ -25,6 +25,9 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice_id")
     private List<InvoiceItem> items;
 
+    @Column
+    private String location;
+
     public int getInvoice_id() {
         return invoice_id;
     }
@@ -71,6 +74,14 @@ public class Invoice {
 
     public void setItems(List<InvoiceItem> items) {
         this.items = items;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Invoice() {
