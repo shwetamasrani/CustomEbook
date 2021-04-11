@@ -6,7 +6,7 @@ import java.util.List;
 @Table(name = "Invoice")
 public class Invoice {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int invoice_id;
 
     @Column(nullable = false)

@@ -1,4 +1,5 @@
 package com.iiitb.customebook.bean;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -7,7 +8,7 @@ import java.util.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
 
     @Column
@@ -20,12 +21,12 @@ public class User {
     private String email;
 
     @Column(length=10)
-    private Integer contactNumber;
+    private String contactNumber;
 
     @Column(length=50,nullable = false)
     private String password;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column( columnDefinition = "boolean default false")
     private Boolean isPublisherFlag; //0-> user   1->Publisher
 
     @Column(nullable = true)
@@ -77,11 +78,11 @@ public class User {
         this.email = email;
     }
 
-    public Integer getContactNumber() {
+    public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(Integer contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 
@@ -112,7 +113,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, Integer contactNumber, String password, Boolean isPublisherFlag, String companyName, List<Invoice> invoices) {
+    public User(String firstName, String lastName, String email, String contactNumber, String password, Boolean isPublisherFlag, String companyName, List<Invoice> invoices) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

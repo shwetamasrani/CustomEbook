@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class PublisherUploads {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int upload_id;
 
     @ManyToOne

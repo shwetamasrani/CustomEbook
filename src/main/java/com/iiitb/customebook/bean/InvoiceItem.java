@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class InvoiceItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int invoice_item_id;
 
     @ManyToOne

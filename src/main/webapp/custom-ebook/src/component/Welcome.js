@@ -17,10 +17,6 @@ class Welcome extends Component {
     render() {
         return (
             <div className="Welcome">
-
-
-
-            
                 <div className="content">
                     <label className="logo">EBook Project</label>
                     <h4>A platform for all your bookish needs. Choose the books and chapters you need and create your
