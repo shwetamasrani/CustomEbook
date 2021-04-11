@@ -11,10 +11,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
 
-    @Column
+    @Column(nullable = true)
     private String firstName;
 
-    @Column
+    @Column(nullable = true)
     private String lastName;
 
     @Column(length=50,nullable = false,unique = true)
@@ -23,13 +23,27 @@ public class User {
     @Column(length=10)
     private String contactNumber;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id=" + user_id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", isPublisherFlag=" + isPublisherFlag +
+                ", companyName='" + companyName + '\'' +
+                '}';
+    }
+
     @Column(length=50,nullable = false)
     private String password;
 
-    @Column( columnDefinition = "boolean default false")
+    @Column( nullable = true,columnDefinition = "boolean default false")
     private Boolean isPublisherFlag; //0-> user   1->Publisher
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String companyName;
 
     @OneToMany(mappedBy = "user_id")

@@ -27,7 +27,7 @@ public class UserService {
 
     public User  createUser(User user)
     {
-        return userRepository.save(user);
+        System.out.println(user.toString()); return userRepository.save(user);
     }
 
     public ResponseEntity<User> getUserById(Integer id){
