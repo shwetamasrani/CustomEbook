@@ -13,7 +13,7 @@ class SignUp extends Component {
             contactNumber: "",
             password: "",
             companyName: "",
-            isPublisher:"No"
+            isPublisher: "No"
         }
         this.handleChange = this.handleChange.bind(this)
         this.saveUser = this.saveUser.bind(this);
@@ -31,7 +31,7 @@ class SignUp extends Component {
         let user = {
             firstName: this.state.firstName, lastName: this.state.lastName, email: this.state.email,
             contactNumber: this.state.contactNumber, password: this.state.password, companyName: this.state.companyName,
-            publisherFlag: this.state.isPublisher==="Yes"
+            publisherFlag: this.state.isPublisher === "Yes"
         }
 
         console.log('User =>' + JSON.stringify(user));
@@ -47,11 +47,12 @@ class SignUp extends Component {
                 <div className="register">
                     <h1>Create an account</h1>
                     <p>Already have an account?<Link to="/SignIn"> Sign in</Link></p>
+                    <br/><br/><br/>
                 </div>
                 <div className="main">
                     <form onSubmit={this.handleSubmit}>
-                        <label className="firstLabel">Do you want a publisher account?</label>
-                        <br/><br/>
+                        {/*<h2 className="type">Account Type</h2>*/}
+                        <label className="firstLabel">Do you want a publisher account?  </label>
                         <select
                             name="isPublisher"
                             id="isPublisher"
@@ -60,21 +61,23 @@ class SignUp extends Component {
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
-                        <div style={{display:this.state.isPublisher==="Yes"? "block":"none"}}>
-                            <h2 className="name">Company Name</h2>
+                        <br/><br/>
+                        <div style={{display: this.state.isPublisher === "Yes" ? "block" : "none"}}>
+                            {/*<h2 className="name">Company Name</h2>*/}
                             <input
                                 type="text"
                                 name="companyName"
                                 className="companyName"
-                                placeholder="companyName"
+                                placeholder="Company Name"
                                 value={this.state.companyName}
                                 onChange={this.handleChange}
                             />
-                            <br/><br/>
+                            {/*<br/><br/>*/}
                         </div>
-                        <div style={{display:this.state.isPublisher==="No"? "block":"none"}} id="name">
-                            <h2 className="name">Name</h2>
-                            <label className="firstLabel">First Name: </label>
+                        <div style={{display: this.state.isPublisher === "No" ? "block" : "none"}} id="name">
+                            {/*<h2 className="name">Name</h2>*/}
+                            {/*<label className="firstLabel">First Name: </label>*/}
+
                             <input
                                 type="text"
                                 name="firstName"
@@ -83,8 +86,8 @@ class SignUp extends Component {
                                 value={this.state.firstName}
                                 onChange={this.handleChange}
                             />
-                            <br/>
-                            <label className="lastLabel">Last Name: </label>
+                            {/*<br/>*/}
+                            {/*<label className="lastLabel">Last Name: </label>*/}
                             <input
                                 type="text"
                                 name="lastName"
@@ -94,7 +97,7 @@ class SignUp extends Component {
                                 onChange={this.handleChange}
                             />
                         </div>
-                        <h2 className="name">Email Address</h2>
+                        {/*<h2 className="name">Email Address</h2>*/}
                         <input
                             type="email"
                             name="email"
@@ -104,8 +107,8 @@ class SignUp extends Component {
                             value={this.state.email}
                             onChange={this.handleChange}
                         />
-                        <br/>
-                        <h2 className="name">Phone</h2>
+                        {/*<br/>*/}
+                        {/*<h2 className="name">Phone</h2>*/}
                         <input
                             type="number"
                             name="contactNumber"
@@ -115,8 +118,8 @@ class SignUp extends Component {
                             value={this.state.contactNumber}
                             onChange={this.handleChange}
                         />
-                        <br/>
-                        <h2 className="name">Password</h2>
+                        {/*<br/>*/}
+                        {/*<h2 className="name">Password</h2>*/}
                         <input
                             type="password"
                             name="password"
@@ -127,8 +130,6 @@ class SignUp extends Component {
                             onChange={this.handleChange}
                         />
                         <br/><br/>
-                        <h2 className="type">Account Type</h2>
-
                         <button className="registerButton" onClick={this.saveUser}>Register</button>
                     </form>
                 </div>

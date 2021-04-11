@@ -68,12 +68,12 @@ label.logo {
 }
 .Welcome .login{
   width: 30%;
-  padding: 10% 0 50% 70%;
   line-height: 10px;
 }
 .SignIn{
   color: whitesmoke;
   position: absolute;
+    text-align: center;
   margin: 10% 10% 0% 60%;
   font-size: 20px;
   width: 20%;
@@ -83,34 +83,46 @@ label.logo {
   border: 1px -o-highlight-border solid ;
   background-color: rgba(255, 255, 255,0.1);
 }
-.SignIn .register{
-  size: 20px;
-  align-items: center;
+.SignIn a{
+    color: lightpink;
+    text-decoration: none;
 }
-.SignIn .registerButton{
-  background-color: rgba(52, 52, 52, 0.2);
-  border: none;
-  color: white;
-  padding: 10px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  margin-top: 5%;
-  border-radius: 12px;
+.SignIn a:hover{
+    color: lavenderblush;
+}
+
+button{
+    background-color: rgba(222, 176, 176, 0.8);
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin:5% 30% 0 30%;
+    border-radius: 15px;
 }
 
 .SignUp{
   color: whitesmoke;
   position: absolute;
-  margin: 10% 10% 0% 60%;
+    text-align: center;
+  margin: 10% 10% 0 60%;
   font-size: 20px;
-  width: 23%;
+  width: 22%;
   padding: 2%;
-  line-height: 20px;
+  line-height: 15px;
   border-radius: 5%;
   border: 1px -o-highlight-border solid ;
-  background-color: rgba(255, 255, 255,0.1);
+  background-color: rgba(255, 255, 255,0.1);;
+}
+.SignUp a{
+    text-decoration: none;
+    color: lightpink;
+}
+.SignUp a:hover{
+    color: hotpink;
 }
 
 
@@ -161,4 +173,32 @@ label.logo {
   border-radius: 5%;
   border: 1px -o-highlight-border solid ;
   background-color: rgba(255, 255, 255,0.1);
+}
+input{
+    background-color: rgba(247, 243, 243, 0.9);
+;
+    border: none;
+    color: black;
+    padding: 20px 55px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-top: 3%;
+    border-radius: 20px;
+}
+input::placeholder {
+    color: darkslategrey;
+}
+select{
+    background-color: rgba(52, 52, 52, 0.2);
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 2%;
+    border-radius: 15px;
 }
