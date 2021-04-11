@@ -7,6 +7,7 @@ import SignIn from "./component/SignIn";
 import Dashboard from "./component/Dashboard";
 import BookDetails from "./component/BookDetails"
 import Navbar from './component/Navbar'
+import AdminDashboard from "./component/AdminDashboard";
 
 
 class App extends Component{
@@ -25,6 +26,7 @@ class App extends Component{
                             <Route exact path='/SignUp' component={SignUp}/>
                             <Route exact path='/Dashboard' component={Dashboard}/>
                             <Route exact path='/BookDetails' component={BookDetails}/>
+                            <Route exact path='/AdminDashboard' component={AdminDashboard}/>
 
                         </Switch>
                     </div>

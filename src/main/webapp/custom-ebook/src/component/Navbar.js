@@ -12,6 +12,7 @@ function Navbar(){
                     <li><Link to="/SignIn">Sign in</Link></li>
                     <li><Link to="/Dashboard">Dashboard</Link></li>
                     <li><Link to="/SignUp">Create Account</Link></li>
+                    <li><Link to="/AdminDashboard">Admin Dashboard</Link></li>
                 </ul>
             </nav>
         </div>
