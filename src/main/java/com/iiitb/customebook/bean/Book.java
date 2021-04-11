@@ -2,6 +2,8 @@ package com.iiitb.customebook.bean;
 
 import javax.persistence.*;
 
+@Entity
+@Table
 public class Book {
 
     @Id
