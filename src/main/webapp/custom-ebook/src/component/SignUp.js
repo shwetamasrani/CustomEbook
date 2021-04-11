@@ -31,7 +31,7 @@ class SignUp extends Component {
         let user = {
             firstName: this.state.firstName, lastName: this.state.lastName, email: this.state.email,
             contactNumber: this.state.contactNumber, password: this.state.password, companyName: this.state.companyName,
-            isPublisherFlag: "true"
+            publisherFlag: this.state.isPublisher==="Yes"
         }
 
         console.log('User =>' + JSON.stringify(user));

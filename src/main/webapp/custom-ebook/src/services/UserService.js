@@ -10,6 +10,7 @@ class UserService{
 
     createUser(user)
     {
+        console.log("Creating user", user);
         return axios.post(USER_API_BASE_URL,user);
 
     }

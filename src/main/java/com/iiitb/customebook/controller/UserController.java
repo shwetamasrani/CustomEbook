@@ -15,6 +15,7 @@ public class UserController {
 
 
     private UserService userService;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -34,15 +35,13 @@ public class UserController {
 
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id)
-    {
+    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
 
     }
 
     @PutMapping("user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user)
-    {
-        return userService.updateUser(id,user);
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        return userService.updateUser(id, user);
     }
 }

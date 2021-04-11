@@ -17,31 +17,17 @@ public class User {
     @Column(nullable = true)
     private String lastName;
 
-    @Column(length=50,nullable = false,unique = true)
+    @Column(length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(length=10)
+    @Column(length = 10)
     private String contactNumber;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "user_id=" + user_id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", contactNumber='" + contactNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", isPublisherFlag=" + isPublisherFlag +
-                ", companyName='" + companyName + '\'' +
-                '}';
-    }
-
-    @Column(length=50,nullable = false)
+    @Column(length = 50, nullable = false)
     private String password;
 
-    @Column( nullable = true,columnDefinition = "boolean default false")
-    private Boolean isPublisherFlag; //0-> user   1->Publisher
+    /*@Column( nullable = true,columnDefinition = "boolean default false")
+    private boolean isPublisherFlag; //0-> user   1->Publisher*/
 
     @Column(nullable = false)
     private String companyName;
@@ -51,6 +37,9 @@ public class User {
 
     @OneToMany(mappedBy = "user_id")
     private List<PublisherUploads> uploaded_books;
+
+    @Column( nullable = true,columnDefinition = "boolean default false")
+    private boolean publisherFlag;
 
     public String getCompanyName() {
         return companyName;
@@ -108,14 +97,6 @@ public class User {
         this.password = password;
     }
 
-    public Boolean getPublisherFlag() {
-        return isPublisherFlag;
-    }
-
-    public void setPublisherFlag(Boolean publisherFlag) {
-        isPublisherFlag = publisherFlag;
-    }
-
     public List<Invoice> getInvoices() {
         return invoices;
     }
@@ -124,17 +105,27 @@ public class User {
         this.invoices = invoices;
     }
 
-    public User() {
+    public boolean isPublisherFlag() {
+        return publisherFlag;
     }
 
-    public User(String firstName, String lastName, String email, String contactNumber, String password, Boolean isPublisherFlag, String companyName, List<Invoice> invoices) {
+    public void setPublisherFlag(boolean publisherFlag) {
+        this.publisherFlag = publisherFlag;
+    }
+
+    public User(int user_id, String firstName, String lastName, String email, String contactNumber, String password, String companyName, List<Invoice> invoices, List<PublisherUploads> uploaded_books, boolean publisherFlag) {
+        this.user_id = user_id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.contactNumber = contactNumber;
         this.password = password;
-        this.isPublisherFlag = isPublisherFlag;
         this.companyName = companyName;
         this.invoices = invoices;
+        this.uploaded_books = uploaded_books;
+        this.publisherFlag = publisherFlag;
+    }
+
+    public User() {
     }
 }

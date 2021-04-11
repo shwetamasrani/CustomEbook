@@ -27,7 +27,8 @@ public class UserService {
 
     public User  createUser(User user)
     {
-        System.out.println(user.toString()); return userRepository.save(user);
+        System.out.println(user.toString());
+        return userRepository.save(user);
     }
 
     public ResponseEntity<User> getUserById(Integer id){
@@ -48,7 +49,7 @@ public class UserService {
         user.setContactNumber(userDetails.getContactNumber());
         user.setEmail(userDetails.getEmail());
         user.setPassword(userDetails.getPassword());
-        user.setPublisherFlag(userDetails.getPublisherFlag());
+        user.setPublisherFlag(userDetails.isPublisherFlag());
         user.setCompanyName(userDetails.getCompanyName());
 
         User updatedUser=userRepository.save(user);
