@@ -1,7 +1,10 @@
 package com.iiitb.customebook;
 
+import com.iiitb.customebook.bean.Book;
 import com.iiitb.customebook.pojo.BookChapterVO;
 import com.iiitb.customebook.pojo.BookVO;
+import com.iiitb.customebook.repository.BookRepository;
+import com.iiitb.customebook.repository.BookRepository.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -26,9 +29,13 @@ public class CustomebookApplication {
     }
     public static void readXML() {
         System.out.println("Hello");
+        //Book b = BookService.findByBookName(book_name);
+        //String filePath = b.getFileLocation();
+
+
 
         try{
-            File file = new File("src/main/resources/Books.xml");
+            File file = new File("src/main/resources/Books/pythonBook.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(BookVO.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -66,7 +73,7 @@ public class CustomebookApplication {
 
             BookVO book = new BookVO();
             book.setBookchapters(list);
-            marshallerObj.marshal(book, new FileOutputStream("src/main/resources/newsample.xml"));
+            marshallerObj.marshal(book, new FileOutputStream("src/main/resources/Books/newsample.xml"));
         } catch(JAXBException | FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -78,7 +85,7 @@ public class CustomebookApplication {
         System.out.println("Hello! Again....");
 
         try{
-            File file = new File("src/main/resources/Books.xml");
+            File file = new File("src/main/resources/Books/pythonBook.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(BookVO.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
