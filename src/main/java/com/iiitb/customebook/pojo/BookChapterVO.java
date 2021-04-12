@@ -1,22 +1,13 @@
 package com.iiitb.customebook.pojo;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
+import javax.xml.bind.annotation.*;
+@XmlAccessorType (XmlAccessType.FIELD)
 public class BookChapterVO {
 
-    public String chapterName;
-    public Integer chapterNumber;
-    public Double chapterPrice;
-    public String chapterContent;
-
-    public String getChapterName() {
-        return chapterName;
-    }
-
-    public void setChapterName(String chapterName) {
-        this.chapterName = chapterName;
-    }
+    private Integer chapterNumber;
+    private String chapterName;
+    private Double price;
+    private String contentLocation;
 
     public Integer getChapterNumber() {
         return chapterNumber;
@@ -26,29 +17,37 @@ public class BookChapterVO {
         this.chapterNumber = chapterNumber;
     }
 
-    public Double getChapterPrice() {
-        return chapterPrice;
+    public String getChapterName() {
+        return chapterName;
     }
 
-    public void setChapterPrice(Double chapterPrice) {
-        this.chapterPrice = chapterPrice;
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
     }
 
-    public String getChapterContent() {
-        return chapterContent;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setChapterContent(String chapterContent) {
-        this.chapterContent = chapterContent;
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getContentLocation() {
+        return contentLocation;
+    }
+
+    public void setContentLocation(String contentLocation) {
+        this.contentLocation = contentLocation;
     }
 
     public BookChapterVO() {
     }
 
-    public BookChapterVO(String chapterName, Integer chapterNumber, Double chapterPrice, String chapterContent) {
-        this.chapterName = chapterName;
+    public BookChapterVO(Integer chapterNumber, String chapterName, Double price, String contentLocation) {
         this.chapterNumber = chapterNumber;
-        this.chapterPrice = chapterPrice;
-        this.chapterContent = chapterContent;
+        this.chapterName = chapterName;
+        this.price = price;
+        this.contentLocation = contentLocation;
     }
 }

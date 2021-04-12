@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<book>
+    <chapters>
+        <chapter>
+            <chapterNumber>1</chapterNumber>
+            <chapterName>Mary</chapterName>
+            <price>200.0</price>
+            <contentLocation>Mary had a little lamb, little lamb, LITTLE LAMB.
+               Mary had a little lamb.</contentLocation>
+        </chapter>
+        <chapter>
+            <chapterNumber>2</chapterNumber>
+            <chapterName>Baba</chapterName>
+            <price>100.0</price>
+            <contentLocation>Baba black sheep, have you any wool? yes sir. yes sir! 3 BAGS FULL!</contentLocation>
+        </chapter>
+    </chapters>
+</book>

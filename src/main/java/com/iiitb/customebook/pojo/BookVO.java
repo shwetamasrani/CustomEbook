@@ -1,7 +1,10 @@
 package com.iiitb.customebook.pojo;
 
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
+@XmlRootElement(name = "book")
+@XmlAccessorType (XmlAccessType.FIELD)
 public class BookVO {
 
     private Integer book_id;
@@ -20,12 +23,14 @@ public class BookVO {
 
     private String imageLocation;
 
-    private List<BookChapterVO> bookchapters;
+    @XmlElementWrapper(name = "chapters")
+    @XmlElement(name = "chapter")
+    private List<BookChapterVO> bookChapters;
 
     public Integer getBook_id() {
         return book_id;
     }
-
+    @XmlTransient
     public void setBook_id(Integer book_id) {
         this.book_id = book_id;
     }
@@ -33,7 +38,7 @@ public class BookVO {
     public String getBook_name() {
         return book_name;
     }
-
+    @XmlTransient
     public void setBook_name(String book_name) {
         this.book_name = book_name;
     }
@@ -57,7 +62,7 @@ public class BookVO {
     public String getPublisher() {
         return publisher;
     }
-
+    @XmlTransient
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
@@ -86,18 +91,18 @@ public class BookVO {
         this.imageLocation = imageLocation;
     }
 
-    public List<BookChapterVO> getBookchapters() {
-        return bookchapters;
+    public List<BookChapterVO> getBookChapters() {
+        return bookChapters;
     }
 
-    public void setBookchapters(List<BookChapterVO> bookchapters) {
-        this.bookchapters = bookchapters;
+    public void setBookchapters(List<BookChapterVO> bookChapters) {
+        this.bookChapters = bookChapters;
     }
 
     public BookVO() {
     }
 
-    public BookVO(Integer book_id, String book_name, String isbnNumber, String author, String publisher, Integer year_of_release, Double price, String imageLocation, List<BookChapterVO> bookchapters) {
+    public BookVO(Integer book_id, String book_name, String isbnNumber, String author, String publisher, Integer year_of_release, Double price, String imageLocation, List<BookChapterVO> bookChapters) {
         this.book_id = book_id;
         this.book_name = book_name;
         this.isbnNumber = isbnNumber;
@@ -106,6 +111,6 @@ public class BookVO {
         this.year_of_release = year_of_release;
         this.price = price;
         this.imageLocation = imageLocation;
-        this.bookchapters = bookchapters;
+        this.bookChapters = bookChapters;
     }
 }
