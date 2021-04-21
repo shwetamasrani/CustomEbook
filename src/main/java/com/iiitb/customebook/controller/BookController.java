@@ -7,6 +7,7 @@ import com.iiitb.customebook.repository.BookRepository;
 import com.iiitb.customebook.repository.UserRepository;
 import com.iiitb.customebook.service.BookService;
 import com.iiitb.customebook.service.UserService;
+import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,15 @@ public class BookController {
         BookVO book = bookService.getBookById(id);
         return ResponseEntity.ok(book);  //entity is returned along with the status
 
+    }
+    @GetMapping("isbn/{isbn}")
+    public ResponseEntity<BookVO> getBookById(@PathVariable String isbn) {
+        Book book = bookService.getBookByIsbnNumber(isbn);
+        if(null!=book) {
+            return ResponseEntity.ok(CustomEBookUtil.mappingBeanToPojo(book));
+        }
+          //entity is returned along with the status
+            return null;
     }
 
     @PostMapping

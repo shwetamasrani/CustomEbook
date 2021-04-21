@@ -5,6 +5,7 @@ import com.iiitb.customebook.exception.ResourceNotFoundException;
 import com.iiitb.customebook.pojo.BookVO;
 import com.iiitb.customebook.repository.BookRepository;
 import com.iiitb.customebook.util.CustomEBookConstants;
+import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,12 @@ public class BookService extends BookXMLService{
         Book book= bookRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Book does not exist with id:"+id));
 
-        return mappingBeanToPojo(book);
+        return CustomEBookUtil.mappingBeanToPojo(book);
     }
 
     public Book addBook(BookVO bookDetails)
     {
-        return bookRepository.save(mappingPojoToBean(bookDetails));
+        return bookRepository.save(CustomEBookUtil.mappingPojoToBean(bookDetails));
 
     }
 
@@ -53,34 +54,6 @@ public class BookService extends BookXMLService{
     public Book getBookByIsbnNumber(String isbnNumber){
         return bookRepository.findByIsbnNumber(isbnNumber);
 
-    }
-
-    public BookVO mappingBeanToPojo(Book book) {
-
-        BookVO bookPOJO = new BookVO();
-        bookPOJO.setBookId(book.getBookId());
-        bookPOJO.setBookName(book.getBookName());
-        bookPOJO.setAuthor(book.getAuthor());
-        bookPOJO.setPrice(book.getPrice());
-        bookPOJO.setIsbnNumber(book.getIsbnNumber());
-        bookPOJO.setYearOfRelease(book.getYearOfRelease());
-        bookPOJO.setImageLocation(book.getImageLocation());
-        //bookPOJO.setBookchapters(readBookXMLFile(book.getXmlFileLocation()));
-        return bookPOJO;
-    }
-
-    public Book mappingPojoToBean(BookVO bookDetails) {
-        Book book = new Book();
-        book.setBookName(bookDetails.getBookName());
-        book.setIsbnNumber(bookDetails.getIsbnNumber());
-        book.setAuthor(bookDetails.getAuthor());
-        book.setPublisher(bookDetails.getPublisher());
-        book.setYearOfRelease(bookDetails.getYearOfRelease());
-        book.setPrice(bookDetails.getPrice());
-        book.setImageLocation(bookDetails.getImageLocation());
-        book.setPdfFileLocation(bookDetails.getPdfFileLocation());
-        book.setXmlFileLocation(CustomEBookConstants.NULL_STRING);
-        return book;
     }
 
     public void splitBookIntoChapters(BookVO book) {
