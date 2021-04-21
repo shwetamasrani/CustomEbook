@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <book>
     <chapters>
+        <chapter/>
+        <chapter/>
+        <chapter/>
         <chapter>
             <chapterNumber>3</chapterNumber>
             <chapterName>Twinkle</chapterName>

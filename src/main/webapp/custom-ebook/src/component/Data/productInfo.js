@@ -33,7 +33,7 @@ const productsInfo = [
         id: 4,
         bookTitle: "A thousand Splendid Suns",
         description: "Khaled Hosseini",
-        price: 20.00,
+        price: 200.00,
         type: "Fiction",
         img: "https://images-na.ssl-images-amazon.com/images/I/51dFVDHybrL.jpg",
         inCart: false,

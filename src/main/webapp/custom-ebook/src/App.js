@@ -8,6 +8,8 @@ import Dashboard from "./component/Dashboard";
 import BookDetails from "./component/BookDetails"
 import Navbar from './component/Navbar'
 import AdminDashboard from "./component/AdminDashboard";
+import Cart from "./component/Cart.js";
+
 
 
 class App extends Component{
@@ -27,7 +29,7 @@ class App extends Component{
                             <Route exact path='/Dashboard' component={Dashboard}/>
                             <Route exact path='/BookDetails' component={BookDetails}/>
                             <Route exact path='/AdminDashboard' component={AdminDashboard}/>
-
+                            <Route exact path='/Cart' component={Cart}/>
                         </Switch>
                     </div>
                 </Router>
