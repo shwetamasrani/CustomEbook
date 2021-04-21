@@ -2,22 +2,28 @@
 <book>
     <chapters>
         <chapter>
-            <chapterid>1</chapterid>
-            <chaptername>Introduction</chaptername>
-            <chapterprice>75</chapterprice>
-            <chaptercontent>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-7-9.pdf</chaptercontent>
+            <chapterNumber>3</chapterNumber>
+            <chapterName>Twinkle</chapterName>
+            <price>500.3</price>
+            <contentLocation>Twinkle Twinkle Little Star, How I wonder what you are?</contentLocation>
         </chapter>
         <chapter>
-            <chapterid>2</chapterid>
-            <chaptername>Python 2 to Python 3</chaptername>
-            <chapterprice>80</chapterprice>
-            <chaptercontent>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-10-15.pdf</chaptercontent>
+            <chapterNumber>3</chapterNumber>
+            <chapterName>Twinkle</chapterName>
+            <price>500.3</price>
+            <contentLocation>Twinkle Twinkle Little Star, How I wonder what you are?</contentLocation>
         </chapter>
         <chapter>
-            <chapterid>1</chapterid>
-            <chaptername>How to install python 3</chaptername>
-            <chapterprice>90</chapterprice>
-            <chaptercontent>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-16-21.pdf</chaptercontent>
+            <chapterNumber>3</chapterNumber>
+            <chapterName>Twinkle</chapterName>
+            <price>500.3</price>
+            <contentLocation>Twinkle Twinkle Little Star, How I wonder what you are?</contentLocation>
+        </chapter>
+        <chapter>
+            <chapterNumber>3</chapterNumber>
+            <chapterName>Twinkle</chapterName>
+            <price>500.3</price>
+            <contentLocation>Twinkle Twinkle Little Star, How I wonder what you are?</contentLocation>
         </chapter>
     </chapters>
 </book>

@@ -3,14 +3,14 @@ package com.iiitb.customebook.bean;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name="Books")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer book_id;
+    private Integer bookId;
     @Column(nullable = false)
-    private String book_name;
+    private String bookName;
     @Column(nullable = false)
     private String isbnNumber;
     @Column(nullable = false)
@@ -18,28 +18,48 @@ public class Book {
     @Column(nullable = false)
     private String publisher;
     @Column
-    private Integer year_of_release;
+    private Integer yearOfRelease;
     @Column(nullable = false)
     private Double price;
-    @Column(nullable = false)
+    @Column
     private String imageLocation;
-    @Column(nullable = false)
-    private String fileLocation;
+    @Column
+    private String pdfFileLocation;
+    @Column
+    private String description;
+    @Column
+    private String xmlFileLocation;
 
-    public Integer getBook_id() {
-        return book_id;
+    public Book() {
     }
 
-    public void setBook_id(Integer book_id) {
-        this.book_id = book_id;
+    public Book(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease, Double price, String imageLocation, String pdfFileLocation, String description, String xmlFileLocation) {
+        this.bookName = bookName;
+        this.isbnNumber = isbnNumber;
+        this.author = author;
+        this.publisher = publisher;
+        this.yearOfRelease = yearOfRelease;
+        this.price = price;
+        this.imageLocation = imageLocation;
+        this.pdfFileLocation = pdfFileLocation;
+        this.description = description;
+        this.xmlFileLocation = xmlFileLocation;
     }
 
-    public String getBook_name() {
-        return book_name;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public void setBook_name(String book_name) {
-        this.book_name = book_name;
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getIsbnNumber() {
@@ -66,12 +86,12 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Integer getYear_of_release() {
-        return year_of_release;
+    public Integer getYearOfRelease() {
+        return yearOfRelease;
     }
 
-    public void setYear_of_release(Integer year_of_release) {
-        this.year_of_release = year_of_release;
+    public void setYearOfRelease(Integer yearOfRelease) {
+        this.yearOfRelease = yearOfRelease;
     }
 
     public Double getPrice() {
@@ -90,25 +110,27 @@ public class Book {
         this.imageLocation = imageLocation;
     }
 
-    public String getFileLocation() {
-        return fileLocation;
+    public String getPdfFileLocation() {
+        return pdfFileLocation;
     }
 
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
+    public void setPdfFileLocation(String pdfFileLocation) {
+        this.pdfFileLocation = pdfFileLocation;
     }
 
-    public Book() {
+    public String getDescription() {
+        return description;
     }
 
-    public Book(String book_name, String isbnNumber, String author, String publisher, Integer year_of_release, Double price, String imageLocation, String fileLocation) {
-        this.book_name = book_name;
-        this.isbnNumber = isbnNumber;
-        this.author = author;
-        this.publisher = publisher;
-        this.year_of_release = year_of_release;
-        this.price = price;
-        this.imageLocation = imageLocation;
-        this.fileLocation = fileLocation;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getXmlFileLocation() {
+        return xmlFileLocation;
+    }
+
+    public void setXmlFileLocation(String xmlFileLocation) {
+        this.xmlFileLocation = xmlFileLocation;
     }
 }

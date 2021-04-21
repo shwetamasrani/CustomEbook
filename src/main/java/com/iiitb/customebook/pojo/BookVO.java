@@ -7,9 +7,9 @@ import java.util.List;
 @XmlAccessorType (XmlAccessType.FIELD)
 public class BookVO {
 
-    private Integer book_id;
+    private Integer bookId;
 
-    private String book_name;
+    private String bookName;
 
     private String isbnNumber;
 
@@ -17,30 +17,35 @@ public class BookVO {
 
     private String publisher;
 
-    private Integer year_of_release;
+    private Integer yearOfRelease;
 
     private Double price;
 
     private String imageLocation;
 
+    private String description;
+
+    private String pdfFileLocation;
+
+
     @XmlElementWrapper(name = "chapters")
     @XmlElement(name = "chapter")
-    private List<BookChapterVO> bookChapters;
+    private List<BookComponent> bookChapters;
 
-    public Integer getBook_id() {
-        return book_id;
-    }
-    @XmlTransient
-    public void setBook_id(Integer book_id) {
-        this.book_id = book_id;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public String getBook_name() {
-        return book_name;
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
     }
-    @XmlTransient
-    public void setBook_name(String book_name) {
-        this.book_name = book_name;
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getIsbnNumber() {
@@ -62,17 +67,17 @@ public class BookVO {
     public String getPublisher() {
         return publisher;
     }
-    @XmlTransient
+
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    public Integer getYear_of_release() {
-        return year_of_release;
+    public Integer getYearOfRelease() {
+        return yearOfRelease;
     }
 
-    public void setYear_of_release(Integer year_of_release) {
-        this.year_of_release = year_of_release;
+    public void setYearOfRelease(Integer yearOfRelease) {
+        this.yearOfRelease = yearOfRelease;
     }
 
     public Double getPrice() {
@@ -91,26 +96,44 @@ public class BookVO {
         this.imageLocation = imageLocation;
     }
 
-    public List<BookChapterVO> getBookChapters() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPdfFileLocation() {
+        return pdfFileLocation;
+    }
+
+    public void setPdfFileLocation(String pdfFileLocation) {
+        this.pdfFileLocation = pdfFileLocation;
+    }
+
+    public List<BookComponent> getBookChapters() {
         return bookChapters;
     }
 
-    public void setBookchapters(List<BookChapterVO> bookChapters) {
+    public void setBookchapters(List<BookComponent> bookChapters) {
         this.bookChapters = bookChapters;
     }
+
 
     public BookVO() {
     }
 
-    public BookVO(Integer book_id, String book_name, String isbnNumber, String author, String publisher, Integer year_of_release, Double price, String imageLocation, List<BookChapterVO> bookChapters) {
-        this.book_id = book_id;
-        this.book_name = book_name;
+    public BookVO(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease, Double price, String imageLocation, String description, String pdfFileLocation, List<BookComponent> bookChapters) {
+        this.bookName = bookName;
         this.isbnNumber = isbnNumber;
         this.author = author;
         this.publisher = publisher;
-        this.year_of_release = year_of_release;
+        this.yearOfRelease = yearOfRelease;
         this.price = price;
         this.imageLocation = imageLocation;
+        this.description = description;
+        this.pdfFileLocation = pdfFileLocation;
         this.bookChapters = bookChapters;
     }
 }

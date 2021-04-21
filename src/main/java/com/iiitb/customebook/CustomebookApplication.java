@@ -1,10 +1,11 @@
 package com.iiitb.customebook;
 
-import com.iiitb.customebook.bean.Book;
 import com.iiitb.customebook.pojo.BookChapterVO;
 import com.iiitb.customebook.pojo.BookVO;
-import com.iiitb.customebook.repository.BookRepository;
-import com.iiitb.customebook.repository.BookRepository.*;
+import com.iiitb.customebook.util.CustomEBookConstants;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.multipdf.Splitter;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,27 +16,95 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
 public class CustomebookApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringApplication.run(CustomebookApplication.class, args);
-        readXML();
-        writeXML();
-        addToXML();
+        //readXML();
+        //writeXML();
+        //addToXML();
+        splitPdf("sample2",21,30);
+        mergePDF();
+        makeDirectory(CustomEBookConstants.PATH_BOOKS);
+        makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
     }
-    public static void readXML() {
+
+    private static void mergePDF() throws IOException {
+
+        //Loading an existing PDF document
+        File file1 = new File(CustomEBookConstants.PATH_BOOKS+"/sample.pdf");
+        PDDocument document1 = PDDocument.load(file1);
+        File file2 = new File(CustomEBookConstants.PATH_BOOKS+"/sample2.pdf");
+        PDDocument document2 = PDDocument.load(file2);
+
+        //Create PDFMergerUtility class object
+        PDFMergerUtility PDFmerger = new PDFMergerUtility();
+
+        //Setting the destination file path
+        PDFmerger.setDestinationFileName(CustomEBookConstants.PATH_BOOKS+"/merged.pdf");
+
+        //adding the source files
+        PDFmerger.addSource(file1);
+        PDFmerger.addSource(file2);
+        //Merging the documents
+        PDFmerger.mergeDocuments(null);
+
+        System.out.println("PDF Documents merged to a single file successfully");
+
+//Close documents
+        document1.close();
+        document2.close();
+
+    }
+
+    private static void makeDirectory(String path) {
+
+        File f1 = new File(path);
+        //Creating a folder using mkdir() method
+        boolean bool = f1.mkdir();
+        if(bool){
+            System.out.println("Folder is created successfully");
+        }else{
+            System.out.println("Error Found!");
+        }
+
+    }
+
+    private static void splitPdf(String fileName, int fromPage, int toPage) throws IOException {
+
+        // Loading PDF
+        File pdfFile
+                = new File(CustomEBookConstants.PATH_BOOKS+"/DevOps For Dummies" + CustomEBookConstants.PDF_FILE_EXTENSION);
+        PDDocument document = PDDocument.load(pdfFile);
+        if (document.getNumberOfPages() > 20) {
+            System.out.println(document.getDocumentInformation().getTitle());
+            try {
+                Splitter splitter = new Splitter();
+                splitter.setStartPage(fromPage);
+                splitter.setEndPage(toPage);
+                splitter.setSplitAtPage(toPage);
+                List<PDDocument> splittedList = splitter.split(document);
+                for (PDDocument doc : splittedList) {
+                    doc.save( CustomEBookConstants.PATH_BOOKS+"/"+fileName + ".pdf");
+                    doc.close();
+                }
+                System.out.println("Save successful file : " + fileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+   /* public static void readXML() {
         System.out.println("Hello");
-        //Book b = BookService.findByBookName(book_name);
-        //String filePath = b.getFileLocation();
-
-
 
         try{
-            File file = new File("src/main/resources/Books/pythonBook.xml");
+            File file = new File("src/main/resources/Books/IntroductionToAlgorithm.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(BookVO.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -104,6 +173,6 @@ public class CustomebookApplication {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }
