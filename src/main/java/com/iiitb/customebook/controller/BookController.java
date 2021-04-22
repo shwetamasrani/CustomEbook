@@ -32,6 +32,15 @@ public class BookController {
 
     }
 
+    @GetMapping("isbn/{isbn}")
+    public ResponseEntity<BookVO> getBookById(@PathVariable String isbn) {
+        BookVO book = bookService.getBookByIsbnNumber(isbn);
+        if(null!=book) {
+            return ResponseEntity.ok(book);
+        }
+        return null;
+    }
+
     @PostMapping
     public void addBook(@RequestBody BookVO bookDetails)  //mapping the JSON Body to the object directly
     {
