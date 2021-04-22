@@ -1,14 +1,14 @@
 package com.iiitb.customebook.pojo;
 
-public class InvoiceItemInputVO {
+public class OrderItemInputVO {
 
     private Integer bookId;
     private Integer chapterNumber;
 
-    public InvoiceItemInputVO() {
+    public OrderItemInputVO() {
     }
 
-    public InvoiceItemInputVO(Integer bookId, Integer chapterNumber) {
+    public OrderItemInputVO(Integer bookId, Integer chapterNumber) {
         this.bookId = bookId;
         this.chapterNumber = chapterNumber;
     }

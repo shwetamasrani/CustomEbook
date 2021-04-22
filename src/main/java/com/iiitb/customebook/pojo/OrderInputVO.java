@@ -2,19 +2,19 @@ package com.iiitb.customebook.pojo;
 
 import java.util.List;
 
-public class InvoiceInputVO {
+public class OrderInputVO {
 
     private String userId;
     private String customEBookName;
-    private List<InvoiceItemInputVO> invoiceItems;
+    private List<OrderItemInputVO> orderItems;
 
-    public InvoiceInputVO() {
+    public OrderInputVO() {
     }
 
-    public InvoiceInputVO(String userId, String customEBookName, List<InvoiceItemInputVO> invoiceItems) {
+    public OrderInputVO(String userId, String customEBookName, List<OrderItemInputVO> orderItems) {
         this.userId = userId;
         this.customEBookName = customEBookName;
-        this.invoiceItems = invoiceItems;
+        this.orderItems = orderItems;
     }
 
     public String getUserId() {
@@ -33,11 +33,11 @@ public class InvoiceInputVO {
         this.customEBookName = customEBookName;
     }
 
-    public List<InvoiceItemInputVO> getInvoiceItems() {
-        return invoiceItems;
+    public List<OrderItemInputVO> getOrderItems() {
+        return orderItems;
     }
 
-    public void setInvoiceItems(List<InvoiceItemInputVO> invoiceItems) {
-        this.invoiceItems = invoiceItems;
+    public void setOrderItems(List<OrderItemInputVO> orderItems) {
+        this.orderItems = orderItems;
     }
 }

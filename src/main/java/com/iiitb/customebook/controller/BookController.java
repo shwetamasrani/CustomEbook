@@ -5,6 +5,7 @@ import com.iiitb.customebook.pojo.BookVO;
 
 import com.iiitb.customebook.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,29 +43,23 @@ public class BookController {
         if(bookDetails!=null) {
             if(bookDetails.getIsbnNumber()!=null && bookService.getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
                 bookDetails = bookService.addBook(bookDetails);
-                return ResponseEntity.ok(bookDetails);
+                return new ResponseEntity(bookDetails, HttpStatus.CREATED);
             }
         }
         return null;
     }
 
-    @PostMapping("/split")
-    public void splitBook(@RequestBody BookVO book)
+    @PutMapping("/split")
+    public ResponseEntity<BookVO> splitBook(@RequestBody BookVO bookDetails)
     {
-        if(null!=book ) {
-            if(book.getBookId()!=null) {
-                System.out.println("bookid is=="+book.getBookId());
-                if(book.getBookChapters()!=null) {
-                    System.out.println("chapters size is=="+book.getBookChapters().size());
-                    bookService.splitBookIntoChapters(book);
-                } else{
-                    System.out.println("bookchapters is null");
+        if(null!=bookDetails ) {
+            if(bookDetails.getBookId()!=null) {
+                if(bookDetails.getBookChapters()!=null) {
+                    bookDetails = bookService.splitBookIntoChapters(bookDetails);
+                    return ResponseEntity.ok(bookDetails);
                 }
-            } else {
-                System.out.println("bookid is null");
             }
-        }else {
-            System.out.println("obj is null");
         }
+        return null;
     }
 }

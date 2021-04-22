@@ -59,7 +59,7 @@ public class BookService {
         return null;
     }
 
-    public void splitBookIntoChapters(BookVO book) {
+    public BookVO splitBookIntoChapters(BookVO book) {
 
         try {
             String xmlFilePath = CustomEBookConstants.PATH_BOOKS_XML+File.separator+book.getBookId()+CustomEBookConstants.XML_FILE_EXTENSION;
@@ -67,10 +67,13 @@ public class BookService {
             Book bookInDB= bookRepository.findById(book.getBookId()).orElseThrow(()
                     -> new ResourceNotFoundException("Book does not exist with id:"+book.getBookId()));
             bookInDB.setXmlFileLocation(xmlFilePath);
-            bookRepository.save(bookInDB);
+            bookInDB = bookRepository.save(bookInDB);
+            return CustomEBookUtil.mappingBeanToPojo(bookInDB);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }
