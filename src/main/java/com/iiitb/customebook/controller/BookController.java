@@ -1,17 +1,12 @@
 package com.iiitb.customebook.controller;
 
-import com.iiitb.customebook.bean.Book;
-import com.iiitb.customebook.pojo.BookComponent;
+
 import com.iiitb.customebook.pojo.BookVO;
-import com.iiitb.customebook.repository.BookRepository;
-import com.iiitb.customebook.repository.UserRepository;
+
 import com.iiitb.customebook.service.BookService;
-import com.iiitb.customebook.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -42,18 +37,17 @@ public class BookController {
     }
 
     @PostMapping
-    public void addBook(@RequestBody BookVO bookDetails)  //mapping the JSON Body to the object directly
+    public ResponseEntity<BookVO> addBook(@RequestBody BookVO bookDetails)  //mapping the JSON Body to the object directly
     {
         if(bookDetails!=null) {
             if(bookDetails.getIsbnNumber()!=null && bookService.getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
-                bookService.addBook(bookDetails);
-            } else {
-                System.out.println("Invalid ISBN Number");
+                bookDetails = bookService.addBook(bookDetails);
+                return ResponseEntity.ok(bookDetails);
             }
         }
-
-
+        return null;
     }
+
     @PostMapping("/split")
     public void splitBook(@RequestBody BookVO book)
     {

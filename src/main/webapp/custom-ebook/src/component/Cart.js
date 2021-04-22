@@ -1,7 +1,5 @@
 import React,{Component} from 'react';
-import {useState} from 'react';
 import ChaptersInfo from "./Data/ChaptersInfo";
-import {render} from "@testing-library/react";
 
 class Cart extends Component{
     constructor(props) {
@@ -54,7 +52,7 @@ class Cart extends Component{
 
     render(){
         let cartItems=this.state.cart.map((chapter, idx) => (
-                <div className="chapter" key={idx}>
+                <div  key={idx}>
                     <h3>{chapter.name}</h3>
                     <h4>${chapter.cost}</h4>
                     <button onClick={() => this.removeFromCart(chapter)}>
