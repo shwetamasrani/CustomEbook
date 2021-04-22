@@ -1,5 +1,7 @@
 package com.iiitb.customebook.pojo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
@@ -26,6 +28,10 @@ public class BookVO {
     private String description;
 
     private String pdfFileLocation;
+
+
+
+    private Integer noOfChapters;
 
 
     @XmlElementWrapper(name = "chapters")
@@ -120,11 +126,18 @@ public class BookVO {
         this.bookChapters = bookChapters;
     }
 
+    public Integer getNoOfChapters() {
+        return noOfChapters;
+    }
+
+    public void setNoOfChapters(Integer noOfChapters) {
+        this.noOfChapters = noOfChapters;
+    }
 
     public BookVO() {
     }
 
-    public BookVO(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease, Double price, String imageLocation, String description, String pdfFileLocation, List<BookComponent> bookChapters) {
+    public BookVO(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease, Double price, String imageLocation, String description, String pdfFileLocation, List<BookComponent> bookChapters,Integer noOfChapters) {
         this.bookName = bookName;
         this.isbnNumber = isbnNumber;
         this.author = author;
@@ -135,5 +148,6 @@ public class BookVO {
         this.description = description;
         this.pdfFileLocation = pdfFileLocation;
         this.bookChapters = bookChapters;
+        this.noOfChapters=noOfChapters;
     }
 }
