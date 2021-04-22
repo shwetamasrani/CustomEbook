@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 @Service
-public class BookService extends BookXMLService{
+public class BookService {
 
     private final BookRepository bookRepository;
 
@@ -60,7 +60,7 @@ public class BookService extends BookXMLService{
 
         try {
             String xmlFilePath = CustomEBookConstants.PATH_BOOKS_XML+File.separator+book.getBookId()+CustomEBookConstants.XML_FILE_EXTENSION;
-            createXMlFile(book, xmlFilePath);
+            CustomEBookUtil.createXMlFile(book, xmlFilePath);
             Book bookInDB= bookRepository.findById(book.getBookId()).orElseThrow(()
                     -> new ResourceNotFoundException("Book does not exist with id:"+book.getBookId()));
             bookInDB.setXmlFileLocation(xmlFilePath);

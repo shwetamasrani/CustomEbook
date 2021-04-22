@@ -1,22 +1,34 @@
 package com.iiitb.customebook.util;
 
 import com.iiitb.customebook.bean.Book;
+import com.iiitb.customebook.pojo.BookComponent;
 import com.iiitb.customebook.pojo.BookVO;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.List;
 
 public class CustomEBookUtil {
 
     public static BookVO mappingBeanToPojo(Book book) {
 
-        BookVO bookPOJO = new BookVO();
-        bookPOJO.setBookId(book.getBookId());
-        bookPOJO.setBookName(book.getBookName());
-        bookPOJO.setAuthor(book.getAuthor());
-        bookPOJO.setPrice(book.getPrice());
-        bookPOJO.setIsbnNumber(book.getIsbnNumber());
-        bookPOJO.setYearOfRelease(book.getYearOfRelease());
-        bookPOJO.setImageLocation(book.getImageLocation());
-        //bookPOJO.setBookchapters(readBookXMLFile(book.getXmlFileLocation()));
-        return bookPOJO;
+        BookVO bookDetails = new BookVO();
+        bookDetails.setBookId(book.getBookId());
+        bookDetails.setBookName(book.getBookName());
+        bookDetails.setAuthor(book.getAuthor());
+        bookDetails.setPrice(book.getPrice());
+        bookDetails.setIsbnNumber(book.getIsbnNumber());
+        bookDetails.setYearOfRelease(book.getYearOfRelease());
+        bookDetails.setImageLocation(book.getImageLocation());
+        if(book.getXmlFileLocation()!=null) {
+            bookDetails.setBookchapters(readXML(book.getXmlFileLocation()));
+        }
+        return bookDetails;
     }
 
     public static Book mappingPojoToBean(BookVO bookDetails) {
@@ -31,5 +43,31 @@ public class CustomEBookUtil {
         book.setPdfFileLocation(bookDetails.getPdfFileLocation());
         book.setXmlFileLocation(CustomEBookConstants.NULL_STRING);
         return book;
+    }
+
+    public static List<BookComponent> readXML(String xmlFileLocation) {
+
+        try{
+            File file = new File(xmlFileLocation);
+            JAXBContext jaxbContext = JAXBContext.newInstance(BookVO.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            BookVO book= (BookVO) jaxbUnmarshaller.unmarshal(file);
+            return book.getBookChapters();
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void createXMlFile(BookVO book, String filePath) {
+        try {
+            JAXBContext contextObj = JAXBContext.newInstance(BookVO.class);
+            Marshaller marshallerObj = contextObj.createMarshaller();
+            marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshallerObj.marshal(book, new FileOutputStream(filePath));
+        } catch (JAXBException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
