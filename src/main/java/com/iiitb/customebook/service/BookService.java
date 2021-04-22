@@ -30,10 +30,10 @@ public class BookService {
         return CustomEBookUtil.mappingBeanToPojo(book);
     }
 
-    public Book addBook(BookVO bookDetails)
+    public BookVO addBook(BookVO bookDetails)
     {
-        return bookRepository.save(CustomEBookUtil.mappingPojoToBean(bookDetails));
-
+        Book book =  bookRepository.save(CustomEBookUtil.mappingPojoToBean(bookDetails));
+        return CustomEBookUtil.mappingBeanToPojo(book);
     }
 
     public List<Book> getBooksByPublisher(String publisher){
