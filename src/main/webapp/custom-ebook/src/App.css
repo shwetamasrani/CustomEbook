@@ -263,3 +263,16 @@ select {
     margin-top: 2%;
     border-radius: 15px;
 }
+
+.addChapter {
+  color: whitesmoke;
+  position: absolute;
+  margin: 7% 10% 0% 60%;
+  font-size: 20px;
+  width: 22%;
+  padding: 2%;
+  line-height: 20px;
+  border-radius: 5%;
+  border: 1px -o-highlight-border solid;
+  background-color: rgba(255, 255, 255, 0.1);
+}
