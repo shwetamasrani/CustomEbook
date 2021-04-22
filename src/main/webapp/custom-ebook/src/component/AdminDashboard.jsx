@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import productsInfo from "./Data/productInfo";
 import axios from 'axios';
 import Dashboard from "./Dashboard";
+import BookService from "../services/BookService"
 
 class AdminDashboard extends Component {
 
@@ -10,72 +11,100 @@ class AdminDashboard extends Component {
         this.state = {
             bookName: "",
             isbnNumber: "",
-            authorName: "",
+            author: "",
+            yearOfRelease:"",
             publisher: "",
             price: "",
-            imageLocation: "",
-            noOfChapters: ""
+            noOfChapters: "",
+            description:"",
+            imageLocation:"",
+            pdfFileLocation:""
+        
         }
+        this.handleChange = this.handleChange.bind(this)
+    }
+    handleChange(event) {
+      const {name, value} = event.target;
+      this.setState({
+          [name]: value
+      })
+  }
+
+  onFileUpload = (e) => {
+    e.preventDefault();
+    let book = {
+      bookName: this.state.bookName, isbnNumber: this.state.isbnNumber, author: this.state.author,
+      publisher: this.state.publisher, price: this.state.price, noOfChapters: this.state.noOfChapters,
+      description: this.state.description ,imageLocation: this.state.imageLocation,
+      pdfFileLocation: this.state.pdfFileLocation,yearOfRelease:this.state.yearOfRelease
     }
 
-    state = {
-        // Initially, no file is selected
-        selectedFile: null
-    };
+    console.log('Book =>' + JSON.stringify(book));
 
-    // On file select (from the pop up)
-    onFileChange = event => {
-        // Update the state
-        this.setState({selectedFile: event.target.files[0]});
-    };
+    BookService.createBook(book).then(res => {
+        this.props.history.push('/Signin');
+    });
+}
+
+    // state = {
+    //     // Initially, no file is selected
+    //     selectedFile: null
+    // };
+
+    // // On file select (from the pop up)
+    // onFileChange = event => {
+    //     // Update the state
+    //     this.setState({selectedFile: event.target.files[0]});
+    // };
 
 
-    // On file upload (click the upload button)
-    onFileUpload = () => {
+    // // On file upload (click the upload button)
+    // onFileUpload = () => {
 
-        // Create an object of formData
-        const formData = new FormData();
+    //     // Create an object of formData
+    //     const formData = new FormData();
 
-        // Update the formData object
-        formData.append(
-            "myFile",
-            this.state.selectedFile,
-            this.state.selectedFile.name,
-        );
+    //     // Update the formData object
+    //     formData.append(
+    //         "myFile",
+    //         this.state.selectedFile,
+    //         this.state.selectedFile.name,
+    //     );
 
-        // Details of the uploaded file
-        console.log(this.state.selectedFile);
+    //     // Details of the uploaded file
+    //     console.log(this.state.selectedFile);
 
-        // Request made to the backend api
-        // Send formData object
-        axios.post("api/uploadfile", formData);     //update the api path in future
-    };
+    //     // Request made to the backend api
+    //     // Send formData object
+    //     axios.post("api/uploadfile", formData);     //update the api path in future
+    // };
 
-    // File content to be displayed after
-    // file upload is complete
-    fileData = () => {
+    // // File content to be displayed after
+    // // file upload is complete
+    // fileData = () => {
 
-        if (this.state.selectedFile) {
-            return (
-                <div>
-                    <h2>File Details:</h2>
-                    <p>File Name: {this.state.selectedFile.name}</p>
-                    <p>File Type: {this.state.selectedFile.type}</p>
-                    <p>
-                        Last Modified:{" "}
-                        {this.state.selectedFile.lastModifiedDate.toDateString()}
-                    </p>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <br/>
-                    <h4>Choose the file before Pressing the Upload button</h4>
-                </div>
-            );
-        }
-    };
+    //     if (this.state.selectedFile) {
+    //         return (
+    //             <div>
+    //                 <h2>File Details:</h2>
+    //                 <p>File Name: {this.state.selectedFile.name}</p>
+    //                 <p>File Type: {this.state.selectedFile.type}</p>
+    //                 <p>File Location:{this.state.selectedFile}</p>
+    //                 <p>
+    //                     Last Modified:{" "}
+    //                     {this.state.selectedFile.lastModifiedDate.toDateString()}
+    //                 </p>
+    //             </div>
+    //         );
+    //     } else {
+    //         return (
+    //             <div>
+    //                 <br/>
+    //                 <h4>Choose the file before Pressing the Upload button</h4>
+    //             </div>
+    //         );
+    //     }
+    // };
 
     render() {
         return (
@@ -86,25 +115,27 @@ class AdminDashboard extends Component {
                     </h2>
                     <div>
                         <form>
-                            <input type="text"
-                                   name="bookName"    //need to add change handler function for name
-                                   required="True"
-                                   placeholder="Book Name"
-                                   value={this.state.bookName}
-                                   onChange={this.handleChange}/>
-                            <input
+                             <input
                                 type="text"
                                 name="isbnNumber"
                                 required="True"
                                 placeholder="ISBN Number"
                                 value={this.state.isbnNumber}
                                 onChange={this.handleChange}/>
+
+                            <input type="text"
+                                   name="bookName"    //need to add change handler function for name
+                                   required="True"
+                                   placeholder="Book Name"
+                                   value={this.state.bookName}
+                                   onChange={this.handleChange}/>
+                           
                             <input
                                 type="text"
-                                name="authorName"
+                                name="author"
                                 required="True"
                                 placeholder="Author name"
-                                value={this.state.authorName}
+                                value={this.state.author}
                                 onChange={this.handleChange}/>
                             <input
                                 type="text"
@@ -115,10 +146,10 @@ class AdminDashboard extends Component {
                                 onChange={this.handleChange}/>
                             <input
                                 type="number"
-                                name="noOfChapters"
+                                name="yearOfRelease"
                                 required="True"
-                                placeholder="Number of Chapters"
-                                value={this.state.noOfChapters}
+                                placeholder="Year of Release"
+                                value={this.state.yearOfRelease}
                                 onChange={this.handleChange}/>
                             <input
                                 type="number"
@@ -127,15 +158,52 @@ class AdminDashboard extends Component {
                                 placeholder="Price"
                                 value={this.state.price}
                                 onChange={this.handleChange}/>
-                            <h3>Upload Book Cover:</h3>
-                            <input type="file" onChange={this.onFileChange}/>
+
+                            <input
+                                type="number"
+                                name="noOfChapters"
+                                required="True"
+                                placeholder="Number of Chapters"
+                                value={this.state.noOfChapters}
+                                onChange={this.handleChange}/> 
+
+                            <input
+                                type="text"
+                                name="description"
+                                required="True"
+                                placeholder="Description"
+                                value={this.state.description}
+                                onChange={this.handleChange}/>
+
+                            <input
+                                type="text"
+                                name="imageLocation"
+                                required="True"
+                                placeholder="Image Location"
+                                value={this.state.imageLocation}
+                                onChange={this.handleChange}/>
+
+                            <input
+                                type="text"
+                                name="pdfFileLocation"
+                                required="True"
+                                placeholder="PDF Location"
+                                value={this.state.pdfFileLocation}
+                                onChange={this.handleChange}/>
+
+
+
+
+                            {/* <h3>Upload Book Cover:</h3>
+                            <input type="file" onChange={this.onFileChange}/> */}
                             <button onClick={this.onFileUpload}>
                                 Upload!
                             </button>
                         </form>
                     </div>
-                    {this.fileData()}
+                    {/* {this.fileData()} */}
                 </div>
+
                 <div className="chapter">
                     <form>
                         <input
