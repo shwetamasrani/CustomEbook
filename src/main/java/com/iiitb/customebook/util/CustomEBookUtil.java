@@ -41,6 +41,7 @@ public class CustomEBookUtil {
         book.setPrice(bookDetails.getPrice());
         book.setImageLocation(bookDetails.getImageLocation());
         book.setPdfFileLocation(bookDetails.getPdfFileLocation());
+        book.setDescription(bookDetails.getDescription());
         book.setXmlFileLocation(CustomEBookConstants.NULL_STRING);
         return book;
     }
