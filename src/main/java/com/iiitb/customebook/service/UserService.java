@@ -25,7 +25,7 @@ public class UserService {
         return userList;    //convert iterable class to List collection and return
     }
 
-    public User  createUser(User user)
+    public User createUser(User user)
     {
         System.out.println(user.toString());
         return userRepository.save(user);

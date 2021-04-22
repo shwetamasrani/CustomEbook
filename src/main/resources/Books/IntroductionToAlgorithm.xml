@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<book>
+    <chapters>
+        <chapter>
+            <chapterNumber>1</chapterNumber>
+            <chapterName>The Role of Algorithms in Computing</chapterName>
+            <price>90</price>
+            <contentLocation>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-7-9.pdf</contentLocation>
+        </chapter>
+        <chapter>
+            <chapterNumber>2</chapterNumber>
+            <chapterName>Getting Started</chapterName>
+            <price>85</price>
+            <contentLocation>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-10-15.pdf</contentLocation>
+        </chapter>
+        <chapter>
+            <chapterNumber>1</chapterNumber>
+            <chapterName>Growth of functions</chapterName>
+            <price>100</price>
+            <contentLocation>file:///C:/Users/AYUSHI/AppData/Local/Temp/Temp1_ilovepdf_split-range.zip/How_To_Code_in_Python_3-16-21.pdf</contentLocation>
+        </chapter>
+    </chapters>
+</book>

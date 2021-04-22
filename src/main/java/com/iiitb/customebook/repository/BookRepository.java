@@ -1,5 +1,4 @@
 package com.iiitb.customebook.repository;
-
 import com.iiitb.customebook.bean.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,19 +8,16 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book,Integer> {
 
 
-    @Query("SELECT b FROM Book b WHERE b.book_name like '%book_name%'")
-    public Book findByBookName(@Param("book_name") String book_name);
+    @Query(value = "SELECT * FROM books b WHERE b.book_name like %:bookName%", nativeQuery = true)
+    public List<Book> findByBookName(@Param("bookName") String bookName);
 
-    @Query("SELECT b FROM Book b WHERE b.author like '%author%'")
+    @Query(value = "SELECT * FROM books b WHERE b.author like %:author%", nativeQuery = true)
     public List<Book> findByAuthor(@Param("author") String author);
 
-    @Query("SELECT b FROM Book b WHERE b.publisher like '%publisher%'")
+    @Query(value = "SELECT * FROM books b WHERE b.publisher like %:publisher%", nativeQuery = true)
     public List<Book> findByPublisher(@Param("publisher") String publisher);
 
-    @Query("Select b FROM Book b where b.isbnNumber = 'isbnNumber'")
-    public List<Book> findByIsbnNumber(@Param("isbnNumber") String isbnNumber);
-
-
-
+    @Query(value = "SELECT * FROM books b WHERE b.isbn_number =:isbnNumber", nativeQuery = true)
+    public Book findByIsbnNumber(@Param("isbnNumber") String isbnNumber);
 
 }
