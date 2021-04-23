@@ -8,16 +8,18 @@ class BookDetails extends Component {
         this.state = {
             userId:1,
             bookId: 1,
-            chapterData: [],
             isChecked: true,
-            cartChapters: [],
-            finalCart: []
+            bookData:[],         //contains everything returned by api
+            chapterData: [],    //contains everything in "bookChapter" part of api result
+            cartChapters: [],   //cart with current {chapterNum, bookId}
+            finalCart: []       //cart with chapters {chapterNum, bookId} that are sent to the next component
         }
         this.handleChange = this.handleChange.bind(this)
         this.addToCart = this.addToCart.bind(this)
         this.goToCart=this.goToCart.bind(this)
         this.getBookDetails=this.getBookDetails.bind(this)
     }
+
     async getBookDetails(){
         let response = await fetch('http://localhost:8081/api/books/'+this.state.bookId, {
             method: 'GET',
@@ -53,15 +55,24 @@ class BookDetails extends Component {
     addToCart() {
         let tempCart = [];
         this.state.cartChapters.forEach(cNum => {
+            let chapterData=[]
+            for(let i=0;i<this.state.chapterData.length;i++)
+            {
+                if(this.state.chapterData[i].chapterNumber==cNum)
+                    chapterData.push(this.state.chapterData[i])
+
+            }
             tempCart.push({
                 "bookId": this.state.bookId,
-                "chapterNum": cNum
+                "bookName":this.state.bookData["bookName"],
+                "chapterNum": cNum,
+                "chapterData":chapterData,
             })
         })
 
         this.setState({
             finalCart: tempCart
-        })
+        },()=>console.log(this.state.finalCart))
     }
 
     goToCart() {
@@ -76,8 +87,7 @@ class BookDetails extends Component {
         let bookDetails=await this.getBookDetails()
         this.setState({
             chapterData: bookDetails["bookChapters"],
-            // chapterNames: await require('./Data/chapter.json')["chapters"]["name"],
-            // chapterPrices:await require('./Data/chapter.json')["chapters"]["cost"]
+            bookData:bookDetails
         })
     }
 
