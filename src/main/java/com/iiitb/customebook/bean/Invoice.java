@@ -9,7 +9,7 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int invoice_id;
 
-    @Column(nullable = false)
+    @Column
     private Character orderStatus;
 
     @Column(nullable = false)
