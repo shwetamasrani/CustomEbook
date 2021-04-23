@@ -8,7 +8,8 @@ class Cart extends Component{
             cart:[],
             totalSum:0,
             newCart:this.props.location.cart,
-            userId:this.props.location.userId
+            userId:this.props.location.userId,
+            chapterDetails:[]
         }
         this.removeFromCart=this.removeFromCart.bind(this);
         this.clearCart=this.clearCart.bind(this);
@@ -30,11 +31,10 @@ class Cart extends Component{
         let bookDetails=await response.json();
         let bookName=bookDetails["bookName"]
         let chapters=bookDetails["bookChapters"]
-        console.log("chapters",chapters)
         let chapterName,price;
         for(let i=0;i<chapters.length;i++)
         {
-            if(chapterNumber===chapters[i]["chapterNumber"])
+            if(chapterNumber==chapters[i]["chapterNumber"])
             {
                 chapterName=chapters[i]["chapterName"]
                 price=chapters[i]["price"]
@@ -46,10 +46,9 @@ class Cart extends Component{
             chapterName:chapterName,
             price:price
         }
+        console.log("chapterList:",chapterList)
         let chapterLists=[bookName,chapterName,price]
-        console.log("chapterList",chapterList)
-        console.log("chaptersList",chapterLists)
-        return chapterList
+        return chapterLists
     }
 
     removeFromCart(chapterToRemove){
@@ -105,8 +104,7 @@ class Cart extends Component{
         let sum=0
         for(let i=0;i<this.state.newCart.length;i++)
         {
-            console.log(this.state.newCart[i])
-            sum=sum+this.state.newCart[i].chapterNum
+            sum=sum+parseInt(this.state.newCart[i].chapterNum)
         }
         this.setState({
             totalSum:sum
@@ -115,13 +113,18 @@ class Cart extends Component{
     }
 
 
-    render(){
-        let cartItems=this.state.newCart.map((chapter, idx) => {
-            let chapterDetails=this.getChapterDetails(chapter.bookId,chapter.chapterNum)
+      render(){
+        let chapterDetails=[]
+        let cartItems= this.state.newCart.map( (chapter, idx) => {
+            let chapterDetailsTemp=  this.getChapterDetails(chapter.bookId,chapter.chapterNum)
+            chapterDetailsTemp.then(function (result){
+                console.log("render",result)
+                chapterDetails=result
+                console.log(chapterDetails)
+            })
             return  (
-
                 <div  key={idx}>
-                    <h3>BookId:{chapter.bookId}</h3>
+                    <h3>BookId:{chapter.bookId}{chapterDetails}</h3>
                     <h4>Chapter number:{chapter.chapterNum}</h4>
                     <button onClick={() => this.removeFromCart(chapter)}>
                         Remove
