@@ -27,13 +27,13 @@ public class BookService {
         Book book= bookRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Book does not exist with id:"+id));
 
-        return CustomEBookUtil.mappingBeanToPojo(book);
+        return CustomEBookUtil.mappingBookBeanToPojo(book);
     }
 
     public BookVO addBook(BookVO bookDetails)
     {
-        Book book =  bookRepository.save(CustomEBookUtil.mappingPojoToBean(bookDetails));
-        return CustomEBookUtil.mappingBeanToPojo(book);
+        Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
+        return CustomEBookUtil.mappingBookBeanToPojo(book);
     }
 
     public List<Book> getBooksByPublisher(String publisher){
@@ -54,7 +54,7 @@ public class BookService {
     public BookVO getBookByIsbnNumber(String isbnNumber){
         Book book =  bookRepository.findByIsbnNumber(isbnNumber);
         if(book!=null) {
-            return CustomEBookUtil.mappingBeanToPojo(book);
+            return CustomEBookUtil.mappingBookBeanToPojo(book);
         }
         return null;
     }
@@ -68,7 +68,7 @@ public class BookService {
                     -> new ResourceNotFoundException("Book does not exist with id:"+book.getBookId()));
             bookInDB.setXmlFileLocation(xmlFilePath);
             bookInDB = bookRepository.save(bookInDB);
-            return CustomEBookUtil.mappingBeanToPojo(bookInDB);
+            return CustomEBookUtil.mappingBookBeanToPojo(bookInDB);
 
         } catch (Exception e) {
             e.printStackTrace();

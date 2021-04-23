@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CustomEBookUtil {
 
-    public static BookVO mappingBeanToPojo(Book book) {
+    public static BookVO mappingBookBeanToPojo(Book book) {
 
         BookVO bookDetails = new BookVO();
         bookDetails.setBookId(book.getBookId());
@@ -31,7 +31,7 @@ public class CustomEBookUtil {
         return bookDetails;
     }
 
-    public static Book mappingPojoToBean(BookVO bookDetails) {
+    public static Book mappingBookVOToBean(BookVO bookDetails) {
         Book book = new Book();
         book.setBookName(bookDetails.getBookName());
         book.setIsbnNumber(bookDetails.getIsbnNumber());

@@ -18,11 +18,11 @@ public class CustomebookApplication {
     public static void main(String[] args) throws IOException {
         SpringApplication.run(CustomebookApplication.class, args);
 
+        makeDirectory(CustomEBookConstants.PATH_BOOKS);
+        makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
         //addToXML();
         splitPdf("sample2",21,30);
         mergePDF();
-        makeDirectory(CustomEBookConstants.PATH_BOOKS);
-        makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
     }
 
     private static void mergePDF() throws IOException {
@@ -89,6 +89,25 @@ public class CustomebookApplication {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void mergePDFs(List<File> chaptersPDFList, Integer orderId) throws IOException {
+
+        //Create PDFMergerUtility class object
+        PDFMergerUtility PDFmerger = new PDFMergerUtility();
+
+        //Setting the destination file path
+        PDFmerger.setDestinationFileName(CustomEBookConstants.PATH_BOOKS+"/merged_"+orderId+CustomEBookConstants.PDF_FILE_EXTENSION);
+
+        for(File chapterPDF: chaptersPDFList) {
+            PDDocument document = PDDocument.load(chapterPDF);
+            PDFmerger.addSource(chapterPDF);
+            document.close();
+        }
+        //Merging the documents
+        PDFmerger.mergeDocuments(null);
+
+        System.out.println("PDF Documents merged to a single file successfully");
     }
 
    /*

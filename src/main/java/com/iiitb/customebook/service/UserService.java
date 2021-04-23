@@ -31,12 +31,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<User> getUserById(Integer id){
+    public User getUserById(Integer id){
 
         User user= userRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Employee not exists with id:"+id));
 
-        return ResponseEntity.ok(user);  //entity is returned along with the status
+        return user;  //entity is returned along with the status
     }
 
     public ResponseEntity<User> updateUser(Integer id, User userDetails)
