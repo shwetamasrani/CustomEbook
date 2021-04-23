@@ -33,15 +33,30 @@ public class UserController {
         return userService.createUser(user);
     }
 
-
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
-
     }
 
     @PutMapping("user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
         return userService.updateUser(id, user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user){
+        String email = user.getEmail();
+        String pass = user.getPassword();
+        System.out.println("email"+ email+" "+pass);
+        User loggedIn = userService.getUserByEmail(email);
+        //System.out.println("Size" + li.size());
+
+        if(loggedIn.getEmail().equals(email) && loggedIn.getPassword().equals(pass)){
+            System.out.println("Password Matched");
+//               System.out.println("flag after:"+ check.isLog_status());
+            return ResponseEntity.ok(loggedIn);
+        }
+
+        return null;
     }
 }
