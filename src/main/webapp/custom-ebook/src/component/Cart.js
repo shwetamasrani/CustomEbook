@@ -1,14 +1,14 @@
 import React,{Component} from 'react';
-import {useState} from 'react';
-import ChaptersInfo from "./Data/ChaptersInfo";
-import {render} from "@testing-library/react";
 
 class Cart extends Component{
     constructor(props) {
         super(props);
         this.state={
             cart:[],
-            totalSum:0
+            totalSum:0,
+            newCart:this.props.location.cart,   //cart passed from bookDetails component
+            userId:this.props.location.userId,
+            chapterDetails:[]
         }
         this.removeFromCart=this.removeFromCart.bind(this);
         this.clearCart=this.clearCart.bind(this);
@@ -17,9 +17,9 @@ class Cart extends Component{
 
     removeFromCart(chapterToRemove){
         console.log("removed");
-        let tempCart=this.state.cart.filter((chapter) => chapter !== chapterToRemove)
+        let tempCart=this.state.newCart.filter((chapter) => chapter !== chapterToRemove)
         this.setState({
-            cart: tempCart
+            newCart: tempCart
         },()=>this.getTotalSum())
     }
     clearCart()
@@ -29,21 +29,32 @@ class Cart extends Component{
         },()=>this.getTotalSum())
     }
     async componentDidMount() {
-        let tempCart=[]
-        for (let i = 0; i < ChaptersInfo.length; i++) {
-            tempCart.push(ChaptersInfo[i]);
-        }
-        this.setState({
-            cart:tempCart
-        },()=>this.getTotalSum())
+        this.getTotalSum()
+        console.log(this.state.newCart)
+        // if(localStorage.getItem('oldCart').length===0)
+        // {
+        //     this.setState({
+        //         cart:this.state.newCart
+        //     },()=>console.log("callback",this.state.cart))
+        // }
+        // else
+        // {
+        //     let oldCart=JSON.parse(localStorage.getItem('oldCart'))
+        //     console.log(oldCart)
+        //     this.state.newCart.forEach(cartItem => {
+        //         oldCart.push(cartItem)})
+        //     this.setState({
+        //         cart:oldCart
+        //     })
+        // }
+        // localStorage.setItem('oldCart', JSON.stringify(this.state.cart));
     }
 
     getTotalSum (){
-        console.log("inside totalSum:",this.state.cart)
         let sum=0
-        for(let i=0;i<this.state.cart.length;i++)
+        for(let i=0;i<this.state.newCart.length;i++)
         {
-            sum=sum+this.state.cart[i].cost
+            sum=sum+parseInt(this.state.newCart[i].chapterData[0].price)
         }
         this.setState({
             totalSum:sum
@@ -52,27 +63,32 @@ class Cart extends Component{
     }
 
 
-    render(){
-        let cartItems=this.state.cart.map((chapter, idx) => (
-                <div className="chapter" key={idx}>
-                    <h3>{chapter.name}</h3>
-                    <h4>${chapter.cost}</h4>
+      render(){
+        let cartItems= this.state.newCart.map( (chapter, idx) => {
+            return  (
+                <div  key={idx}>
+                    <h3>BookId:{chapter.bookId}</h3>
+                    <h4>BookName:{chapter.bookName}</h4>
+                    <h4>Chapter number:{chapter.chapterNum}</h4>
+                    <h4>Chapter name:{chapter.chapterData[0].chapterName}</h4>
+                    <h4>Price: ${chapter.chapterData[0].price}</h4>
                     <button onClick={() => this.removeFromCart(chapter)}>
                         Remove
                     </button>
                 </div>
-            ))
-        return (
+            )})
 
+
+        return (
             <div>
-                <h1>Cart</h1>
+                <h1 style={{color:"white"}}>Cart</h1>
                 <div className="Chapters">
-                    {this.state.cart.length===0 && (
+                    {this.state.newCart.length===0 && (
                         <h3> Your cart is empty </h3>
                     )}
                     {cartItems}
                 </div>
-                <div>Total Cost: ${this.state.totalSum}</div>
+                <div style={{color:"white"}}><h2>Total Cost: ${this.state.totalSum}</h2></div>
 
                 {this.state.cart.length > 0 && (
                     <button onClick={this.clearCart}>Clear Cart</button>

@@ -1,72 +1,142 @@
-import React, {Component, useState} from "react"
+import React, {Component} from "react"
 import {Link} from "react-router-dom";
 import productsInfo from "./Data/productInfo";
 
-const PAGE_CART = 'Cart';
+class BookDetails extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            userId:1,
+            bookId: 1,
+            isChecked: true,
+            bookData:[],         //contains everything returned by api
+            chapterData: [],    //contains everything in "bookChapter" part of api result
+            cartChapters: [],   //cart with current {chapterNum, bookId}
+            finalCart: []       //cart with chapters {chapterNum, bookId} that are sent to the next component
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.addToCart = this.addToCart.bind(this)
+        this.goToCart=this.goToCart.bind(this)
+        this.getBookDetails=this.getBookDetails.bind(this)
+    }
 
-function BookDetails(props) {
-    const bookComponent = productsInfo[0]
-    /* const [cart, setCart] = useState([]);
-   const [page, setPage] = useState([]);
+    async getBookDetails(){
+        let response = await fetch('http://localhost:8081/api/books/'+this.state.bookId, {
+            method: 'GET',
+            headers: {
+                'Accept': '*/*'
+            }
+        })
+        let status = response.status;
+        if (status === 200) {
+            console.log("successful")
+        }
+        return await response.json()
+    }
 
-    /* const navigateTo = (nextPage) => {
-             setPage(nextPage);
-         };
+    handleChange(event) {
+        const {name, value, type, checked} = event.target
+        if (type === "checkbox") {
+            let tempCart = this.state.cartChapters
+            if (checked) {
+                tempCart.push(name)
+            } else {
+                tempCart = this.state.cartChapters.filter((chapter) => chapter !== name)
 
-     */
+            }
+            this.setState(
+                {[name]: checked, cartChapters: tempCart}
+            )
+        } else {
+            this.setState({[name]: value})
+        }
+    }
 
+    addToCart() {
+        let tempCart = [];
+        this.state.cartChapters.forEach(cNum => {
+            let chapterData=[]
+            for(let i=0;i<this.state.chapterData.length;i++)
+            {
+                if(this.state.chapterData[i].chapterNumber==cNum)
+                    chapterData.push(this.state.chapterData[i])
 
-    /*  const addToCart = (chapter) => {
-          let newCart = [...cart];
-          let itemInCart;
-          itemInCart = {
-              ...chapter,
-          };
-          newCart.push(itemInCart);
-          setCart(newCart);
-      };*/
+            }
+            tempCart.push({
+                "bookId": this.state.bookId,
+                "bookName":this.state.bookData["bookName"],
+                "chapterNum": cNum,
+                "chapterData":chapterData,
+            })
+        })
 
+        this.setState({
+            finalCart: tempCart
+        },()=>console.log(this.state.finalCart))
+    }
 
-    return (
+    goToCart() {
+        this.props.history.push({
+            pathname: "/Cart",
+            cart: this.state.finalCart,
+            userId: this.state.userId
+        })
+    }
 
-        <div>
-            <h1 style={{color: "white"}}>Book Details</h1>
-            <div className="BookDetails_Image" style={{width: '20rem'}}>
-                <img src={productsInfo[0].img} style={{width: '20rem'}}/>
+    async componentDidMount() {
+        let bookDetails=await this.getBookDetails()
+        this.setState({
+            chapterData: bookDetails["bookChapters"],
+            bookData:bookDetails
+        })
+    }
+
+    render() {
+        const bookComponent = productsInfo[0];
+        return (
+            <div>
+                <h1 style={{color: "white"}}>Book Details</h1>
+
+                <div className="BookDetails_Info">
+                    <img src={productsInfo[0].img} style={{width: '20rem'}}/>
+                    {this.state.finalCart.length>0 &&(<div className="Preview">
+                        <button onClick={this.goToCart}>Go to Cart</button>
+                    </div>)}
+
+                    <p>Name:{bookComponent.bookTitle}</p>
+                    <p>Description:{bookComponent.description}</p>
+                    <p>Price:{bookComponent.price}</p>
+                    <p>Genre:{bookComponent.type}</p>
+
+                    <ol title="Chapters">
+                        {
+                            this.state.chapterData.map((chap) => {
+                                return (
+                                    <div>
+                                        <li>{chap.chapterName}: ${chap.price}
+                                            <input type="checkbox"
+                                                   name={chap.chapterNumber}
+                                                   onChange={this.handleChange}
+                                                   value={this.state.isChecked}
+                                            />
+                                        </li>
+                                        <br/>
+                                    </div>
+                                )
+                            })
+                        }
+                        <br/>
+                        <button className="addToCart" onClick={this.addToCart}> Add To Cart</button>
+                        <button className="buyNow"> Buy Now</button>
+                    </ol>
+
+                </div>
+
             </div>
-            <div className="Preview">
-                <Link to={'/Cart'}>
-                    <button>Go to Cart</button>
-                </Link>
-            </div>
-            <div className="BookDetails_Info" style={{width: '20rem'}}>
-                <p>Name:{bookComponent.bookTitle}</p>
-                <p>Description:{bookComponent.description}</p>
-                <p>Price:{bookComponent.price}</p>
-                <p>Genre:{bookComponent.type}</p>
-
-                <ol title="Chapters">
-                    <li><input type="checkbox"/> The Boy Who Lived price : $2</li>
-                    <br/>
-                    <li><input type="checkbox"/>The Vanishing Glass price : $2</li>
-                    <br/>
-                    <li><input type="checkbox"/>The Letters from No One price : $2</li>
-                    <br/>
-                    <li><input type="checkbox"/>The Keeper of Keys price : $2</li>
-                    <br/>
-                    <li><input type="checkbox"/>Diagon Alley price : $2</li>
-                    <br/>
-                    <br/>
-                    <button className="addToCart"> Add To Cart</button>
-                    <button className="buyNow"> Buy Now</button>
-                </ol>
-
-            </div>
-
-        </div>
 
 
-    )
+        )
+    }
 
 
 }

@@ -1,0 +1,30 @@
+{
+  "bookId": 1,
+  "bookName": "Ayushi",
+  "isbnNumber": "ryikn7456981230",
+  "author": "Neha Kothari",
+  "publisher": null,
+  "yearOfRelease": 2018,
+  "price": 500.0,
+  "imageLocation": null,
+  "description": null,
+  "pdfFileLocation": null,
+  "bookChapters": [
+    {
+      "chapterNumber": 11,
+      "chapterName": "Hello",
+      "price": 8235.0,
+      "startPage": 10,
+      "endPage": 20,
+      "description": "Tata World!"
+    },
+    {
+      "chapterNumber": 52,
+      "chapterName": "Tata",
+      "price": 8650.0,
+      "startPage": 35,
+      "endPage": 50,
+      "description": "BABABABABABABABABABA"
+    }
+  ]
+}

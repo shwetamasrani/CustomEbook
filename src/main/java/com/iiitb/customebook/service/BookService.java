@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 @Service
-public class BookService extends BookXMLService{
+public class BookService {
 
     private final BookRepository bookRepository;
 
@@ -27,13 +27,13 @@ public class BookService extends BookXMLService{
         Book book= bookRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Book does not exist with id:"+id));
 
-        return CustomEBookUtil.mappingBeanToPojo(book);
+        return CustomEBookUtil.mappingBookBeanToPojo(book);
     }
 
-    public Book addBook(BookVO bookDetails)
+    public BookVO addBook(BookVO bookDetails)
     {
-        return bookRepository.save(CustomEBookUtil.mappingPojoToBean(bookDetails));
-
+        Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
+        return CustomEBookUtil.mappingBookBeanToPojo(book);
     }
 
     public List<Book> getBooksByPublisher(String publisher){
@@ -51,23 +51,29 @@ public class BookService extends BookXMLService{
 
     }
 
-    public Book getBookByIsbnNumber(String isbnNumber){
-        return bookRepository.findByIsbnNumber(isbnNumber);
-
+    public BookVO getBookByIsbnNumber(String isbnNumber){
+        Book book =  bookRepository.findByIsbnNumber(isbnNumber);
+        if(book!=null) {
+            return CustomEBookUtil.mappingBookBeanToPojo(book);
+        }
+        return null;
     }
 
-    public void splitBookIntoChapters(BookVO book) {
+    public BookVO splitBookIntoChapters(BookVO book) {
 
         try {
             String xmlFilePath = CustomEBookConstants.PATH_BOOKS_XML+File.separator+book.getBookId()+CustomEBookConstants.XML_FILE_EXTENSION;
-            createXMlFile(book, xmlFilePath);
+            CustomEBookUtil.createXMlFile(book, xmlFilePath);
             Book bookInDB= bookRepository.findById(book.getBookId()).orElseThrow(()
                     -> new ResourceNotFoundException("Book does not exist with id:"+book.getBookId()));
             bookInDB.setXmlFileLocation(xmlFilePath);
-            bookRepository.save(bookInDB);
+            bookInDB = bookRepository.save(bookInDB);
+            return CustomEBookUtil.mappingBookBeanToPojo(bookInDB);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }
