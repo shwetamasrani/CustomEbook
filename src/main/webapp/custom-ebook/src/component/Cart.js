@@ -8,11 +8,17 @@ class Cart extends Component{
             totalSum:0,
             newCart:this.props.location.cart,   //cart passed from bookDetails component
             userId:this.props.location.userId,
-            chapterDetails:[]
+            chapterDetails:[],
         }
         this.removeFromCart=this.removeFromCart.bind(this);
         this.clearCart=this.clearCart.bind(this);
         this.getTotalSum=this.getTotalSum.bind(this);
+        this.buyBook=this.buyBook.bind(this);
+    }
+
+    buyBook()
+    {
+        alert("book bought")
     }
 
     removeFromCart(chapterToRemove){
@@ -31,6 +37,19 @@ class Cart extends Component{
     async componentDidMount() {
         this.getTotalSum()
         console.log(this.state.newCart)
+
+        if (this.state.newCart === undefined) {
+
+
+            this.setState({
+                newCart: JSON.parse(localStorage.getItem('newCart')),
+                userId: JSON.parse(localStorage.getItem('userId')),
+            })
+        } else {
+            localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
+            localStorage.setItem('userId', JSON.stringify(this.state.userId));
+
+        }
         // if(localStorage.getItem('oldCart').length===0)
         // {
         //     this.setState({
@@ -89,6 +108,7 @@ class Cart extends Component{
                     {cartItems}
                 </div>
                 <div style={{color:"white"}}><h2>Total Cost: ${this.state.totalSum}</h2></div>
+                <button name="buy" onClick={this.buyBook}>Buy Book</button>
 
                 {this.state.cart.length > 0 && (
                     <button onClick={this.clearCart}>Clear Cart</button>
