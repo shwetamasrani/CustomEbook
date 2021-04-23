@@ -4,24 +4,34 @@ import java.util.List;
 
 public class OrderInputVO {
 
-    private String userId;
+    private Integer orderId;
+    private Integer userId;
     private String customEBookName;
     private List<OrderItemInputVO> orderItems;
 
     public OrderInputVO() {
     }
 
-    public OrderInputVO(String userId, String customEBookName, List<OrderItemInputVO> orderItems) {
+    public OrderInputVO(Integer orderId, Integer userId, String customEBookName, List<OrderItemInputVO> orderItems) {
+        this.orderId = orderId;
         this.userId = userId;
         this.customEBookName = customEBookName;
         this.orderItems = orderItems;
     }
 
-    public String getUserId() {
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
