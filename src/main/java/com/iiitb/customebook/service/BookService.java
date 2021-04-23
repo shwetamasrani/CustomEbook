@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +29,18 @@ public class BookService {
                 -> new ResourceNotFoundException("Book does not exist with id:"+id));
 
         return CustomEBookUtil.mappingBookBeanToPojo(book);
+    }
+
+    public List<BookVO> getAllBooks()
+    {
+        List<Book> bookList=bookRepository.findAll();
+        List<BookVO> bookVoList=new ArrayList<>();
+
+        for(int i=0;i<bookList.size();i++) {
+
+             bookVoList.add(CustomEBookUtil.mappingBookBeanToPojo(bookList.get(i)));
+        }
+        return bookVoList;
     }
 
     public BookVO addBook(BookVO bookDetails)

@@ -21,10 +21,14 @@ public class CustomEBookUtil {
         bookDetails.setBookId(book.getBookId());
         bookDetails.setBookName(book.getBookName());
         bookDetails.setAuthor(book.getAuthor());
+        bookDetails.setPublisher(book.getPublisher());
         bookDetails.setPrice(book.getPrice());
         bookDetails.setIsbnNumber(book.getIsbnNumber());
         bookDetails.setYearOfRelease(book.getYearOfRelease());
         bookDetails.setImageLocation(book.getImageLocation());
+        bookDetails.setDescription(book.getDescription());
+        bookDetails.setPdfFileLocation(book.getPdfFileLocation());
+
         if(book.getXmlFileLocation()!=null) {
             bookDetails.setBookchapters(readXML(book.getXmlFileLocation()));
         }
