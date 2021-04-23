@@ -7,7 +7,7 @@ class BookDetails extends Component {
         super(props);
         this.state = {
             userId:1,
-            bookId: 1,
+            bookId: this.props.location.bookId,
             isChecked: true,
             bookData:[],         //contains everything returned by api
             chapterData: [],    //contains everything in "bookChapter" part of api result
@@ -18,6 +18,7 @@ class BookDetails extends Component {
         this.addToCart = this.addToCart.bind(this)
         this.goToCart=this.goToCart.bind(this)
         this.getBookDetails=this.getBookDetails.bind(this)
+        this.updateChapterData=this.updateChapterData.bind(this)
     }
 
     async getBookDetails(){
@@ -83,32 +84,44 @@ class BookDetails extends Component {
         })
     }
 
-    async componentDidMount() {
+    async updateChapterData()
+    {
         let bookDetails=await this.getBookDetails()
         this.setState({
             chapterData: bookDetails["bookChapters"],
             bookData:bookDetails
         })
+
+    }
+
+    async componentDidMount() {
+        if (this.state.bookId === undefined) {
+            this.setState({
+                bookId: JSON.parse(localStorage.getItem('bookId')),
+            },()=>this.updateChapterData())
+        } else {
+            localStorage.setItem('bookId', JSON.stringify(this.state.bookId));
+        }
     }
 
     render() {
-        const bookComponent = productsInfo[0];
+        const bookComponent = this.state.bookData;
         return (
             <div>
                 <h1 style={{color: "white"}}>Book Details</h1>
 
                 <div className="BookDetails_Info">
-                    <img src={productsInfo[0].img} style={{width: '20rem'}}/>
+                    <img src={bookComponent.imageLocation} style={{width: '20rem'}}/>
                     {this.state.finalCart.length>0 &&(<div className="Preview">
                         <button onClick={this.goToCart}>Go to Cart</button>
                     </div>)}
 
-                    <p>Name:{bookComponent.bookTitle}</p>
+                    <p>Name:{bookComponent.bookName}</p>
                     <p>Description:{bookComponent.description}</p>
                     <p>Price:{bookComponent.price}</p>
-                    <p>Genre:{bookComponent.type}</p>
+                    <p>Author:{bookComponent.author}</p>
 
-                    <ol title="Chapters">
+                    {this.state.chapterData==null?<h3>No Chapters</h3>:<ol title="Chapters">
                         {
                             this.state.chapterData.map((chap) => {
                                 return (
@@ -128,8 +141,7 @@ class BookDetails extends Component {
                         <br/>
                         <button className="addToCart" onClick={this.addToCart}> Add To Cart</button>
                         <button className="buyNow"> Buy Now</button>
-                    </ol>
-
+                    </ol>}
                 </div>
 
             </div>

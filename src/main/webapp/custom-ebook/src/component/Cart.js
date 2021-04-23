@@ -35,12 +35,11 @@ class Cart extends Component{
         },()=>this.getTotalSum())
     }
     async componentDidMount() {
+
         this.getTotalSum()
         console.log(this.state.newCart)
 
         if (this.state.newCart === undefined) {
-
-
             this.setState({
                 newCart: JSON.parse(localStorage.getItem('newCart')),
                 userId: JSON.parse(localStorage.getItem('userId')),
@@ -48,7 +47,6 @@ class Cart extends Component{
         } else {
             localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
-
         }
         // if(localStorage.getItem('oldCart').length===0)
         // {
@@ -68,6 +66,20 @@ class Cart extends Component{
         // }
         // localStorage.setItem('oldCart', JSON.stringify(this.state.cart));
     }
+    // async updateNewCart(){
+    //     if (this.state.newCart === undefined) {
+    //         console.log("MAMMAMAMAM")
+    //         this.setState({
+    //             newCart: JSON.parse(localStorage.getItem('newCart')),
+    //             userId: JSON.parse(localStorage.getItem('userId')),
+    //         })
+    //     } else {
+    //         console.log("MEWMEWMEW")
+    //         localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
+    //         localStorage.setItem('userId', JSON.stringify(this.state.userId));
+    //     }
+    //
+    // }
 
     getTotalSum (){
         let sum=0
@@ -83,6 +95,7 @@ class Cart extends Component{
 
 
       render(){
+
         let cartItems= this.state.newCart.map( (chapter, idx) => {
             return  (
                 <div  key={idx}>
@@ -96,8 +109,6 @@ class Cart extends Component{
                     </button>
                 </div>
             )})
-
-
         return (
             <div>
                 <h1 style={{color:"white"}}>Cart</h1>

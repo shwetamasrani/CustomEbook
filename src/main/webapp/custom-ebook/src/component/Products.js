@@ -16,6 +16,7 @@ class Products extends Component {
         }
     }
 
+
     render() {
         return (
             <div className="Products" href="" style={{width: '30rem'}}>
@@ -24,7 +25,7 @@ class Products extends Component {
                 <p>Author:{this.state.authorName}</p>
                 <p>Price:Rs.{this.state.price}</p>
                 <p>Publisher:{this.state.publisher} </p>
-                <Link to={'/BookDetails'}>
+                <Link to={{pathname:'/BookDetails',bookId:this.state.id}}>
                     <button className="viewDetails"> View Details</button>
                 </Link>
             </div>
