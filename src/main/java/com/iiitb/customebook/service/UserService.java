@@ -37,6 +37,14 @@ public class UserService {
                 -> new ResourceNotFoundException("Employee not exists with id:"+id));
 
         return user;  //entity is returned along with the status
+
+    }
+
+    public User getUserByEmail(String email){
+
+        User user= userRepository.findByEmail(email);
+
+        return user;  //entity is returned along with the status
     }
 
     public ResponseEntity<User> updateUser(Integer id, User userDetails)

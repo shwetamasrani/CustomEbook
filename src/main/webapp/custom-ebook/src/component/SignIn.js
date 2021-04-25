@@ -1,23 +1,67 @@
 import React,{Component} from "react"
-import {Link} from 'react-router-dom';
+import {Link, withRouter, Route, BrowserRouter} from 'react-router-dom';
+import UserService from "../services/UserService";
+import { hashHistory } from "react-router";
+import { createHashHistory } from 'history';
+
 class SignIn extends Component{
     constructor(props) {
         super(props);
+
         this.state = {
             email: "",
             password: "",
-            errorMessage: false
         }
-        this.handleChange=this.handleChange.bind(this)
+
+        this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
-    handleChange = (event) => {
-        const {name, value} = event.target
+
+    handleChange(event) {
+        //console.log("Handle change callled")
+        const {name, value} = event.target;
         this.setState({
             [name]: value
         })
+        //console.log(this.state)
     }
-    handleClick(){
-        alert("Login")
+    handleClick(e){
+        e.preventDefault();
+
+        let user = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        console.log("HandleClick")
+        console.log(user);
+        UserService.getUser(user).then(res => {
+                console.log("response",res);
+                console.log("Signin Component", res.data);
+                console.log("Publisher", res.data.publisherFlag);
+
+                if(res.data.publisherFlag){
+                    this.props.history.push({
+                        pathname: "/AdminDashboard",
+                        userId: res.data.user_id
+                    })
+                    //this.props.history.push('/AdminDashboard');
+                }
+                else{
+                    this.props.history.push({
+                        pathname: "/Dashboard",
+                        userId: res.data.user_id
+                    })
+
+                    //this.props.history.push('/Dashboard');
+                }
+                console.log("LoggedIn");
+        })
+            .catch(err =>{
+                console.log(err.response.data);
+                alert("Username or Password doesn't Match!");
+                window.location.reload(true);
+                });
+        //alert("Login")
     }
     render() {
         return (

@@ -12,19 +12,21 @@ class Products extends Component {
             img: this.props.img,
             authorName: this.props.authorName,
             price: this.props.price,
-            genre: this.props.genre
+            publisher: this.props.publisher,
+            userId:this.props.userId
         }
     }
 
+
     render() {
         return (
-            <div className="Products" href="" style={{width: '18rem'}}>
+            <div className="Products" href="" style={{width: '30rem'}}>
                 <img src={this.state.img} style={{width: '18rem'}}/>
                 <h3>{this.state.bookTitle}</h3>
                 <p>Author:{this.state.authorName}</p>
                 <p>Price:Rs.{this.state.price}</p>
-                <p>Genre:{this.state.genre} </p>
-                <Link to={'/BookDetails'}>
+                <p>Publisher:{this.state.publisher} </p>
+                <Link to={{pathname:'/BookDetails',bookId:this.state.id,userId:this.state.userId}}>
                     <button className="viewDetails"> View Details</button>
                 </Link>
             </div>
