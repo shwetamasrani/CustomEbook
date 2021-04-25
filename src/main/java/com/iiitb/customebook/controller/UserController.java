@@ -33,9 +33,14 @@ public class UserController {
         return userService.createUser(user);
     }
 
+
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return userService.getUserById(id);
+        ResponseEntity<User> user = userService.getUserById(id);
+        if(user!=null) {
+            return user;
+        }
+        return null;
     }
 
     @PutMapping("user/{id}")
