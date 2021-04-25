@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user){
+    public ResponseEntity<Object> login(@RequestBody User user){
         String email = user.getEmail();
         String pass = user.getPassword();
         System.out.println("email"+ email+" "+pass);
@@ -56,7 +56,8 @@ public class UserController {
 //               System.out.println("flag after:"+ check.isLog_status());
             return ResponseEntity.ok(loggedIn);
         }
-
-        return null;
+        else{
+            return ResponseEntity.badRequest().body("Password Doesn't match");
+        }
     }
 }
