@@ -29,6 +29,20 @@ public class BookController {
         return ResponseEntity.ok(book);  //entity is returned along with the status
     }
 
+    @PutMapping("/split")
+    public ResponseEntity<BookVO> splitBook(@RequestBody BookVO bookDetails)
+    {
+        if(null!=bookDetails ) {
+            if(bookDetails.getBookId()!=null) {
+                if(bookDetails.getBookChapters()!=null) {
+                    bookDetails = bookService.splitBookIntoChapters(bookDetails);
+                    return ResponseEntity.ok(bookDetails);
+                }
+            }
+        }
+        return null;
+    }
+
     @GetMapping
     public List<BookVO> getAllBooks(){
         return bookService.getAllBooks();
@@ -55,17 +69,5 @@ public class BookController {
         return null;
     }
 
-    @PutMapping("/split")
-    public ResponseEntity<BookVO> splitBook(@RequestBody BookVO bookDetails)
-    {
-        if(null!=bookDetails ) {
-            if(bookDetails.getBookId()!=null) {
-                if(bookDetails.getBookChapters()!=null) {
-                    bookDetails = bookService.splitBookIntoChapters(bookDetails);
-                    return ResponseEntity.ok(bookDetails);
-                }
-            }
-        }
-        return null;
-    }
+
 }
