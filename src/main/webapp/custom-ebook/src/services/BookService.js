@@ -14,7 +14,7 @@ class BookService{
    
     splitBookChapters(book_split)
     {
-       return axios.post(BOOK_SPLIT_APT_BASE_URL,book_split)
+       return axios.put(BOOK_SPLIT_APT_BASE_URL,book_split)
     }
    
        
