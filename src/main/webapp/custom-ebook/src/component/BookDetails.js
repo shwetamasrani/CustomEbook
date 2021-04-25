@@ -6,7 +6,7 @@ class BookDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId:1,
+            userId:this.props.location.userId,
             bookId: this.props.location.bookId,
             isChecked: true,
             bookData:[],         //contains everything returned by api
@@ -32,6 +32,7 @@ class BookDetails extends Component {
             console.log("successful")
         }
         let bookDetails= await response.json()
+        console.log(JSON.stringify(bookDetails))
         this.setState({
             chapterData: bookDetails["bookChapters"],
             bookData:bookDetails
@@ -92,9 +93,12 @@ class BookDetails extends Component {
         if (this.state.bookId === undefined) {
             this.setState({
                 bookId: JSON.parse(localStorage.getItem('bookId')),
+                userId:JSON.parse(localStorage.getItem('userId'))
             },()=>this.getBookDetails())
         } else {
             localStorage.setItem('bookId', JSON.stringify(this.state.bookId));
+            localStorage.setItem('userId', JSON.stringify(this.state.userId));
+
             await this.getBookDetails()
         }
         // let bookDetails= await this.getBookDetails()

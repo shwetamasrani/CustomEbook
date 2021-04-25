@@ -38,11 +38,21 @@ class SignIn extends Component{
                 console.log("response",res);
                 console.log("Signin Component", res.data);
                 console.log("Publisher", res.data.publisherFlag);
+
                 if(res.data.publisherFlag){
-                    this.props.history.push('/AdminDashboard');
+                    this.props.history.push({
+                        pathname: "/AdminDashboard",
+                        userId: res.data.user_id
+                    })
+                    //this.props.history.push('/AdminDashboard');
                 }
                 else{
-                    this.props.history.push('/Dashboard');
+                    this.props.history.push({
+                        pathname: "/Dashboard",
+                        userId: res.data.user_id
+                    })
+
+                    //this.props.history.push('/Dashboard');
                 }
                 console.log("LoggedIn");
         })

@@ -12,7 +12,8 @@ class Products extends Component {
             img: this.props.img,
             authorName: this.props.authorName,
             price: this.props.price,
-            publisher: this.props.publisher
+            publisher: this.props.publisher,
+            userId:this.props.userId
         }
     }
 
@@ -25,7 +26,7 @@ class Products extends Component {
                 <p>Author:{this.state.authorName}</p>
                 <p>Price:Rs.{this.state.price}</p>
                 <p>Publisher:{this.state.publisher} </p>
-                <Link to={{pathname:'/BookDetails',bookId:this.state.id}}>
+                <Link to={{pathname:'/BookDetails',bookId:this.state.id,userId:this.state.userId}}>
                     <button className="viewDetails"> View Details</button>
                 </Link>
             </div>

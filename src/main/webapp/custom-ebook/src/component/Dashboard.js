@@ -8,7 +8,8 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            productInfo: []
+            productInfo: [],
+            userId:this.props.location.userId
         }
         this.setStateToFalse = this.setStateToFalse.bind(this)
 
@@ -34,6 +35,15 @@ class Dashboard extends Component {
         }
         let tempProductInfo = await response.json()
 
+        if (this.state.userId === undefined) {
+            this.setState({
+                userId: JSON.parse(localStorage.getItem('userId')),
+            })
+        } else {
+            console.log("hi")
+            localStorage.setItem('userId', JSON.stringify(this.state.userId));
+        }
+
         this.setState({
                 productInfo: tempProductInfo,
                 isLoading: false
@@ -58,6 +68,7 @@ class Dashboard extends Component {
                     price={product.price}
                     img={product.imageLocation}
                     publisher={product.publisher}
+                    userId={this.state.userId}
                 />
             )
         })
