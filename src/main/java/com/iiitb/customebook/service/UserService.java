@@ -39,6 +39,13 @@ public class UserService {
         return user;  //entity is returned along with the status
     }
 
+    public User getUserByEmail(String email){
+
+        User user= userRepository.findByEmail(email);
+
+        return user;  //entity is returned along with the status
+    }
+
     public ResponseEntity<User> updateUser(Integer id, User userDetails)
     {
         User user= userRepository.findById(id).orElseThrow(()

@@ -1,22 +1,41 @@
 import React,{Component} from "react"
 import {Link} from 'react-router-dom';
+import UserService from "../services/UserService";
+import history from './history';
+
 class SignIn extends Component{
     constructor(props) {
         super(props);
+
         this.state = {
             email: "",
             password: "",
-            errorMessage: false
         }
-        this.handleChange=this.handleChange.bind(this)
+
+        this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
-    handleChange = (event) => {
-        const {name, value} = event.target
+
+    handleChange(event) {
+        console.log("Handle change callled")
+        const {name, value} = event.target;
         this.setState({
             [name]: value
         })
+        console.log(this.state)
     }
-    handleClick(){
+    handleClick(e){
+        e.preventDefault();
+        let user = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        console.log("HandleClick")
+        console.log(user);
+        UserService.getUser(user).then(res => {
+            this.props.history.push('/Dashboard');
+            console.log("LoggedIn");
+        });
         alert("Login")
     }
     render() {

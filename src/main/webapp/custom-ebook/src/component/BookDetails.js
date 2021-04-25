@@ -18,7 +18,6 @@ class BookDetails extends Component {
         this.addToCart = this.addToCart.bind(this)
         this.goToCart=this.goToCart.bind(this)
         this.getBookDetails=this.getBookDetails.bind(this)
-        this.updateChapterData=this.updateChapterData.bind(this)
     }
 
     async getBookDetails(){
@@ -32,7 +31,11 @@ class BookDetails extends Component {
         if (status === 200) {
             console.log("successful")
         }
-        return await response.json()
+        let bookDetails= await response.json()
+        this.setState({
+            chapterData: bookDetails["bookChapters"],
+            bookData:bookDetails
+        })
     }
 
     handleChange(event) {
@@ -66,6 +69,7 @@ class BookDetails extends Component {
             tempCart.push({
                 "bookId": this.state.bookId,
                 "bookName":this.state.bookData["bookName"],
+                "bookLocation":this.state.bookData["pdfFileLocation"],
                 "chapterNum": cNum,
                 "chapterData":chapterData,
             })
@@ -84,24 +88,20 @@ class BookDetails extends Component {
         })
     }
 
-    async updateChapterData()
-    {
-        let bookDetails=await this.getBookDetails()
-        this.setState({
-            chapterData: bookDetails["bookChapters"],
-            bookData:bookDetails
-        })
-
-    }
-
     async componentDidMount() {
         if (this.state.bookId === undefined) {
             this.setState({
                 bookId: JSON.parse(localStorage.getItem('bookId')),
-            },()=>this.updateChapterData())
+            },()=>this.getBookDetails())
         } else {
             localStorage.setItem('bookId', JSON.stringify(this.state.bookId));
+            await this.getBookDetails()
         }
+        // let bookDetails= await this.getBookDetails()
+        // this.setState({
+        //     chapterData: bookDetails["bookChapters"],
+        //     bookData:bookDetails
+        // })
     }
 
     render() {
@@ -115,12 +115,10 @@ class BookDetails extends Component {
                     {this.state.finalCart.length>0 &&(<div className="Preview">
                         <button onClick={this.goToCart}>Go to Cart</button>
                     </div>)}
-
                     <p>Name:{bookComponent.bookName}</p>
                     <p>Description:{bookComponent.description}</p>
                     <p>Price:{bookComponent.price}</p>
                     <p>Author:{bookComponent.author}</p>
-
                     {this.state.chapterData==null?<h3>No Chapters</h3>:<ol title="Chapters">
                         {
                             this.state.chapterData.map((chap) => {
