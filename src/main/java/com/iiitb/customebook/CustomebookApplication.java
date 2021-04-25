@@ -1,7 +1,5 @@
 package com.iiitb.customebook;
 
-import com.iiitb.customebook.pojo.BookChapterVO;
-import com.iiitb.customebook.pojo.BookVO;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -9,15 +7,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -25,13 +17,13 @@ public class CustomebookApplication {
 
     public static void main(String[] args) throws IOException {
         SpringApplication.run(CustomebookApplication.class, args);
-        //readXML();
-        //writeXML();
+
+        makeDirectory(CustomEBookConstants.PATH_BOOKS);
+        makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
+        makeDirectory(CustomEBookConstants.PATH_BOOKS_ORDERS);
         //addToXML();
         splitPdf("sample2",21,30);
         mergePDF();
-        makeDirectory(CustomEBookConstants.PATH_BOOKS);
-        makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
     }
 
     private static void mergePDF() throws IOException {
@@ -100,56 +92,26 @@ public class CustomebookApplication {
         }
     }
 
-   /* public static void readXML() {
-        System.out.println("Hello");
+    public void mergePDFs(List<File> chaptersPDFList, Integer orderId) throws IOException {
 
-        try{
-            File file = new File("src/main/resources/Books/IntroductionToAlgorithm.xml");
-            JAXBContext jaxbContext = JAXBContext.newInstance(BookVO.class);
+        //Create PDFMergerUtility class object
+        PDFMergerUtility PDFmerger = new PDFMergerUtility();
 
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            BookVO book= (BookVO) jaxbUnmarshaller.unmarshal(file);
-            System.out.println("Chapters:");
-            List<BookChapterVO> list=book.getBookChapters();
-            for(BookChapterVO chapters:list)
-                System.out.println(chapters.getChapterNumber()+" "+chapters.getChapterName()+"  "+chapters.getPrice() + " " + chapters.getContentLocation());
+        //Setting the destination file path
+        PDFmerger.setDestinationFileName(CustomEBookConstants.PATH_BOOKS+"/merged_"+orderId+CustomEBookConstants.PDF_FILE_EXTENSION);
 
-        } catch (JAXBException e) {
-            e.printStackTrace();
+        for(File chapterPDF: chaptersPDFList) {
+            PDDocument document = PDDocument.load(chapterPDF);
+            PDFmerger.addSource(chapterPDF);
+            document.close();
         }
+        //Merging the documents
+        PDFmerger.mergeDocuments(null);
+
+        System.out.println("PDF Documents merged to a single file successfully");
     }
 
-    public static void writeXML() {
-        System.out.println("Hello from the other side");
-
-        try {
-            JAXBContext contextObj = JAXBContext.newInstance(BookVO.class);
-
-            Marshaller marshallerObj = contextObj.createMarshaller();
-            marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-            BookChapterVO chapter1 = new BookChapterVO(1, "Linkin Park", 5100.30, "I've become so numb\n" +
-                    "I can't feel you there\n" +
-                    "Become so tired\n" +
-                    "So much more aware");
-            BookChapterVO chapter2 = new BookChapterVO(2, "Green Day", 5200.20, "Summer has come and passed\n" +
-                    "The innocent can never last\n" +
-                    "Wake me up when September ends");
-
-            ArrayList<BookChapterVO> list = new ArrayList<>();
-            list.add(chapter1);
-            list.add(chapter2);
-
-            BookVO book = new BookVO();
-            book.setBookchapters(list);
-            marshallerObj.marshal(book, new FileOutputStream("src/main/resources/Books/newsample.xml"));
-        } catch(JAXBException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
+   /*
     public static void addToXML() {
         System.out.println("Hello! Again....");
 

@@ -9,6 +9,7 @@ import BookDetails from "./component/BookDetails"
 import Navbar from './component/Navbar'
 import AdminDashboard from "./component/AdminDashboard";
 import Cart from "./component/Cart.js";
+import AddChapterDetails from "./component/AddChapterDetails";
 
 
 
@@ -30,6 +31,7 @@ class App extends Component{
                             <Route exact path='/BookDetails' component={BookDetails}/>
                             <Route exact path='/AdminDashboard' component={AdminDashboard}/>
                             <Route exact path='/Cart' component={Cart}/>
+                            <Route exact path='/AddChapterDetails' component={AddChapterDetails}/>
                         </Switch>
                     </div>
                 </Router>

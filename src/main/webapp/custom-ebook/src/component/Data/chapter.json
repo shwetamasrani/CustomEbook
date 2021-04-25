@@ -1,0 +1,16 @@
+{
+  "chapters": [
+    {
+      "bookId": 1,
+      "name": "Introduction",
+      "cost": 2.99,
+      "chapterNo": 1
+    },
+    {
+      "bookId": 3,
+      "name": "Python2",
+      "cost": 19.99,
+      "chapterNo": 2
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import productsInfo from "./Data/productInfo";
 import axios from 'axios';
 import Dashboard from "./Dashboard";
 import BookService from "../services/BookService"
+import AddChapterDetails from "./AddChapterDetails";
 
 class AdminDashboard extends Component {
 
@@ -41,9 +42,16 @@ class AdminDashboard extends Component {
 
     console.log('Book =>' + JSON.stringify(book));
 
-    BookService.createBook(book).then(res => {
-        this.props.history.push('/Signin');
+    BookService.createBook(book).then((res) => {
+       
+       
+        console.log("admindash-data.bookid",res.bookId)
+        this.props.history.push({pathname:'/AddChapterDetails',state: {
+          bookId: res.bookId}});
     });
+
+    // const book_result= BookService.createBook(book)
+    // console.log("admin-dashboard",book_result)
 }
 
     // state = {
@@ -116,7 +124,7 @@ class AdminDashboard extends Component {
                     <div>
                         <form>
                              <input
-                                type="text"
+                                type="number"
                                 name="isbnNumber"
                                 required="True"
                                 placeholder="ISBN Number"
@@ -204,29 +212,6 @@ class AdminDashboard extends Component {
                     {/* {this.fileData()} */}
                 </div>
 
-                <div className="chapter">
-                    <form>
-                        <input
-                            type="text"
-                            name="chapterName"
-                            required="True"
-                            placeholder="Chapter Name"
-                            //value={this.state.bookName}
-                            onChange={this.handleChange}/>
-                        <input
-                            type="number"
-                            name="chapterPrice"
-                            required="True"
-                            placeholder="Chapter Price"
-                            //value={this.state.chapterPrice}
-                            onChange={this.handleChange}/>
-                        <h4>Upload PDF</h4>
-                        <input type="file" onChange={this.onFileChange}/>
-                        <button onClick={this.onFileUpload}>
-                            Upload!
-                        </button>
-                    </form>
-                </div>
                 <div className="box hide">
 
                 </div>
