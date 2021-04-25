@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/books")
@@ -25,7 +27,11 @@ public class BookController {
     public ResponseEntity<BookVO> getBookById(@PathVariable Integer id) {
         BookVO book = bookService.getBookById(id);
         return ResponseEntity.ok(book);  //entity is returned along with the status
+    }
 
+    @GetMapping
+    public List<BookVO> getAllBooks(){
+        return bookService.getAllBooks();
     }
 
     @GetMapping("isbn/{isbn}")

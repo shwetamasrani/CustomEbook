@@ -20,6 +20,7 @@ public class CustomebookApplication {
 
         makeDirectory(CustomEBookConstants.PATH_BOOKS);
         makeDirectory(CustomEBookConstants.PATH_BOOKS_XML);
+        makeDirectory(CustomEBookConstants.PATH_BOOKS_ORDERS);
         //addToXML();
         splitPdf("sample2",21,30);
         mergePDF();
