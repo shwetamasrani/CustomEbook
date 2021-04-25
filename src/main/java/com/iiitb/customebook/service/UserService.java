@@ -37,6 +37,7 @@ public class UserService {
                 -> new ResourceNotFoundException("Employee not exists with id:"+id));
 
         return user;  //entity is returned along with the status
+
     }
 
     public User getUserByEmail(String email){

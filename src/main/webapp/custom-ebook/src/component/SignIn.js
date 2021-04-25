@@ -1,7 +1,8 @@
 import React,{Component} from "react"
-import {Link} from 'react-router-dom';
+import {Link, withRouter, Route, BrowserRouter} from 'react-router-dom';
 import UserService from "../services/UserService";
-import history from './history';
+import { hashHistory } from "react-router";
+import { createHashHistory } from 'history';
 
 class SignIn extends Component{
     constructor(props) {
@@ -17,15 +18,16 @@ class SignIn extends Component{
     }
 
     handleChange(event) {
-        console.log("Handle change callled")
+        //console.log("Handle change callled")
         const {name, value} = event.target;
         this.setState({
             [name]: value
         })
-        console.log(this.state)
+        //console.log(this.state)
     }
     handleClick(e){
         e.preventDefault();
+
         let user = {
             email: this.state.email,
             password: this.state.password
@@ -33,10 +35,23 @@ class SignIn extends Component{
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-            this.props.history.push('/Dashboard');
-            console.log("LoggedIn");
-        });
-        alert("Login")
+                console.log("response",res);
+                console.log("Signin Component", res.data);
+                console.log("Publisher", res.data.publisherFlag);
+                if(res.data.publisherFlag){
+                    this.props.history.push('/AdminDashboard');
+                }
+                else{
+                    this.props.history.push('/Dashboard');
+                }
+                console.log("LoggedIn");
+        })
+            .catch(err =>{
+                console.log(err.response.data);
+                alert("Username or Password doesn't Match!");
+                window.location.reload(true);
+                });
+        //alert("Login")
     }
     render() {
         return (
