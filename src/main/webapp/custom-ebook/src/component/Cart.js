@@ -8,7 +8,7 @@ class Cart extends Component {
             totalSum: 0,
             newCart: this.props.location.cart,   //cart passed from bookDetails component
             userId: this.props.location.userId,
-            orderId:this.props.location.orderId,
+            orderId: this.props.location.orderId,
             chapterDetails: [],
             customBookName: ""
         }
@@ -26,6 +26,7 @@ class Cart extends Component {
         this.buyBook = this.buyBook.bind(this);
         this.updateCartData = this.updateCartData.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.getOldCartItems = this.getOldCartItems.bind(this)
     }
 
     handleChange(event) {
@@ -70,11 +71,12 @@ class Cart extends Component {
                 )
             })
             let status = response.status;
-            if (status === 200) {
-                console.log("successful")
+            if (status === 201) {
+                this.clearCart()
             }
             let bookDetails = await response.json()
             console.log(JSON.stringify(completeCart))
+            alert("Book Bought")
         }
     }
 
@@ -93,27 +95,73 @@ class Cart extends Component {
 
     clearCart() {
         this.setState({
-            newCart: []
+            newCart: [],
+            customBookName:""
         }, () => this.updateCartData())
+    }
+
+    async getOldCartItems() {
+        let response = await fetch('http://localhost:8081/api/cart/orders/' + this.state.orderId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            },
+        })
+        let status = response.status;
+        if (status === 200) {
+            console.log("successful")
+        }
+
+        let oldCart = await response.json()
+        console.log("oldCart--->", oldCart)
+        let formattedOldCart = []
+        for (const orderItem of oldCart.orderItems) {
+            let cartItem = {
+                bookId: orderItem.bookId,
+                bookName: orderItem.bookName,
+                bookLocation: orderItem.bookLocation,
+                chapterNum: orderItem.chapterNumber,
+                chapterData: [
+                    {
+                        chapterNumber: orderItem.chapterNumber,
+                        chapterName: "dummy chapter name",
+                        price: orderItem.price,
+                        startPage: orderItem.startPage,
+                        endPage: orderItem.endPage,
+                        description: orderItem.chapterDescription
+                    }
+                ]
+            }
+            formattedOldCart.push(cartItem)
+        }
+        console.log(formattedOldCart)
+        localStorage.setItem('newCart', JSON.stringify(formattedOldCart));
+        this.setState({
+            newCart: formattedOldCart
+        }, () => this.getTotalSum())
+
+
+        //this.getTotalSum()
     }
 
     async componentDidMount() {
 
-        console.log(this.state.newCart)
+        console.log("NewCart:--->", this.state.newCart)
 
         if (this.state.newCart === undefined) {
             this.setState({
                     newCart: JSON.parse(localStorage.getItem('newCart')),
                     userId: JSON.parse(localStorage.getItem('userId')),
                     orderId: JSON.parse(localStorage.getItem('orderId'))
-                }, () => this.getTotalSum()
+                }, () => this.getOldCartItems()
             )
         } else {
             localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
             localStorage.setItem('orderId', JSON.stringify(this.state.orderId));
 
-            this.getTotalSum()
+            await this.getOldCartItems()
         }
     }
 
@@ -152,7 +200,7 @@ class Cart extends Component {
             )
         })
         return (
-            <div>
+            <div className="Cart" style={{display:"inline-grid"}}>
                 <h1 style={{color: "white"}}>Cart</h1>
                 <div className="Chapters" style={{width: 'fit-content'}}>
                     {this.state.newCart.length === 0 && (
@@ -160,20 +208,25 @@ class Cart extends Component {
                     )}
                     {cartItems}
                 </div>
-                <div style={{color: "white"}}><h2>Total Cost: ${this.state.totalSum}</h2></div>
-                <form>
-                    <div>
-                        <h3>Enter a book Name:</h3>
-                        <input type="text" name="customBookName" required="true" onChange={this.handleChange}/>
-                    </div>
-                    {this.state.newCart.length > 0 &&
-                    <button name="buy" onClick={this.buyBook}>Buy Book</button>
-                    }
-                </form>
+                <div className="bookName">
+                    <h2>Total Cost: ${this.state.totalSum}</h2>
 
-                {this.state.newCart.length > 0 && (
-                    <button onClick={this.clearCart}>Clear Cart</button>
-                )}
+
+                    {this.state.newCart.length > 0 &&
+                    (
+                        <div>
+                        <h3>Enter a book Name:</h3>
+                        <input type="text" name="customBookName" required="true" value={this.state.customBookName} onChange={this.handleChange}/>
+                        <button name="buy" onClick={this.buyBook}>Buy Book</button>
+                        </div>
+
+                    )
+                    }
+                    {this.state.newCart.length > 0 && (
+                        <button onClick={this.clearCart}>Clear Cart</button>
+                    )}
+                </div>
+
             </div>
 
         )

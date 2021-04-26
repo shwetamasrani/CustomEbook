@@ -145,7 +145,25 @@ button {
     border: 1px -o-highlight-border solid;
     background-color: rgba(255, 255, 255, 0.1);
 }
+.bookName{
+    color: white;
+    border-radius: 20px;
+    size: 20px;
+    background-color: rgba(0,0,0,0.5);
+    padding: 10px;
+    width: fit-content;
+}
+.bookName button{
+    color: black;
+}
+.bookName input{
+    border-radius: 10px;
+    height: 30px;
+}
+.Cart button{
+    margin: 10px;
 
+}
 .Chapters{
     color: whitesmoke;
     font-size: 20px;
