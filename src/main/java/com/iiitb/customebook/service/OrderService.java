@@ -11,12 +11,14 @@ import com.iiitb.customebook.pojo.*;
 import com.iiitb.customebook.repository.OrderRepository;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import com.iiitb.customebook.util.CustomEBookUtil;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 
 @Service
@@ -117,7 +119,7 @@ public class OrderService {
         User user = userService.getUserById(order.getUser_id().getUser_id());
         cartDetails.setUserId(user.getUser_id());
         String chapters[] = order.getChapterItems().split(",");
-
+        List<ItemVO> cartItems = new ArrayList<ItemVO>();
         for(String chapter : chapters) {
             int chapterId = Integer.valueOf(chapter);
             ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
@@ -132,16 +134,11 @@ public class OrderService {
                     cartItem.setStartPage(chapterDetails.getStartPage());
                     cartItem.setEndPage(chapterDetails.getEndPage());
                     cartItem.setBookLocation(book.getPdfFileLocation());
-                    if(cartDetails.getOrderItems()!=null) {
-                        cartDetails.getOrderItems().add(cartItem);
-                    }
-                   else {
-                       cartDetails.setOrderItems(Arrays.asList(cartItem));
-                    }
+                    cartItems.add(cartItem);
                 }
             }
-
         }
+        cartDetails.setOrderItems(cartItems);
 
     }
 
