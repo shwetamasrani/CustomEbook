@@ -2,9 +2,9 @@ package com.iiitb.customebook.controller;
 
 
 import com.iiitb.customebook.bean.Order;
-import com.iiitb.customebook.pojo.CartInputVO;
+import com.iiitb.customebook.pojo.CartItemInputVO;
 import com.iiitb.customebook.pojo.CartOutputVO;
-import com.iiitb.customebook.pojo.OrderInputVO;
+import com.iiitb.customebook.pojo.CartVO;
 import com.iiitb.customebook.pojo.OrderOutputVO;
 import com.iiitb.customebook.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<OrderOutputVO> merge(@RequestBody OrderInputVO orderDetails)  //mapping the JSON Body to the object directly
+    public ResponseEntity<OrderOutputVO> merge(@RequestBody CartVO orderDetails)  //mapping the JSON Body to the object directly
     {
         if(orderDetails!=null) {
             OrderOutputVO orderMerged = orderService.processOrder(orderDetails);
@@ -35,7 +35,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CartOutputVO> addToCart(@RequestBody CartInputVO itemDetails)  //mapping the JSON Body to the object directly
+    public ResponseEntity<CartOutputVO> addToCart(@RequestBody CartItemInputVO itemDetails)  //mapping the JSON Body to the object directly
     {
         if(itemDetails!=null) {
             Order order = orderService.addItem(itemDetails);
@@ -52,5 +52,13 @@ public class CartController {
         updatedCartDetails.setTotalNumberOfItems(order.getChapterItems().split(",").length);
         return updatedCartDetails;
 
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<CartVO> getOrderDetails(@PathVariable Integer orderId) {
+        CartVO cartDetails = new CartVO();
+        cartDetails.setOrderId(orderId);
+        orderService.getCartDetails(cartDetails, orderId);
+        return ResponseEntity.ok(cartDetails);
     }
 }

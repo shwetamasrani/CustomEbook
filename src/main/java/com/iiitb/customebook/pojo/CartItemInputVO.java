@@ -1,14 +1,14 @@
 package com.iiitb.customebook.pojo;
 
-public class CartInputVO {
+public class CartItemInputVO {
 
     private Integer userId;
     private ItemVO itemDetails;
 
-    public CartInputVO() {
+    public CartItemInputVO() {
     }
 
-    public CartInputVO(Integer userId, ItemVO itemDetails) {
+    public CartItemInputVO(Integer userId, ItemVO itemDetails) {
         this.userId = userId;
         this.itemDetails = itemDetails;
     }
