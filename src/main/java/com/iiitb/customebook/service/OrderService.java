@@ -5,9 +5,9 @@ import com.iiitb.customebook.bean.ChapterItem;
 import com.iiitb.customebook.bean.Order;
 import com.iiitb.customebook.bean.User;
 import com.iiitb.customebook.exception.ResourceNotFoundException;
-import com.iiitb.customebook.pojo.CartInputVO;
+import com.iiitb.customebook.pojo.CartItemInputVO;
+import com.iiitb.customebook.pojo.CartVO;
 import com.iiitb.customebook.pojo.ItemVO;
-import com.iiitb.customebook.pojo.OrderInputVO;
 
 import com.iiitb.customebook.pojo.OrderOutputVO;
 import com.iiitb.customebook.repository.OrderRepository;
@@ -36,7 +36,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Order addItem(CartInputVO cartInputDetails){
+    public Order addItem(CartItemInputVO cartInputDetails){
         Integer cartOrderId = orderRepository.findInCartOrderIdForUser(cartInputDetails.getUserId());
         if(null == cartOrderId || cartOrderId==0) {
             return orderRepository.save(createNewOrder(cartInputDetails));
@@ -65,7 +65,7 @@ public class OrderService {
         return null;
     }
 
-    public Order createNewOrder(CartInputVO cartInputDetails) {
+    public Order createNewOrder(CartItemInputVO cartInputDetails) {
         Order order = new Order();
         User user = userService.getUserById(cartInputDetails.getUserId());
         order.setUser_id(user);
@@ -76,22 +76,27 @@ public class OrderService {
         return order;
     }
 
-    public Order updateOrder(CartInputVO cartInputDetails, Order order) {
+    public Order updateOrder(CartItemInputVO cartInputDetails, Order order) {
         String chapters[] = order.getChapterItems().split(",");
+        int initialLength = chapters.length;
+
         HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
         uniqueChapters.add(getChapterId(cartInputDetails.getItemDetails())+"");
         StringBuilder chapterItems = new StringBuilder();
         for(String chapter: uniqueChapters) {
             chapterItems.append(chapter+",");
         }
-
+        chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
         order.setChapterItems(chapterItems.toString());
-        order.setTotalPrice(order.getTotalPrice()+cartInputDetails.getItemDetails().getPrice());
+        int newLength = order.getChapterItems().split(",").length;
+        if(initialLength<newLength) {
+            order.setTotalPrice(order.getTotalPrice()+cartInputDetails.getItemDetails().getPrice());
+        }
         return orderRepository.save(order);
     }
 
 
-    public OrderOutputVO processOrder(OrderInputVO orderDetails)
+    public OrderOutputVO processOrder(CartVO orderDetails)
     {
         Order order = orderRepository.findById(orderDetails.getOrderId()).orElseThrow(()
                 -> new ResourceNotFoundException("Order does not exists with id:"+orderDetails.getOrderId()));
