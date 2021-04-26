@@ -119,29 +119,33 @@ POST: localhost:8081/api/cart/add
 ##6. Getting all the details of the item in cart
 GET: localhost:8081/api/cart/orders/7
    ###Response Body:
-   {
-   "orderId": 7,
-   "userId": 2,
-   "customEBookName": null,
-   "orderItems": [
-   {
-   "bookId": 2,
-   "chapterNumber": 1,
-   "price": 85.0,
-   "startPage": 10,
-   "endPage": 20,
-   "bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf"
-   },
-   {
-   "bookId": 2,
-   "chapterNumber": 3,
-   "price": 8650.0,
-   "startPage": 35,
-   "endPage": 50,
-   "bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf"
-   }
-   ]
-   }
+{
+"orderId": 7,
+"userId": 2,
+"customEBookName": null,
+"orderItems": [
+{
+"bookId": 2,
+"bookName": "DevOps For Dummies",
+"bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf",
+"chapterNumber": 1,
+"price": 85.0,
+"startPage": 10,
+"endPage": 20,
+"chapterDescription": "DevOps Introduction!"
+},
+{
+"bookId": 2,
+"bookName": "DevOps For Dummies",
+"bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf",
+"chapterNumber": 3,
+"price": 8650.0,
+"startPage": 35,
+"endPage": 50,
+"chapterDescription": "Why DevOps was Introdcued?"
+}
+]
+}
    
 ##7. Checkout
 POST: localhost:8081/api/cart/checkout

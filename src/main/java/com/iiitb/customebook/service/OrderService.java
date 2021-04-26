@@ -129,11 +129,13 @@ public class OrderService {
                 if(chapterDetails!=null) {
                     ItemVO cartItem = new ItemVO();
                     cartItem.setBookId(book.getBookId());
+                    cartItem.setBookName(book.getBookName());
+                    cartItem.setBookLocation(book.getPdfFileLocation());
                     cartItem.setPrice(chapterDetails.getPrice());
                     cartItem.setChapterNumber(chapterDetails.getChapterNumber());
                     cartItem.setStartPage(chapterDetails.getStartPage());
                     cartItem.setEndPage(chapterDetails.getEndPage());
-                    cartItem.setBookLocation(book.getPdfFileLocation());
+                    cartItem.setChapterDescription(chapterDetails.getDescription());
                     cartItems.add(cartItem);
                 }
             }
