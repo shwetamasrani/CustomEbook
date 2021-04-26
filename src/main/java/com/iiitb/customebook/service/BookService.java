@@ -23,12 +23,12 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public BookVO getBookById(Integer id){
+    public Book getBookById(Integer id){
 
         Book book= bookRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Book does not exist with id:"+id));
 
-        return CustomEBookUtil.mappingBookBeanToPojo(book);
+        return book;
     }
 
     public List<BookVO> getAllBooks()

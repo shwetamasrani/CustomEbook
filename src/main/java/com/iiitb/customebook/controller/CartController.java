@@ -54,8 +54,11 @@ public class CartController {
 
     }
 
-    @GetMapping("orders/{id}")
-    public ResponseEntity<OrderOutputVO> getOrderDetails(@PathVariable Integer orderId) {
-        return null;
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<CartVO> getOrderDetails(@PathVariable Integer orderId) {
+        CartVO cartDetails = new CartVO();
+        cartDetails.setOrderId(orderId);
+        orderService.getCartDetails(cartDetails, orderId);
+        return ResponseEntity.ok(cartDetails);
     }
 }

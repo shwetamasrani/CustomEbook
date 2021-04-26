@@ -1,17 +1,16 @@
 package com.iiitb.customebook.service;
 
+import com.iiitb.customebook.bean.Book;
 import com.iiitb.customebook.bean.ChapterItem;
 
 import com.iiitb.customebook.bean.Order;
 import com.iiitb.customebook.bean.User;
 import com.iiitb.customebook.exception.ResourceNotFoundException;
-import com.iiitb.customebook.pojo.CartItemInputVO;
-import com.iiitb.customebook.pojo.CartVO;
-import com.iiitb.customebook.pojo.ItemVO;
+import com.iiitb.customebook.pojo.*;
 
-import com.iiitb.customebook.pojo.OrderOutputVO;
 import com.iiitb.customebook.repository.OrderRepository;
 import com.iiitb.customebook.util.CustomEBookConstants;
+import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,8 @@ public class OrderService {
     UserService userService;
     @Autowired
     ChapterItemService chapterItemService;
+    @Autowired
+    BookService bookService;
 
     @Autowired
     public OrderService(OrderRepository orderRepository) {
@@ -109,4 +110,43 @@ public class OrderService {
     }
 
 
+    public void getCartDetails(CartVO cartDetails, Integer orderId) {
+
+        Order order = orderRepository.findById(orderId).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+orderId));
+        User user = userService.getUserById(order.getUser_id().getUser_id());
+        cartDetails.setUserId(user.getUser_id());
+        String chapters[] = order.getChapterItems().split(",");
+
+        for(String chapter : chapters) {
+            int chapterId = Integer.valueOf(chapter);
+            ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
+            Book book = bookService.getBookById(chapterItem.getBookId());
+            if(book!=null) {
+                BookComponent chapterDetails = getChapterDetails(book, chapterItem.getChapterNumber());
+                if(chapterDetails!=null) {
+                    ItemVO cartItem = new ItemVO();
+                    cartItem.setBookId(book.getBookId());
+                    cartItem.setPrice(chapterDetails.getPrice());
+                    cartItem.setChapterNumber(chapterDetails.getChapterNumber());
+                    cartItem.setStartPage(chapterDetails.getStartPage());
+                    cartItem.setEndPage(chapterDetails.getEndPage());
+                    cartItem.setBookLocation(book.getPdfFileLocation());
+                    if(cartDetails.getOrderItems()!=null) {
+                        cartDetails.getOrderItems().add(cartItem);
+                    }
+                   else {
+                       cartDetails.setOrderItems(Arrays.asList(cartItem));
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    public BookComponent getChapterDetails(Book book, int chapterNumber) {
+
+        return CustomEBookUtil.getChapterDetails(book, chapterNumber);
+    }
 }
