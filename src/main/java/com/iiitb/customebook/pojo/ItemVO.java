@@ -1,22 +1,15 @@
 package com.iiitb.customebook.pojo;
 
-public class OrderItemInputVO {
+public class ItemVO {
 
     private Integer bookId;
     private Integer chapterNumber;
     private double price;
     private Integer startPage;
     private Integer endPage;
+    private String bookLocation;
 
-    public OrderItemInputVO() {
-    }
-
-    public OrderItemInputVO(Integer bookId, Integer chapterNumber, double price, Integer startPage, Integer endPage) {
-        this.bookId = bookId;
-        this.chapterNumber = chapterNumber;
-        this.price = price;
-        this.startPage = startPage;
-        this.endPage = endPage;
+    public ItemVO() {
     }
 
     public Integer getBookId() {
@@ -57,5 +50,13 @@ public class OrderItemInputVO {
 
     public void setEndPage(Integer endPage) {
         this.endPage = endPage;
+    }
+
+    public String getBookLocation() {
+        return bookLocation;
+    }
+
+    public void setBookLocation(String bookLocation) {
+        this.bookLocation = bookLocation;
     }
 }

@@ -7,12 +7,12 @@ public class OrderInputVO {
     private Integer orderId;
     private Integer userId;
     private String customEBookName;
-    private List<OrderItemInputVO> orderItems;
+    private List<ItemVO> orderItems;
 
     public OrderInputVO() {
     }
 
-    public OrderInputVO(Integer orderId, Integer userId, String customEBookName, List<OrderItemInputVO> orderItems) {
+    public OrderInputVO(Integer orderId, Integer userId, String customEBookName, List<ItemVO> orderItems) {
         this.orderId = orderId;
         this.userId = userId;
         this.customEBookName = customEBookName;
@@ -43,11 +43,11 @@ public class OrderInputVO {
         this.customEBookName = customEBookName;
     }
 
-    public List<OrderItemInputVO> getOrderItems() {
+    public List<ItemVO> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItemInputVO> orderItems) {
+    public void setOrderItems(List<ItemVO> orderItems) {
         this.orderItems = orderItems;
     }
 }
