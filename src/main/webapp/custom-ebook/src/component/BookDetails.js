@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom";
 import productsInfo from "./Data/productInfo";
+import BookService from "../services/BookService";
 
 class BookDetails extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class BookDetails extends Component {
             userId:this.props.location.userId,
             bookId: this.props.location.bookId,
             isChecked: true,
+            orderId:undefined,
             bookData:[],         //contains everything returned by api
             chapterData: [],    //contains everything in "bookChapter" part of api result
             cartChapters: [],   //cart with current {chapterNum, bookId}
@@ -32,7 +34,6 @@ class BookDetails extends Component {
             console.log("successful")
         }
         let bookDetails= await response.json()
-        console.log(JSON.stringify(bookDetails))
         this.setState({
             chapterData: bookDetails["bookChapters"],
             bookData:bookDetails
@@ -57,9 +58,9 @@ class BookDetails extends Component {
         }
     }
 
-    addToCart() {
+   async addToCart() {
         let tempCart = [];
-        this.state.cartChapters.forEach(cNum => {
+        for (const cNum of this.state.cartChapters) {
             let chapterData=[]
             for(let i=0;i<this.state.chapterData.length;i++)
             {
@@ -74,9 +75,40 @@ class BookDetails extends Component {
                 "chapterNum": cNum,
                 "chapterData":chapterData,
             })
-        })
+            console.log(JSON.stringify({
+                userId: this.state.userId,
+                itemDetails:{
+                    bookId: this.state.bookId,
+                    chapterNumber:cNum,
+                    price:chapterData[0].price
+                }}))
+            let response = await fetch('http://localhost:8081/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                },
+                body: JSON.stringify({
+                    userId: this.state.userId,
+                    itemDetails:{
+                        bookId: this.state.bookId,
+                        chapterNumber:cNum,
+                        price:chapterData[0].price
+                    }
+                })
+            })
+            let status = response.status;
+            if (status === 200) {
+                console.log("successful")
+            }
+            let bookDetails= await response.json()
+            this.setState({
+                orderId:bookDetails.orderId
+            })
 
-        this.setState({
+        }
+
+       this.setState({
             finalCart: tempCart
         },()=>console.log(this.state.finalCart))
     }
@@ -85,7 +117,8 @@ class BookDetails extends Component {
         this.props.history.push({
             pathname: "/Cart",
             cart: this.state.finalCart,
-            userId: this.state.userId
+            userId: this.state.userId,
+            orderId:this.state.orderId
         })
     }
 
