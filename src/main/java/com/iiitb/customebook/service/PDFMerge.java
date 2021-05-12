@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import com.iiitb.customebook.pojo.OrderInputVO;
-import com.iiitb.customebook.pojo.OrderItemInputVO;
+import com.iiitb.customebook.pojo.ItemVO;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,7 +12,7 @@ import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
 public class PDFMerge {
 
-    public static String merge(Integer orderId, List<OrderItemInputVO> orderItems)  {
+    public static String merge(Integer orderId, List<ItemVO> orderItems)  {
 
         String orderFolderPath = CustomEBookConstants.PATH_BOOKS_ORDERS+File.separator+orderId;
         makeDirectory(orderFolderPath);
@@ -91,11 +90,11 @@ public class PDFMerge {
         return null;
     }
 
-    public static List<String> extractChapters(String orderFolderPath, List<OrderItemInputVO> chapterDetails) throws IOException {
+    public static List<String> extractChapters(String orderFolderPath, List<ItemVO> chapterDetails) throws IOException {
         List<String> extractedChapterLocation = new ArrayList<>();
         int count=0;
-        for(OrderItemInputVO item: chapterDetails) {
-            String bookLocation = CustomEBookConstants.PATH_BOOKS + File.separator+ item.getBookId()+ CustomEBookConstants.PDF_FILE_EXTENSION;
+        for(ItemVO item: chapterDetails) {
+            String bookLocation = item.getBookLocation();
             count++;
             extractedChapterLocation.add(splitPdf(bookLocation, item.getStartPage(), item.getEndPage(), orderFolderPath, count));
         }

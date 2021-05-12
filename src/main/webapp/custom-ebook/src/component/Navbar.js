@@ -4,15 +4,12 @@ import {Link} from 'react-router-dom'
 
 function Navbar(){
     return(
-        <div>
+        <div className="Navbar">
             <nav>
                 <ul>
                     <li ><Link to="/">Home</Link></li>
                     <li><Link to="/SignUp">About</Link></li>
-                    <li><Link to="/SignIn">Sign in</Link></li>
-                    <li><Link to="/Dashboard">Dashboard</Link></li>
                     <li><Link to="/SignUp">Create Account</Link></li>
-                    <li><Link to="/AdminDashboard">Admin Dashboard</Link></li>
                 </ul>
             </nav>
         </div>

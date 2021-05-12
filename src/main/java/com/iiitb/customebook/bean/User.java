@@ -33,7 +33,7 @@ public class User {
     private String companyName;
 
     @OneToMany(mappedBy = "user_id")
-    private List<Invoice> invoices;
+    private List<Order> orders;
 
     @OneToMany(mappedBy = "user_id")
     private List<PublisherUploads> uploaded_books;
@@ -97,12 +97,12 @@ public class User {
         this.password = password;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public boolean isPublisherFlag() {
@@ -113,15 +113,14 @@ public class User {
         this.publisherFlag = publisherFlag;
     }
 
-    public User(int user_id, String firstName, String lastName, String email, String contactNumber, String password, String companyName, List<Invoice> invoices, List<PublisherUploads> uploaded_books, boolean publisherFlag) {
-        this.user_id = user_id;
+    public User(String firstName, String lastName, String email, String contactNumber, String password, String companyName, List<Order> orders, List<PublisherUploads> uploaded_books, boolean publisherFlag) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.contactNumber = contactNumber;
         this.password = password;
         this.companyName = companyName;
-        this.invoices = invoices;
+        this.orders = orders;
         this.uploaded_books = uploaded_books;
         this.publisherFlag = publisherFlag;
     }

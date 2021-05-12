@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import Products from "./Products";
 import productsInfo from "./Data/productInfo";
+import {Link} from "react-router-dom";
 
 
 class Dashboard extends Component {
@@ -12,7 +13,11 @@ class Dashboard extends Component {
             userId:this.props.location.userId
         }
         this.setStateToFalse = this.setStateToFalse.bind(this)
+        this.logout=this.logout.bind(this)
 
+    }
+    logout(){
+        localStorage.removeItem('userId');
     }
 
     setStateToFalse() {
@@ -53,18 +58,30 @@ class Dashboard extends Component {
 
 
     render() {
+
         if (this.state.isLoading)
             return (
                 <div>
+                    <div className="Navbar">
+                        <nav>
+                            <ul>
+                                <li ><Link to="/">Home</Link></li>
+                                <li><Link to="/SignUp">About</Link></li>
+                                <li><Link to="/Dashboard">Dashboard</Link></li>
+                                <li><Link to="/" onClick={this.logout}>Logout</Link></li>
+                            </ul>
+                        </nav>
+                    </div>
                     <h3>loading...</h3>
                 </div>
             )
         const productComponents = this.state.productInfo.map((product) => {
             return (
+
                 <Products
                     id={product.bookId}
                     bookTitle={product.bookName}
-                    authorName={product.description}
+                    authorName={product.author}
                     price={product.price}
                     img={product.imageLocation}
                     publisher={product.publisher}
@@ -76,8 +93,20 @@ class Dashboard extends Component {
             <div className="Dashboard">
                 {this.state.isLoading ? this.setStateToFalse :
                     <div>
-                        <h1>Dashboard</h1>
+                        <div className="Navbar">
+                            <nav>
+                                <ul>
+                                    <li ><Link to="/">Home</Link></li>
+                                    <li><Link to="/SignUp">About</Link></li>
+                                    <li><Link to="/Dashboard">Dashboard</Link></li>
+                                    <li><Link to="/" onClick={this.logout}>Logout</Link></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <h1 style={{border:'10px solid rgba(255,255,255,0)',width:'fit-content'}}>Dashboard</h1>
+                        <div className="box">
                         {productComponents}
+                        </div>
                     </div>}
             </div>
         )

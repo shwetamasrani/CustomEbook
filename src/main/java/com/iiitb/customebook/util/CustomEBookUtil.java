@@ -75,4 +75,15 @@ public class CustomEBookUtil {
             e.printStackTrace();
         }
     }
+
+    public static BookComponent getChapterDetails(Book book, int chapterNumber) {
+        List<BookComponent> allChapters = readXML(book.getXmlFileLocation());
+        for(BookComponent chapter: allChapters) {
+            if(chapter.getChapterNumber()==chapterNumber) {
+                return chapter;
+            }
+        }
+
+        return null;
+    }
 }

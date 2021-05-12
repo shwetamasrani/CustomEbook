@@ -2,17 +2,17 @@ package com.iiitb.customebook.pojo;
 
 import java.util.List;
 
-public class OrderInputVO {
+public class CartVO {
 
     private Integer orderId;
     private Integer userId;
     private String customEBookName;
-    private List<OrderItemInputVO> orderItems;
+    private List<ItemVO> orderItems;
 
-    public OrderInputVO() {
+    public CartVO() {
     }
 
-    public OrderInputVO(Integer orderId, Integer userId, String customEBookName, List<OrderItemInputVO> orderItems) {
+    public CartVO(Integer orderId, Integer userId, String customEBookName, List<ItemVO> orderItems) {
         this.orderId = orderId;
         this.userId = userId;
         this.customEBookName = customEBookName;
@@ -43,11 +43,11 @@ public class OrderInputVO {
         this.customEBookName = customEBookName;
     }
 
-    public List<OrderItemInputVO> getOrderItems() {
+    public List<ItemVO> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItemInputVO> orderItems) {
+    public void setOrderItems(List<ItemVO> orderItems) {
         this.orderItems = orderItems;
     }
 }

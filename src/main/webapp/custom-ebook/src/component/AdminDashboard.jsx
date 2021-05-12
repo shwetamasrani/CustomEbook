@@ -4,6 +4,7 @@ import axios from 'axios';
 import Dashboard from "./Dashboard";
 import BookService from "../services/BookService"
 import AddChapterDetails from "./AddChapterDetails";
+import {Link} from "react-router-dom";
 
 class AdminDashboard extends Component {
 
@@ -23,6 +24,10 @@ class AdminDashboard extends Component {
         
         }
         this.handleChange = this.handleChange.bind(this)
+        this.logout=this.logout.bind(this)
+    }
+    logout(){
+        alert("...Logging out")
     }
     handleChange(event) {
       const {name, value} = event.target;
@@ -117,6 +122,16 @@ class AdminDashboard extends Component {
     render() {
         return (
             <div>
+                <div className="Navbar">
+                    <nav>
+                        <ul>
+                            <li ><Link to="/">Home</Link></li>
+                            <li><Link to="/SignUp">About</Link></li>
+                            <li><Link to="/AdminDashboard">Dashboard</Link></li>
+                            <li><Link to="/" onClick={this.logout}>Logout</Link></li>
+                        </ul>
+                    </nav>
+                </div>
                 <div className="bookUpload">
                     <h2>
                         Upload the Ebook here

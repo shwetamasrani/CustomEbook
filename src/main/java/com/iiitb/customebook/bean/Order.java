@@ -3,16 +3,16 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Invoice")
-public class Invoice {
+@Table(name = "Orders_TBL")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int invoice_id;
+    private int orderId;
 
-    @Column
+    @Column(nullable = false) // C-In Cart and P-Processed & Merged
     private Character orderStatus;
 
-    @Column(nullable = false)
+    @Column
     private String customEBookName;
 
     @Column(nullable = false)
@@ -22,18 +22,17 @@ public class Invoice {
     @JoinColumn(name = "user_id")
     private User user_id;
 
-    @OneToMany(mappedBy = "invoice_id")
-    private List<InvoiceItem> items;
+    private String chapterItems;
 
     @Column
     private String location;
 
-    public int getInvoice_id() {
-        return invoice_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setInvoice_id(int invoice_id) {
-        this.invoice_id = invoice_id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public Character getOrderStatus() {
@@ -68,12 +67,12 @@ public class Invoice {
         this.user_id = user_id;
     }
 
-    public List<InvoiceItem> getItems() {
-        return items;
+    public String getChapterItems() {
+        return chapterItems;
     }
 
-    public void setItems(List<InvoiceItem> items) {
-        this.items = items;
+    public void setChapterItems(String chapterItems) {
+        this.chapterItems = chapterItems;
     }
 
     public String getLocation() {
@@ -84,14 +83,15 @@ public class Invoice {
         this.location = location;
     }
 
-    public Invoice() {
+    public Order() {
     }
 
-    public Invoice(Character orderStatus, String customEBookName, Double totalPrice, User user_id, List<InvoiceItem> items) {
+    public Order(Character orderStatus, String customEBookName, Double totalPrice, User user_id, String chapterItems, String location) {
         this.orderStatus = orderStatus;
         this.customEBookName = customEBookName;
         this.totalPrice = totalPrice;
         this.user_id = user_id;
-        this.items = items;
+        this.chapterItems = chapterItems;
+        this.location = location;
     }
 }
