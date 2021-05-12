@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom";
 import UserService from '../services/UserService';
+import Navbar from "./Navbar";
 
 class SignUp extends Component {
     constructor(props) {
@@ -43,6 +44,8 @@ class SignUp extends Component {
 
     render() {
         return (
+            <div>
+                <Navbar/>
             <div className="SignUp">
                 <div className="register">
                     <h1>Create an account</h1>
@@ -133,6 +136,7 @@ class SignUp extends Component {
                         <button className="registerButton" onClick={this.saveUser}>Register</button>
                     </form>
                 </div>
+            </div>
             </div>
         )
     }

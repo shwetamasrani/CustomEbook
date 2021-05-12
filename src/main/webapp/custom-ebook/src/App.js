@@ -18,14 +18,12 @@ class App extends Component{
         return(
             <div>
                 <Router>
-                    <div>
-                        <Navbar/>
-                    </div>
+
                     <div className="container">
                         <Switch>
 
                             <Route exact path='/' component={Welcome}/>
-                            <Route exact path='/SignIn' component={SignIn}/>
+                            <Route exact path='/SignIn' component={Welcome}/>
                             <Route exact path='/SignUp' component={SignUp}/>
                             <Route exact path='/Dashboard' component={Dashboard}/>
                             <Route exact path='/BookDetails' component={BookDetails}/>

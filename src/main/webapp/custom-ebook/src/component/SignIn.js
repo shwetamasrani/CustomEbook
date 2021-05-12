@@ -3,6 +3,8 @@ import {Link, withRouter, Route, BrowserRouter} from 'react-router-dom';
 import UserService from "../services/UserService";
 import { hashHistory } from "react-router";
 import { createHashHistory } from 'history';
+import Navbar from "./Navbar";
+
 
 class SignIn extends Component{
     constructor(props) {
@@ -57,7 +59,7 @@ class SignIn extends Component{
                 console.log("LoggedIn");
         })
             .catch(err =>{
-                console.log(err.response.data);
+                console.log(err);
                 alert("Username or Password doesn't Match!");
                 window.location.reload(true);
                 });
@@ -65,6 +67,7 @@ class SignIn extends Component{
     }
     render() {
         return (
+            <div>
             <div className="SignIn">
                 <div className="register">
                     <h1>Sign In</h1>
@@ -101,10 +104,11 @@ class SignIn extends Component{
                     </form>
                 </div>
             </div>
+            </div>
         );
     }
 
 }
 
-export default SignIn;
+export default withRouter(SignIn);
 
