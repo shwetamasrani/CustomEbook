@@ -1,6 +1,7 @@
 package com.iiitb.customebook.service;
 
 import com.iiitb.customebook.bean.Book;
+import com.iiitb.customebook.bean.User;
 import com.iiitb.customebook.exception.ResourceNotFoundException;
 import com.iiitb.customebook.pojo.BookVO;
 import com.iiitb.customebook.repository.BookRepository;
@@ -45,9 +46,23 @@ public class BookService {
 
     public BookVO addBook(BookVO bookDetails)
     {
-        Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
-        return CustomEBookUtil.mappingBookBeanToPojo(book);
+        if(bookDetails.getIsbnNumber()!=null && getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
+            Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
+            return CustomEBookUtil.mappingBookBeanToPojo(book);
+        }
+        return null;
     }
+
+    public BookVO uploadBook(BookVO bookDetails, User publisher)
+    {
+        if(bookDetails.getIsbnNumber()!=null && getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
+            Book newBook = CustomEBookUtil.mappingBookVOToBean(bookDetails);
+            newBook.setUser_id(publisher);
+            return CustomEBookUtil.mappingBookBeanToPojo(bookRepository.save(newBook));
+        }
+        return null;
+    }
+
 
     public List<Book> getBooksByPublisher(String publisher){
        return bookRepository.findByPublisher(publisher);

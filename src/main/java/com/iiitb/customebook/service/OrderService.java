@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.iiitb.customebook.util.CustomEBookConstants.*;
+
 
 @Service
 public class OrderService {
@@ -74,7 +76,7 @@ public class OrderService {
         order.setUser_id(user);
         order.setChapterItems(String.valueOf(getChapterId(cartInputDetails.getItemDetails())));
         order.setTotalPrice(cartInputDetails.getItemDetails().getPrice());
-        order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_IN_CART);
+        order.setOrderStatus(ORDER_STATUS_IN_CART);
 
         return order;
     }
@@ -147,5 +149,18 @@ public class OrderService {
     public BookComponent getChapterDetails(Book book, int chapterNumber) {
 
         return CustomEBookUtil.getChapterDetails(book, chapterNumber);
+    }
+
+    public void getOrderDetails(OrderDetails orderDetails) {
+        Order order = orderRepository.findById(orderDetails.getOrderId()).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+orderDetails.getOrderId()));
+        if(order.getOrderStatus()==ORDER_STATUS_IN_CART) {
+            orderDetails.setOrderStatus(ORDER_IN_CART);
+        } else if(order.getOrderStatus()==ORDER_STATUS_PROCESSED) {
+            orderDetails.setOrderStatus(ORDER_PROCESSED);
+        }
+        orderDetails.setCustomEBookName(order.getCustomEBookName());
+        orderDetails.setTotalPrice(order.getTotalPrice());
+
     }
 }

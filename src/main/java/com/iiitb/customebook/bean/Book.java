@@ -30,10 +30,15 @@ public class Book {
     @Column
     private String xmlFileLocation;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user_id;
+
     public Book() {
     }
 
-    public Book(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease, Double price, String imageLocation, String pdfFileLocation, String description, String xmlFileLocation) {
+    public Book(String bookName, String isbnNumber, String author, String publisher, Integer yearOfRelease,
+                Double price, String imageLocation, String pdfFileLocation, String description, String xmlFileLocation, User user_id) {
         this.bookName = bookName;
         this.isbnNumber = isbnNumber;
         this.author = author;
@@ -44,6 +49,7 @@ public class Book {
         this.pdfFileLocation = pdfFileLocation;
         this.description = description;
         this.xmlFileLocation = xmlFileLocation;
+        this.user_id = user_id;
     }
 
     public Integer getBookId() {
@@ -132,5 +138,13 @@ public class Book {
 
     public void setXmlFileLocation(String xmlFileLocation) {
         this.xmlFileLocation = xmlFileLocation;
+    }
+
+    public User getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
 }

@@ -36,7 +36,7 @@ public class User {
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user_id")
-    private List<PublisherUploads> uploaded_books;
+    private List<Book> uploaded_books;
 
     @Column( nullable = true,columnDefinition = "boolean default false")
     private boolean publisherFlag;
@@ -105,6 +105,14 @@ public class User {
         this.orders = orders;
     }
 
+    public List<Book> getUploaded_books() {
+        return uploaded_books;
+    }
+
+    public void setUploaded_books(List<Book> uploaded_books) {
+        this.uploaded_books = uploaded_books;
+    }
+
     public boolean isPublisherFlag() {
         return publisherFlag;
     }
@@ -113,7 +121,7 @@ public class User {
         this.publisherFlag = publisherFlag;
     }
 
-    public User(String firstName, String lastName, String email, String contactNumber, String password, String companyName, List<Order> orders, List<PublisherUploads> uploaded_books, boolean publisherFlag) {
+    public User(String firstName, String lastName, String email, String contactNumber, String password, String companyName, List<Order> orders, List<Book> uploaded_books, boolean publisherFlag) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
