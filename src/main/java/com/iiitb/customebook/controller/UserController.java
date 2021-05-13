@@ -35,16 +35,20 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> getUsers() {
+
         return userService.getUsers();
     }
 
 
     @PostMapping("/users")
-    public ResponseEntity<UserDetails> createUser(@RequestBody User newUser)  //mapping the JSON Body tot he object directly
+    public ResponseEntity<Object> createUser(@RequestBody User newUser)  //mapping the JSON Body tot he object directly
     {
         User user = userService.createUser(newUser);
         if(user!=null) {
-            return ResponseEntity.ok(mappingUserBeanToPojo(user));
+            if(user.isPublisherFlag()) {
+                return ResponseEntity.ok(getPublisherDetails(user));
+            }
+            return ResponseEntity.ok(getCustomerDetails(user));
         }
         return null;
     }
@@ -54,19 +58,30 @@ public class UserController {
 
         User user = userService.getUserById(id);
         if(user!=null) {
-            return ResponseEntity.ok(mappingUserBeanToPojo(user));
+            if(user.isPublisherFlag()) {
+                return ResponseEntity.ok(getPublisherDetails(user));
+            }
+            return ResponseEntity.ok(getCustomerDetails(user));
         }
         return null;
 
     }
 
     @GetMapping("users/{id}/orders")
-    public ResponseEntity<UserDetails> getUserOrders(@PathVariable Integer id) {
-        System.out.println("Is this coming here??");
+    public ResponseEntity<CustomerDetails> getUserOrders(@PathVariable Integer id) {
         User user = userService.getUserById(id);
         if(user!=null) {
+            return ResponseEntity.ok(getCustomerDetails(user));
+        }
+        return null;
 
-            return ResponseEntity.ok(mappingUserBeanToPojo(user));
+    }
+
+    @GetMapping("users/{id}/uploadedBooks")
+    public ResponseEntity<PublisherDetails> getPublisherUploads(@PathVariable Integer id) {
+        User user = userService.getUserById(id);
+        if(user!=null) {
+            return ResponseEntity.ok(getPublisherDetails(user));
         }
         return null;
 
@@ -77,14 +92,14 @@ public class UserController {
         return userService.updateUser(id, user);
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<UserDetails> login(@RequestBody LoginDetailsVO loginDetails){
 
         User userDetails = userService.getUserByEmail(loginDetails.getEmailAddress());
 
         if(userDetails.getEmail().equals(loginDetails.getEmailAddress())
                 && userDetails.getPassword().equals(loginDetails.getPassword())) {
-            return ResponseEntity.ok(mappingUserBeanToPojo(userDetails));
+            return ResponseEntity.ok(getUserDetails(userDetails));
         }
         else {
             return null;
@@ -116,30 +131,45 @@ public class UserController {
         return null;
     }
 
-    private UserDetails mappingUserBeanToPojo(User user) {
+    private UserDetails getUserDetails(User user) {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUserId(user.getUser_id());
         userDetails.setPublisherFlag(user.isPublisherFlag());
         userDetails.setEmailAddress(user.getEmail());
+        return userDetails;
+    }
 
-        if (user.isPublisherFlag()) {
-            userDetails.setCompanyName(user.getCompanyName());
-            //publisherDetails.setUploadedBooks();
-            return userDetails;
-        } else {
+    private CustomerDetails getCustomerDetails(User user) {
+        CustomerDetails customerDetails = new CustomerDetails(getUserDetails(user));
 
-            userDetails.setFirstName(user.getFirstName());
-            userDetails.setLastName(user.getLastName());
-            List<OrderDetails> userOrders = new ArrayList<>();
+        customerDetails.setFirstName(user.getFirstName());
+        customerDetails.setLastName(user.getLastName());
+        List<OrderDetails> userOrders = new ArrayList<>();
+        if(null != user.getOrders()) {
             for(Order order: user.getOrders()) {
                 OrderDetails orderDetails = new OrderDetails();
                 orderDetails.setOrderId(order.getOrderId());
                 orderService.getOrderDetails(orderDetails);
                 userOrders.add(orderDetails);
             }
-            userDetails.setOrders(userOrders);
-            return userDetails;
         }
+        customerDetails.setOrders(userOrders);
+        return customerDetails;
+    }
+
+    private PublisherDetails getPublisherDetails(User user) {
+        PublisherDetails publisherDetails = new PublisherDetails(getUserDetails(user));
+        publisherDetails.setCompanyName(user.getCompanyName());
+        List<BookVO> uploadedBooks = new ArrayList<>();
+        if(null!=user.getUploaded_books()) {
+            for(Book book: user.getUploaded_books()) {
+                BookVO bookDetails = CustomEBookUtil.mappingBookBeanToPojo(book);
+                uploadedBooks.add(bookDetails);
+            }
+        }
+
+        publisherDetails.setUploadedBooks(uploadedBooks);
+        return publisherDetails;
     }
 }
