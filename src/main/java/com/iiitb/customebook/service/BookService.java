@@ -9,8 +9,12 @@ import com.iiitb.customebook.util.CustomEBookConstants;
 import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,21 @@ public class BookService {
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+    }
+
+    public static void savePdfFile(MultipartFile pdfFile) {
+         System.out.println("in book service");
+        System.out.println(pdfFile.getOriginalFilename());
+        System.out.println(pdfFile.getSize());
+        String pdfFolderPath = CustomEBookConstants.PATH_BOOKS+File.separator+pdfFile.getOriginalFilename();
+        try {
+            Files.copy(pdfFile.getInputStream(), Paths.get(pdfFolderPath), StandardCopyOption.REPLACE_EXISTING);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Book getBookById(Integer id){
