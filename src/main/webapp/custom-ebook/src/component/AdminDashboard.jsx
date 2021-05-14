@@ -15,7 +15,7 @@ class AdminDashboard extends Component {
             isbnNumber: "",
             author: "",
             yearOfRelease:"",
-            publisher: "",
+            publisher: JSON.parse(localStorage.getItem('User')).companyName,
             price: "",
             noOfChapters: "",
             description:"",
@@ -23,6 +23,7 @@ class AdminDashboard extends Component {
             pdfFileLocation:""
         
         }
+        console.log(this.state.publisher)
         this.handleChange = this.handleChange.bind(this)
         this.logout=this.logout.bind(this)
     }
@@ -39,10 +40,16 @@ class AdminDashboard extends Component {
   onFileUpload = (e) => {
     e.preventDefault();
     let book = {
-      bookName: this.state.bookName, isbnNumber: this.state.isbnNumber, author: this.state.author,
-      publisher: this.state.publisher, price: this.state.price, noOfChapters: this.state.noOfChapters,
-      description: this.state.description ,imageLocation: this.state.imageLocation,
-      pdfFileLocation: this.state.pdfFileLocation,yearOfRelease:this.state.yearOfRelease
+      bookName: this.state.bookName, 
+      isbnNumber: this.state.isbnNumber, 
+      author: this.state.author,
+      publisher: this.state.publisher, 
+      price: this.state.price, 
+      noOfChapters: this.state.noOfChapters,
+      description: this.state.description,
+      imageLocation: this.state.imageLocation,
+      pdfFileLocation: this.state.pdfFileLocation,
+      yearOfRelease:this.state.yearOfRelease
     }
 
     console.log('Book =>' + JSON.stringify(book));
@@ -52,7 +59,9 @@ class AdminDashboard extends Component {
        
         console.log("admindash-data.bookid",res.bookId)
         this.props.history.push({pathname:'/AddChapterDetails',state: {
-          bookId: res.bookId}});
+            bookId: res.bookId,
+            totalChapter: this.state.noOfChapters
+        }});
     });
 
     // const book_result= BookService.createBook(book)
@@ -126,7 +135,7 @@ class AdminDashboard extends Component {
                     <nav>
                         <ul>
                             <li ><Link to="/">Home</Link></li>
-                            <li><Link to="/SignUp">About</Link></li>
+                            <li><Link to="/AdminDashboard">About</Link></li>
                             <li><Link to="/AdminDashboard">Dashboard</Link></li>
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                         </ul>
@@ -138,6 +147,7 @@ class AdminDashboard extends Component {
                     </h2>
                     <div>
                         <form>
+                            <label >ISBN Number</label>
                              <input
                                 type="number"
                                 name="isbnNumber"
@@ -146,6 +156,7 @@ class AdminDashboard extends Component {
                                 value={this.state.isbnNumber}
                                 onChange={this.handleChange}/>
 
+                            <label>Book Name</label>
                             <input type="text"
                                    name="bookName"    //need to add change handler function for name
                                    required="True"
@@ -153,6 +164,7 @@ class AdminDashboard extends Component {
                                    value={this.state.bookName}
                                    onChange={this.handleChange}/>
                            
+                            <label>Author Name</label>
                             <input
                                 type="text"
                                 name="author"
@@ -160,13 +172,19 @@ class AdminDashboard extends Component {
                                 placeholder="Author name"
                                 value={this.state.author}
                                 onChange={this.handleChange}/>
+
+                            <label>Publisher Name</label>
                             <input
                                 type="text"
                                 name="publisher"
                                 required="True"
                                 placeholder="Publisher"
                                 value={this.state.publisher}
-                                onChange={this.handleChange}/>
+                                onChange={this.handleChange}
+                                readOnly
+                                />
+
+                            <label>Year Of Release</label>
                             <input
                                 type="number"
                                 name="yearOfRelease"
@@ -174,6 +192,8 @@ class AdminDashboard extends Component {
                                 placeholder="Year of Release"
                                 value={this.state.yearOfRelease}
                                 onChange={this.handleChange}/>
+                            
+                            <label>Price</label>
                             <input
                                 type="number"
                                 name="price"
@@ -182,6 +202,7 @@ class AdminDashboard extends Component {
                                 value={this.state.price}
                                 onChange={this.handleChange}/>
 
+                            <label>Number Of Chapters</label>
                             <input
                                 type="number"
                                 name="noOfChapters"
@@ -190,6 +211,7 @@ class AdminDashboard extends Component {
                                 value={this.state.noOfChapters}
                                 onChange={this.handleChange}/> 
 
+                            <label>Description of Book:</label>
                             <input
                                 type="text"
                                 name="description"
@@ -198,6 +220,7 @@ class AdminDashboard extends Component {
                                 value={this.state.description}
                                 onChange={this.handleChange}/>
 
+                            <label>Image Location</label>
                             <input
                                 type="text"
                                 name="imageLocation"
@@ -206,6 +229,7 @@ class AdminDashboard extends Component {
                                 value={this.state.imageLocation}
                                 onChange={this.handleChange}/>
 
+                            <label>PDF location</label>
                             <input
                                 type="text"
                                 name="pdfFileLocation"
