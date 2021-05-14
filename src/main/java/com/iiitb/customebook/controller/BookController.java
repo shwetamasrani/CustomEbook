@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -69,6 +70,20 @@ public class BookController {
             }
         }
         return null;
+    }
+
+    @PostMapping(value="/savePdfFile" ,produces= { "application/json" },
+            consumes = { "multipart/form-data" })
+    public ResponseEntity<String> savePdfFile(@RequestParam(value = "file" ) MultipartFile pdfFile)
+    {
+        System.out.println(pdfFile.getOriginalFilename());
+
+
+        if(pdfFile!=null) {
+            bookService.savePdfFile(pdfFile);
+
+        }
+ return ResponseEntity.ok("working");
     }
 
 

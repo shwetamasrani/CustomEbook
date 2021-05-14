@@ -20,8 +20,8 @@ class AdminDashboard extends Component {
             noOfChapters: "",
             description:"",
             imageLocation:"",
-            pdfFileLocation:""
-        
+            pdfFileLocation:"",
+        pdfFile:null
         }
         this.handleChange = this.handleChange.bind(this)
         this.logout=this.logout.bind(this)
@@ -36,7 +36,7 @@ class AdminDashboard extends Component {
       })
   }
 
-  onFileUpload = (e) => {
+  onSubmit = (e) => {
     e.preventDefault();
     let book = {
       bookName: this.state.bookName, isbnNumber: this.state.isbnNumber, author: this.state.author,
@@ -55,69 +55,40 @@ class AdminDashboard extends Component {
           bookId: res.bookId}});
     });
 
-    // const book_result= BookService.createBook(book)
-    // console.log("admin-dashboard",book_result)
-}
+  }
+    onFileChange = event => {
+    
+        // Update the state
+        this.setState({ pdfFile: event.target.files[0] });
+      
+      };
+      onFileUpload = () => {
+    
 
-    // state = {
-    //     // Initially, no file is selected
-    //     selectedFile: null
-    // };
+        console.log(this.state.pdfFile)
+        console.log(this.state.pdfFile.name)
+        var name=this.state.pdfFile.name;
+        var pdfFolder="/home/nihar/Desktop/Semester2/CS-605DataModeling/Project/Books/"        //set the appropriate path name to store pdf
+        this.state.pdfFileLocation=pdfFolder.concat(name)
 
-    // // On file select (from the pop up)
-    // onFileChange = event => {
-    //     // Update the state
-    //     this.setState({selectedFile: event.target.files[0]});
-    // };
+        
+        const formData = new FormData();
+    
+        // Update the formData object
+        formData.append(
+          "file",
+          this.state.pdfFile
+        );
+        
+        BookService.savePdfFile(formData).then((res) => {
+       
+       
+            console.log("response-onfileupload()",res)
+            // this.props.history.push({pathname:'/AddChapterDetails',state: {
+            //   bookId: res.bookId}});
+        });
+      };
 
-
-    // // On file upload (click the upload button)
-    // onFileUpload = () => {
-
-    //     // Create an object of formData
-    //     const formData = new FormData();
-
-    //     // Update the formData object
-    //     formData.append(
-    //         "myFile",
-    //         this.state.selectedFile,
-    //         this.state.selectedFile.name,
-    //     );
-
-    //     // Details of the uploaded file
-    //     console.log(this.state.selectedFile);
-
-    //     // Request made to the backend api
-    //     // Send formData object
-    //     axios.post("api/uploadfile", formData);     //update the api path in future
-    // };
-
-    // // File content to be displayed after
-    // // file upload is complete
-    // fileData = () => {
-
-    //     if (this.state.selectedFile) {
-    //         return (
-    //             <div>
-    //                 <h2>File Details:</h2>
-    //                 <p>File Name: {this.state.selectedFile.name}</p>
-    //                 <p>File Type: {this.state.selectedFile.type}</p>
-    //                 <p>File Location:{this.state.selectedFile}</p>
-    //                 <p>
-    //                     Last Modified:{" "}
-    //                     {this.state.selectedFile.lastModifiedDate.toDateString()}
-    //                 </p>
-    //             </div>
-    //         );
-    //     } else {
-    //         return (
-    //             <div>
-    //                 <br/>
-    //                 <h4>Choose the file before Pressing the Upload button</h4>
-    //             </div>
-    //         );
-    //     }
-    // };
 
     render() {
         return (
@@ -132,12 +103,24 @@ class AdminDashboard extends Component {
                         </ul>
                     </nav>
                 </div>
+
+            
                 <div className="bookUpload">
                     <h2>
                         Upload the Ebook here
                     </h2>
                     <div>
                         <form>
+                        <label>Choose the ebook:</label>
+                        <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" accept=".pdf" onChange={this.onFileChange}/>
+                            <button onClick={this.onFileUpload}>
+                                Upload Book
+                            </button>    
+                            <hr></hr>
+                            <h2>
+                        Enter Book Details
+                    </h2>
+                    <label>ISBN Number:</label>
                              <input
                                 type="number"
                                 name="isbnNumber"
@@ -145,14 +128,16 @@ class AdminDashboard extends Component {
                                 placeholder="ISBN Number"
                                 value={this.state.isbnNumber}
                                 onChange={this.handleChange}/>
-
+<br></br>
+                             <label>Book Name:</label>
                             <input type="text"
                                    name="bookName"    //need to add change handler function for name
                                    required="True"
                                    placeholder="Book Name"
                                    value={this.state.bookName}
                                    onChange={this.handleChange}/>
-                           
+                                   <br/>
+                           <label>Author name:</label>
                             <input
                                 type="text"
                                 name="author"
@@ -160,6 +145,8 @@ class AdminDashboard extends Component {
                                 placeholder="Author name"
                                 value={this.state.author}
                                 onChange={this.handleChange}/>
+                             <br/>
+                                <label>Publisher:</label>
                             <input
                                 type="text"
                                 name="publisher"
@@ -167,6 +154,8 @@ class AdminDashboard extends Component {
                                 placeholder="Publisher"
                                 value={this.state.publisher}
                                 onChange={this.handleChange}/>
+                               <br/>
+                                <label>Year of Release:</label>
                             <input
                                 type="number"
                                 name="yearOfRelease"
@@ -174,6 +163,8 @@ class AdminDashboard extends Component {
                                 placeholder="Year of Release"
                                 value={this.state.yearOfRelease}
                                 onChange={this.handleChange}/>
+                              <br/>
+                                <label>Price:</label>
                             <input
                                 type="number"
                                 name="price"
@@ -181,6 +172,8 @@ class AdminDashboard extends Component {
                                 placeholder="Price"
                                 value={this.state.price}
                                 onChange={this.handleChange}/>
+                              <br/>
+                                <label>Number of Chapters:</label>
 
                             <input
                                 type="number"
@@ -189,6 +182,8 @@ class AdminDashboard extends Component {
                                 placeholder="Number of Chapters"
                                 value={this.state.noOfChapters}
                                 onChange={this.handleChange}/> 
+                              <br/>
+                                <label>Description:</label>
 
                             <input
                                 type="text"
@@ -197,31 +192,36 @@ class AdminDashboard extends Component {
                                 placeholder="Description"
                                 value={this.state.description}
                                 onChange={this.handleChange}/>
+                               <br/>
+                                <label>Image Path:</label>
 
                             <input
                                 type="text"
                                 name="imageLocation"
                                 required="True"
-                                placeholder="Image Location"
+                                placeholder="Image Path"
                                 value={this.state.imageLocation}
                                 onChange={this.handleChange}/>
 
-                            <input
+                            {/* <input
                                 type="text"
                                 name="pdfFileLocation"
                                 required="True"
                                 placeholder="PDF Location"
                                 value={this.state.pdfFileLocation}
-                                onChange={this.handleChange}/>
+                                onChange={this.handleChange}/> */}
 
 
 
 
                             {/* <h3>Upload Book Cover:</h3>
                             <input type="file" onChange={this.onFileChange}/> */}
-                            <button onClick={this.onFileUpload}>
-                                Upload!
+
+                            <br/>
+                            <button onClick={this.onSubmit}>
+                                Save Book details
                             </button>
+                            
                         </form>
                     </div>
                     {/* {this.fileData()} */}
