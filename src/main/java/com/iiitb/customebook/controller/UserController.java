@@ -151,6 +151,16 @@ public class UserController {
         return null;
     }
 
+    @DeleteMapping("/users/{userId}/cart")
+    public HttpStatus deleteItemInCart(@PathVariable Integer userId, @RequestBody CartItemInputVO itemDetails) {
+        if(userId!=null) {
+            orderService.deleteItemInCart(userId, itemDetails);
+            return HttpStatus.CREATED;
+
+        }
+        return null;
+    }
+
     private UserDetails getUserDetails(User user) {
 
         UserDetails userDetails = new UserDetails();
