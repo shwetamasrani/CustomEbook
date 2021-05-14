@@ -58,11 +58,11 @@ public class OrderService {
     }
 
 
-    public OrderOutputVO processOrder(CartVO cartDetails)
+    public OrderOutputVO processOrder(Integer userId, String customEBookName)
     {
-        Order order = orderRepository.findById(cartDetails.getOrderId()).orElseThrow(()
-                -> new ResourceNotFoundException("Order does not exists with id:"+cartDetails.getOrderId()));
-        order.setCustomEBookName(cartDetails.getCustomEBookName());
+        Order order = orderRepository.findCartOrderForUser(userId);
+        CartVO cartDetails = getUserCartDetails(userId);
+        order.setCustomEBookName(customEBookName);
         String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
@@ -197,7 +197,7 @@ public class OrderService {
             return;
         }
         String chapterItemNumber = String.valueOf(chapterItem.getChapterId());
-        double chapterPrice = getChapterPrice(itemDetails.getBookId(), itemDetails.getChapterNumber());
+
         Order order = orderRepository.findCartOrderForUser(userId);
         String orderItems = order.getChapterItems();
         if(orderItems.contains(chapterItemNumber)) {
@@ -207,8 +207,10 @@ public class OrderService {
             } else {
                 order.setChapterItems(orderItems.replace(","+chapterItemNumber,""));
             }
+            double chapterPrice = getChapterPrice(itemDetails.getBookId(), itemDetails.getChapterNumber());
             double totalPrice = order.getTotalPrice() - chapterPrice;
             order.setTotalPrice(totalPrice);
+
         }
         orderRepository.save(order);
     }
