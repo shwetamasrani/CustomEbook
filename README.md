@@ -129,6 +129,43 @@ Response Body:
 "bookChapters": null
 }
 ```
+
+### Get Cart Details of a User
+GET: localhost:8081/api/users/2/cart
+
+Response Body:
+```
+{
+    "orderId": 7,
+    "userId": 2,
+    "customEBookName": null,
+    "totalPrice": 8735,
+    "orderItems": [
+        {
+            "bookId": 2,
+            "bookName": "DevOps For Dummies",
+            "bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf",
+            "chapterNumber": 1,
+            "chapterName": "DevOps",
+            "price": 85.0,
+            "startPage": 10,
+            "endPage": 20,
+            "chapterDescription": "DevOps Introduction!"
+        },
+        {
+            "bookId": 2,
+            "bookName": "DevOps For Dummies",
+            "bookLocation": "/home/nehakothari/Desktop/Semester2/CS-605DataModeling/Project/Books/2.pdf",
+            "chapterNumber": 3,
+            "chapterName": "History",
+            "price": 8650.0,
+            "startPage": 35,
+            "endPage": 50,
+            "chapterDescription": "Why DevOps was Introdcued?"
+        }
+    ]
+}
+```
 ### 1. To add a new book, it also checks whether the ISBN number exists or not.
 POST: localhost:8081/api/books
 #### Request Body:

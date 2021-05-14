@@ -131,6 +131,24 @@ public class UserController {
         return null;
     }
 
+    @GetMapping("/users/{userId}/cart")
+    public ResponseEntity<CartVO> getUserCartDetails(@PathVariable Integer userId) {
+        if(userId!=null) {
+            CartVO cartDetails = orderService.getUserCartDetails(userId);
+            return ResponseEntity.ok(cartDetails);
+        }
+        return null;
+    }
+
+   /* @PostMapping("/users/{userId}/cart")
+    public ResponseEntity<CartVO> addToCart(@PathVariable Integer userId, @RequestBody ItemVO itemDetails) {
+        if(userId!=null) {
+            CartVO cartDetails = orderService.addItemToCart(userId, itemDetails);
+            return ResponseEntity.ok(cartDetails);
+        }
+        return null;
+    }*/
+
     private UserDetails getUserDetails(User user) {
 
         UserDetails userDetails = new UserDetails();
