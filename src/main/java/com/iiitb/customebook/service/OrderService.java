@@ -11,7 +11,6 @@ import com.iiitb.customebook.pojo.*;
 import com.iiitb.customebook.repository.OrderRepository;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import com.iiitb.customebook.util.CustomEBookUtil;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,7 @@ public class OrderService {
         }
     }*/
 
-    public Integer getChapterId(ItemVO itemDetails) {
+    public Integer getChapterId(CartItemInputVO itemDetails) {
 
         if(itemDetails!=null) {
             ChapterItem chapterItem = chapterItemService.getChapterItemByBookIdAndChapterNumber(itemDetails.getBookId(),
@@ -151,14 +150,12 @@ public class OrderService {
             for(String chapter : chapters) {
                 int chapterId = Integer.valueOf(chapter);
                 ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
-                Book book = bookService.getBookById(chapterItem.getBookId());
-                if(book!=null) {
-                    ItemVO item = getBookChapterDetails(book, chapterItem.getChapterNumber());
-                    if(item!=null) {
-                        cartItems.add(item);
-                        totalPrice += item.getPrice();
-                    }
+                ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
+                if(item!=null) {
+                    cartItems.add(item);
+                    totalPrice += item.getPrice();
                 }
+
             }
             cartVO.setOrderItems(cartItems);
             cartVO.setTotalPrice(totalPrice);
@@ -166,23 +163,76 @@ public class OrderService {
         }
     }
 
-    private ItemVO getBookChapterDetails(Book book, Integer chapterNumber) {
+    private ItemVO getBookChapterDetails(Integer bookId, Integer chapterNumber) {
 
-        BookComponent chapterDetails = getChapterDetails(book, chapterNumber);
-        if(chapterDetails!=null) {
-            ItemVO cartItem = new ItemVO();
-            cartItem.setBookId(book.getBookId());
-            cartItem.setBookName(book.getBookName());
-            cartItem.setBookLocation(book.getPdfFileLocation());
-            cartItem.setChapterName(chapterDetails.getChapterName());
-            cartItem.setChapterNumber(chapterDetails.getChapterNumber());
-            cartItem.setStartPage(chapterDetails.getStartPage());
-            cartItem.setEndPage(chapterDetails.getEndPage());
-            cartItem.setPrice(chapterDetails.getPrice());
-            cartItem.setChapterDescription(chapterDetails.getDescription());
-            return cartItem;
+        Book book = bookService.getBookById(bookId);
+        if(book!=null) {
+            BookComponent chapterDetails = getChapterDetails(book, chapterNumber);
+            if(chapterDetails!=null) {
+                ItemVO cartItem = new ItemVO();
+                cartItem.setBookId(book.getBookId());
+                cartItem.setBookName(book.getBookName());
+                cartItem.setBookLocation(book.getPdfFileLocation());
+                cartItem.setChapterName(chapterDetails.getChapterName());
+                cartItem.setChapterNumber(chapterDetails.getChapterNumber());
+                cartItem.setStartPage(chapterDetails.getStartPage());
+                cartItem.setEndPage(chapterDetails.getEndPage());
+                cartItem.setPrice(chapterDetails.getPrice());
+                cartItem.setChapterDescription(chapterDetails.getDescription());
+                return cartItem;
+            }
         }
         return null;
+    }
+
+    public void addItemToCart(Integer userId, CartItemInputVO itemDetails) {
+        Integer cartOrderId = orderRepository.findInCartOrderIdForUser(userId);
+        if(null == cartOrderId || cartOrderId==0) {
+            createNewOrder(userId, itemDetails);
+        } else {
+            updateOrder(cartOrderId, userId, itemDetails);
+        }
+    }
+
+
+
+    public Order createNewOrder(Integer userId, CartItemInputVO itemDetails) {
+        Order order = new Order();
+        User user = userService.getUserById(userId);
+        order.setUser_id(user);
+
+        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
+        if(item!=null) {
+            order.setChapterItems(String.valueOf(getChapterId(itemDetails)));
+            order.setTotalPrice(item.getPrice());
+        }
+
+        order.setOrderStatus(ORDER_STATUS_IN_CART);
+        return orderRepository.save(order);
+    }
+
+    private void updateOrder(Integer cartOrderId, Integer userId, CartItemInputVO itemDetails) {
+        Order order = orderRepository.findById(cartOrderId).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
+
+        String chapters[] = order.getChapterItems().split(",");
+        int initialLength = chapters.length;
+        HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
+        uniqueChapters.add(String.valueOf(getChapterId(itemDetails)));
+        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
+
+        StringBuilder chapterItems = new StringBuilder();
+        for(String chapter: uniqueChapters) {
+            chapterItems.append(chapter+",");
+        }
+        chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
+        order.setChapterItems(chapterItems.toString());
+        int newLength = order.getChapterItems().split(",").length;
+        if(initialLength<newLength) {
+
+            order.setTotalPrice(order.getTotalPrice()+item.getPrice());
+        }
+        orderRepository.save(order);
     }
 
 }
