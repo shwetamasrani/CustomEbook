@@ -1,6 +1,7 @@
 package com.iiitb.customebook.service;
 
 import com.iiitb.customebook.bean.Book;
+import com.iiitb.customebook.bean.User;
 import com.iiitb.customebook.exception.ResourceNotFoundException;
 import com.iiitb.customebook.pojo.BookVO;
 import com.iiitb.customebook.repository.BookRepository;
@@ -8,8 +9,12 @@ import com.iiitb.customebook.util.CustomEBookConstants;
 import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +26,21 @@ public class BookService {
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+    }
+
+    public static void savePdfFile(MultipartFile pdfFile) {
+         System.out.println("in book service");
+        System.out.println(pdfFile.getOriginalFilename());
+        System.out.println(pdfFile.getSize());
+        String pdfFolderPath = CustomEBookConstants.PATH_BOOKS+File.separator+pdfFile.getOriginalFilename();
+        try {
+            Files.copy(pdfFile.getInputStream(), Paths.get(pdfFolderPath), StandardCopyOption.REPLACE_EXISTING);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Book getBookById(Integer id){
@@ -45,9 +65,23 @@ public class BookService {
 
     public BookVO addBook(BookVO bookDetails)
     {
-        Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
-        return CustomEBookUtil.mappingBookBeanToPojo(book);
+        if(bookDetails.getIsbnNumber()!=null && getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
+            Book book =  bookRepository.save(CustomEBookUtil.mappingBookVOToBean(bookDetails));
+            return CustomEBookUtil.mappingBookBeanToPojo(book);
+        }
+        return null;
     }
+
+    public BookVO uploadBook(BookVO bookDetails, User publisher)
+    {
+        if(bookDetails.getIsbnNumber()!=null && getBookByIsbnNumber(bookDetails.getIsbnNumber())==null) {
+            Book newBook = CustomEBookUtil.mappingBookVOToBean(bookDetails);
+            newBook.setUser_id(publisher);
+            return CustomEBookUtil.mappingBookBeanToPojo(bookRepository.save(newBook));
+        }
+        return null;
+    }
+
 
     public List<Book> getBooksByPublisher(String publisher){
        return bookRepository.findByPublisher(publisher);

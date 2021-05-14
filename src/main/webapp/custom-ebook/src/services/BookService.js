@@ -3,7 +3,7 @@ import axios from 'axios';
 const BOOK_API_BASE_URL="http://localhost:8081/api/books"
 const BOOK_GET_API_BASE_URL="http://localhost:8081/api/books/isbn"
 const BOOK_SPLIT_APT_BASE_URL="http://localhost:8081/api/books/split"
-
+const BOOK_API_BASE_URL_FILE="http://localhost:8081/api/books/savePdfFile"
 class BookService{
 
     // getBookByIsbn(isbn)
@@ -16,7 +16,26 @@ class BookService{
     {
        return axios.put(BOOK_SPLIT_APT_BASE_URL,book_split)
     }
-   
+    savePdfFile(pdfFile)
+    {
+        console.log("in service",pdfFile)
+        console.log("in service",pdfFile.get("file"))
+        return axios.post(BOOK_API_BASE_URL_FILE,pdfFile)
+        // axios({
+        //     method: "post",
+        //     url: BOOK_API_BASE_URL_FILE,
+        //     data: pdfFile,
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //   })
+        //     .then(function (response) {
+        //       //handle success
+        //       console.log(response);
+        //     })
+        //     .catch(function (response) {
+        //       //handle error
+        //       console.log(response);
+        //     });
+    }
        
     // createBook(book)
     // {
@@ -30,6 +49,7 @@ class BookService{
     // });
 
      createBook = async (book) => {
+         console.log("in createBook-service",book)
         try {
             const resp = await axios.post(BOOK_API_BASE_URL,book);
             console.log(resp.data);

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
 class Cart extends Component {
     constructor(props) {
@@ -96,7 +97,7 @@ class Cart extends Component {
     clearCart() {
         this.setState({
             newCart: [],
-            customBookName:""
+            customBookName: ""
         }, () => this.updateCartData())
     }
 
@@ -149,7 +150,7 @@ class Cart extends Component {
 
         console.log("NewCart:--->", this.state.newCart)
 
-        if (this.state.newCart === undefined) {
+        if (this.state.userId === undefined) {
             this.setState({
                     newCart: JSON.parse(localStorage.getItem('newCart')),
                     userId: JSON.parse(localStorage.getItem('userId')),
@@ -192,7 +193,7 @@ class Cart extends Component {
                     <h4>BookName:{chapter.bookName}</h4>
                     <h4>Chapter number:{chapter.chapterNum}</h4>
                     <h4>Chapter name:{chapter.chapterData[0].chapterName}</h4>
-                    <h4>Price: ${chapter.chapterData[0].price}</h4>
+                    <h4>Price: Rs.{chapter.chapterData[0].price}</h4>
                     <button onClick={() => this.removeFromCart(chapter)}>
                         Remove
                     </button>
@@ -200,34 +201,41 @@ class Cart extends Component {
             )
         })
         return (
-            <div className="Cart" style={{display:"inline-grid"}}>
-                <h1 style={{color: "white"}}>Cart</h1>
-                <div className="Chapters" style={{width: 'fit-content'}}>
-                    {this.state.newCart.length === 0 && (
-                        <h3> Your cart is empty </h3>
-                    )}
-                    {cartItems}
+            <div>
+                <nav>
+                    <ul>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/SignUp">About</Link></li>
+                        <li><Link to="/Dashboard">Dashboard</Link></li>
+                        <li><Link to="/" onClick={this.logout}>Logout</Link></li>
+                    </ul>
+                </nav>
+                <div className="Cart" style={{display: "inline-grid"}}>
+                    <h1 style={{color: "white"}}>Cart</h1>
+                    <div className="Chapters" style={{width: '100%'}}>
+                        {this.state.newCart.length === 0 && (
+                            <h3> Your cart is empty </h3>
+                        )}
+                        {cartItems}
+                    </div>
+                    <div className="bookName">
+                        <h2>Total Cost: Rs.{this.state.totalSum}</h2>
+                        {this.state.newCart.length > 0 && (
+                            <div>
+                                <h3>Enter a book Name:</h3>
+                                <input type="text" name="customBookName" required="true"
+                                       value={this.state.customBookName}
+                                       onChange={this.handleChange}/>
+                                <button name="buy" onClick={this.buyBook}>Buy Book</button>
+                            </div>)
+                        }
+                        {this.state.newCart.length > 0 && (
+                            <button onClick={this.clearCart}>Clear Cart</button>
+                        )}
+                    </div>
                 </div>
-                <div className="bookName">
-                    <h2>Total Cost: ${this.state.totalSum}</h2>
-
-
-                    {this.state.newCart.length > 0 &&
-                    (
-                        <div>
-                        <h3>Enter a book Name:</h3>
-                        <input type="text" name="customBookName" required="true" value={this.state.customBookName} onChange={this.handleChange}/>
-                        <button name="buy" onClick={this.buyBook}>Buy Book</button>
-                        </div>
-
-                    )
-                    }
-                    {this.state.newCart.length > 0 && (
-                        <button onClick={this.clearCart}>Clear Cart</button>
-                    )}
-                </div>
-
             </div>
+
 
         )
     }
