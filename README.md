@@ -3,7 +3,7 @@
 APIs:
 ## IMPORTANT!
 ### Login API:
-GET: localhost:8081/api/login
+POST: localhost:8081/api/login
 ```
 Request Body: {
 "emailAddress":"shwetamasrani19@gmail.com",

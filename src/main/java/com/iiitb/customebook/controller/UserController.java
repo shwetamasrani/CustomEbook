@@ -92,7 +92,7 @@ public class UserController {
         return userService.updateUser(id, user);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<UserDetails> login(@RequestBody LoginDetailsVO loginDetails){
 
         User userDetails = userService.getUserByEmail(loginDetails.getEmailAddress());
