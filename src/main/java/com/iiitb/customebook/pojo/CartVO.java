@@ -7,16 +7,10 @@ public class CartVO {
     private Integer orderId;
     private Integer userId;
     private String customEBookName;
+    private Integer totalPrice;
     private List<ItemVO> orderItems;
 
     public CartVO() {
-    }
-
-    public CartVO(Integer orderId, Integer userId, String customEBookName, List<ItemVO> orderItems) {
-        this.orderId = orderId;
-        this.userId = userId;
-        this.customEBookName = customEBookName;
-        this.orderItems = orderItems;
     }
 
     public Integer getOrderId() {
@@ -49,5 +43,13 @@ public class CartVO {
 
     public void setOrderItems(List<ItemVO> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public Integer getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

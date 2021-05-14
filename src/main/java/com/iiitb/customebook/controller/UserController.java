@@ -8,6 +8,7 @@ import com.iiitb.customebook.service.BookService;
 import com.iiitb.customebook.service.OrderService;
 import com.iiitb.customebook.service.UserService;
 import com.iiitb.customebook.util.CustomEBookUtil;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,6 +128,25 @@ public class UserController {
             } else {
                 return ResponseEntity.badRequest().body("Book already exists");
             }
+        }
+        return null;
+    }
+
+    @GetMapping("/users/{userId}/cart")
+    public ResponseEntity<CartVO> getUserCartDetails(@PathVariable Integer userId) {
+        if(userId!=null) {
+            CartVO cartDetails = orderService.getUserCartDetails(userId);
+            return ResponseEntity.ok(cartDetails);
+        }
+        return null;
+    }
+
+    @PostMapping("/users/{userId}/cart")
+    public HttpStatus addToCart(@PathVariable Integer userId, @RequestBody CartItemInputVO itemDetails) {
+        if(userId!=null) {
+            orderService.addItemToCart(userId, itemDetails);
+            return HttpStatus.CREATED;
+
         }
         return null;
     }

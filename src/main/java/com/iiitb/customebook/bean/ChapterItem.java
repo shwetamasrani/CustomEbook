@@ -15,7 +15,6 @@ public class ChapterItem {
     @Column(nullable = false)
     private Integer chapterNumber;
 
-
     public ChapterItem() {
     }
 

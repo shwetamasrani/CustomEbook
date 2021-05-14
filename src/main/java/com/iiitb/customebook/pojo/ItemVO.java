@@ -6,6 +6,7 @@ public class ItemVO {
     private String bookName;
     private String bookLocation;
     private Integer chapterNumber;
+    private String chapterName;
     private double price;
     private Integer startPage;
     private Integer endPage;
@@ -36,6 +37,14 @@ public class ItemVO {
 
     public void setChapterNumber(Integer chapterNumber) {
         this.chapterNumber = chapterNumber;
+    }
+
+    public String getChapterName() {
+        return chapterName;
+    }
+
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
     }
 
     public double getPrice() {

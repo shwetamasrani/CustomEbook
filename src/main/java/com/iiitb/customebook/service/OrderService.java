@@ -11,7 +11,6 @@ import com.iiitb.customebook.pojo.*;
 import com.iiitb.customebook.repository.OrderRepository;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import com.iiitb.customebook.util.CustomEBookUtil;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Order addItem(CartItemInputVO cartInputDetails){
+    /*public Order addItem(CartItemInputVO cartInputDetails){
         Integer cartOrderId = orderRepository.findInCartOrderIdForUser(cartInputDetails.getUserId());
         if(null == cartOrderId || cartOrderId==0) {
             return orderRepository.save(createNewOrder(cartInputDetails));
@@ -51,9 +50,9 @@ public class OrderService {
             return updateOrder(cartInputDetails, order);
 
         }
-    }
+    }*/
 
-    public Integer getChapterId(ItemVO itemDetails) {
+    public Integer getChapterId(CartItemInputVO itemDetails) {
 
         if(itemDetails!=null) {
             ChapterItem chapterItem = chapterItemService.getChapterItemByBookIdAndChapterNumber(itemDetails.getBookId(),
@@ -70,7 +69,7 @@ public class OrderService {
         return null;
     }
 
-    public Order createNewOrder(CartItemInputVO cartInputDetails) {
+   /* public Order createNewOrder(CartItemInputVO cartInputDetails) {
         Order order = new Order();
         User user = userService.getUserById(cartInputDetails.getUserId());
         order.setUser_id(user);
@@ -79,9 +78,9 @@ public class OrderService {
         order.setOrderStatus(ORDER_STATUS_IN_CART);
 
         return order;
-    }
+    }*/
 
-    public Order updateOrder(CartItemInputVO cartInputDetails, Order order) {
+   /* public Order updateOrder(CartItemInputVO cartInputDetails, Order order) {
         String chapters[] = order.getChapterItems().split(",");
         int initialLength = chapters.length;
 
@@ -98,53 +97,21 @@ public class OrderService {
             order.setTotalPrice(order.getTotalPrice()+cartInputDetails.getItemDetails().getPrice());
         }
         return orderRepository.save(order);
-    }
+    }*/
 
 
-    public OrderOutputVO processOrder(CartVO orderDetails)
+    public OrderOutputVO processOrder(CartVO cartDetails)
     {
-        Order order = orderRepository.findById(orderDetails.getOrderId()).orElseThrow(()
-                -> new ResourceNotFoundException("Order does not exists with id:"+orderDetails.getOrderId()));
-        order.setCustomEBookName(orderDetails.getCustomEBookName());
-        String mergedFileLocation = PDFMerge.merge(order.getOrderId(), orderDetails.getOrderItems());
+        Order order = orderRepository.findById(cartDetails.getOrderId()).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+cartDetails.getOrderId()));
+        order.setCustomEBookName(cartDetails.getCustomEBookName());
+        String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
         orderRepository.save(order);
         return new OrderOutputVO(order.getOrderId(), mergedFileLocation, order.getTotalPrice());
     }
 
-
-    public void getCartDetails(CartVO cartDetails, Integer orderId) {
-
-        Order order = orderRepository.findById(orderId).orElseThrow(()
-                -> new ResourceNotFoundException("Order does not exists with id:"+orderId));
-        User user = userService.getUserById(order.getUser_id().getUser_id());
-        cartDetails.setUserId(user.getUser_id());
-        String chapters[] = order.getChapterItems().split(",");
-        List<ItemVO> cartItems = new ArrayList<ItemVO>();
-        for(String chapter : chapters) {
-            int chapterId = Integer.valueOf(chapter);
-            ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
-            Book book = bookService.getBookById(chapterItem.getBookId());
-            if(book!=null) {
-                BookComponent chapterDetails = getChapterDetails(book, chapterItem.getChapterNumber());
-                if(chapterDetails!=null) {
-                    ItemVO cartItem = new ItemVO();
-                    cartItem.setBookId(book.getBookId());
-                    cartItem.setBookName(book.getBookName());
-                    cartItem.setBookLocation(book.getPdfFileLocation());
-                    cartItem.setPrice(chapterDetails.getPrice());
-                    cartItem.setChapterNumber(chapterDetails.getChapterNumber());
-                    cartItem.setStartPage(chapterDetails.getStartPage());
-                    cartItem.setEndPage(chapterDetails.getEndPage());
-                    cartItem.setChapterDescription(chapterDetails.getDescription());
-                    cartItems.add(cartItem);
-                }
-            }
-        }
-        cartDetails.setOrderItems(cartItems);
-
-    }
 
     public BookComponent getChapterDetails(Book book, int chapterNumber) {
 
@@ -163,4 +130,109 @@ public class OrderService {
         orderDetails.setTotalPrice(order.getTotalPrice());
 
     }
+
+    public CartVO getUserCartDetails(Integer userId) {
+        Integer cartOrderId = orderRepository.findInCartOrderIdForUser(userId);
+        if(null == cartOrderId || cartOrderId==0) {
+            return null;
+        } else {
+            Order order = orderRepository.findById(cartOrderId).orElseThrow(()
+                    -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
+            CartVO cartVO = new CartVO();
+            cartVO.setOrderId(order.getOrderId());
+            cartVO.setUserId(userId);
+            if(order.getCustomEBookName()!=null && !order.getCustomEBookName().equals(EMPTY_STRING)) {
+                cartVO.setCustomEBookName(order.getCustomEBookName());
+            }
+            List<ItemVO> cartItems = new ArrayList<>();
+            int totalPrice = 0;
+            String chapters[] = order.getChapterItems().split(",");
+            for(String chapter : chapters) {
+                int chapterId = Integer.valueOf(chapter);
+                ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
+                ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
+                if(item!=null) {
+                    cartItems.add(item);
+                    totalPrice += item.getPrice();
+                }
+
+            }
+            cartVO.setOrderItems(cartItems);
+            cartVO.setTotalPrice(totalPrice);
+            return cartVO;
+        }
+    }
+
+    private ItemVO getBookChapterDetails(Integer bookId, Integer chapterNumber) {
+
+        Book book = bookService.getBookById(bookId);
+        if(book!=null) {
+            BookComponent chapterDetails = getChapterDetails(book, chapterNumber);
+            if(chapterDetails!=null) {
+                ItemVO cartItem = new ItemVO();
+                cartItem.setBookId(book.getBookId());
+                cartItem.setBookName(book.getBookName());
+                cartItem.setBookLocation(book.getPdfFileLocation());
+                cartItem.setChapterName(chapterDetails.getChapterName());
+                cartItem.setChapterNumber(chapterDetails.getChapterNumber());
+                cartItem.setStartPage(chapterDetails.getStartPage());
+                cartItem.setEndPage(chapterDetails.getEndPage());
+                cartItem.setPrice(chapterDetails.getPrice());
+                cartItem.setChapterDescription(chapterDetails.getDescription());
+                return cartItem;
+            }
+        }
+        return null;
+    }
+
+    public void addItemToCart(Integer userId, CartItemInputVO itemDetails) {
+        Integer cartOrderId = orderRepository.findInCartOrderIdForUser(userId);
+        if(null == cartOrderId || cartOrderId==0) {
+            createNewOrder(userId, itemDetails);
+        } else {
+            updateOrder(cartOrderId, userId, itemDetails);
+        }
+    }
+
+
+
+    public Order createNewOrder(Integer userId, CartItemInputVO itemDetails) {
+        Order order = new Order();
+        User user = userService.getUserById(userId);
+        order.setUser_id(user);
+
+        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
+        if(item!=null) {
+            order.setChapterItems(String.valueOf(getChapterId(itemDetails)));
+            order.setTotalPrice(item.getPrice());
+        }
+
+        order.setOrderStatus(ORDER_STATUS_IN_CART);
+        return orderRepository.save(order);
+    }
+
+    private void updateOrder(Integer cartOrderId, Integer userId, CartItemInputVO itemDetails) {
+        Order order = orderRepository.findById(cartOrderId).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
+
+        String chapters[] = order.getChapterItems().split(",");
+        int initialLength = chapters.length;
+        HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
+        uniqueChapters.add(String.valueOf(getChapterId(itemDetails)));
+        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
+
+        StringBuilder chapterItems = new StringBuilder();
+        for(String chapter: uniqueChapters) {
+            chapterItems.append(chapter+",");
+        }
+        chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
+        order.setChapterItems(chapterItems.toString());
+        int newLength = order.getChapterItems().split(",").length;
+        if(initialLength<newLength) {
+
+            order.setTotalPrice(order.getTotalPrice()+item.getPrice());
+        }
+        orderRepository.save(order);
+    }
+
 }
