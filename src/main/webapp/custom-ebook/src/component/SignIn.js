@@ -9,23 +9,27 @@ import Navbar from "./Navbar";
 class SignIn extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             email: "",
             password: "",
         }
+
         this.handleChange = this.handleChange.bind(this)
         this.handleClick = this.handleClick.bind(this)
     }
 
     handleChange(event) {
+        //console.log("Handle change callled")
         const {name, value} = event.target;
         this.setState({
             [name]: value
         })
+        //console.log(this.state)
     }
-
-    handleClick(e) {
+    handleClick(e){
         e.preventDefault();
+
         let user = {
             emailAddress: this.state.email,
             password: this.state.password
@@ -33,29 +37,36 @@ class SignIn extends Component {
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-            console.log("SignIn Response:", res.data);
-            console.log(res.data.userId)
-            if (res.data.publisherFlag) {
-                this.props.history.push({
-                    pathname: "/AdminDashboard",
-                    userId: res.data.userId
-                })
-            } else {
-                this.props.history.push({
-                    pathname: "/Dashboard",
-                    userId: res.data.userId
-                })
-            }
-            console.log("LoggedIn");
+                // console.log("response",res);
+                // console.log("Signin Component", res.data);
+                localStorage.setItem('User',JSON.stringify(res.data));
+                // console.log(JSON.parse(localStorage.getItem('User')));
+                // console.log("Publisher", res.data.publisherFlag);
+
+                if(res.data.publisherFlag){
+                    this.props.history.push({
+                        pathname: "/AdminDashboard",
+                        userId: res.data.user_id
+                    })
+                    //this.props.history.push('/AdminDashboard');
+                }
+                else{
+                    this.props.history.push({
+                        pathname: "/Dashboard",
+                        userId: res.data.user_id
+                    })
+
+                    //this.props.history.push('/Dashboard');
+                }
+                console.log("LoggedIn");
         })
-            .catch(err => {
+            .catch(err =>{
                 console.log(err);
                 alert("Username or Password doesn't Match!");
                 window.location.reload(true);
-            });
+                });
         //alert("Login")
     }
-
     render() {
         return (
             <div>
@@ -89,14 +100,16 @@ class SignIn extends Component {
                             <h3 style={{display: this.state.errorMessage ? "block" : "none"}}>Incorrect
                                 Username/Password</h3>
                             <br/>
-                            <button className="registerButton" onClick={this.handleClick}>Login</button>
+                            <button className="registerButton" onClick={this.handleClick} >Login</button>
                             <p>New at the portal?<Link to="/SignUp"> Sign Up</Link></p>
+
                         </form>
                     </div>
                 </div>
             </div>
         );
     }
+
 }
 
 export default withRouter(SignIn);

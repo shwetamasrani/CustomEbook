@@ -9,13 +9,16 @@ class AddChapterDetails extends Component {
         this.state = {
 
             bookId: this.props.location.state.bookId,
-            chapterNumber: "",
+            totalChapter: this.props.location.state.totalChapter,
+            chapterNumber: 1,
             chapterName: "",
             price: "",
             startPage: "",
             endPage: "",
             description: "",
-            chapterArray: []
+            chapterArray: [],
+            isSubmit: false,
+            isAdd: true
         }
         this.handleChange = this.handleChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -35,6 +38,7 @@ class AddChapterDetails extends Component {
 
     onAddChapter = (c) => {
         c.preventDefault()
+        
         // let chapter={chapterNumber:this.state.chapterNumber,chapterName:this.state.chapterName,
         //         price:this.state.price ,startPage:this.state.startPage,
         //         endPage:this.state.endPage, description:this.state.description};
@@ -42,20 +46,45 @@ class AddChapterDetails extends Component {
         // console.log('chapter => ' + JSON.stringify(chapter));
 
         // this.state.chapterArray.push({chapter});
-
+        console.log("total",this.state.totalChapter);
+        console.log(this.state.chapterNumber)
         this.state.chapterArray.push({
-            chapterNumber: this.state.chapterNumber, chapterName: this.state.chapterName,
-            price: this.state.price, startPage: this.state.startPage,
-            endPage: this.state.endPage, description: this.state.description
+            chapterNumber: this.state.chapterNumber, 
+            chapterName: this.state.chapterName,
+            price: this.state.price, 
+            startPage: this.state.startPage,
+            endPage: this.state.endPage, 
+            description: this.state.description
         });
 
-        console.log("chapter-array", this.state.chapterArray)
+        Array.from(document.querySelectorAll("input")).forEach(
+            input => (input.value = "")
+          );
+
+        if(this.state.isSubmit || this.state.totalChapter == 1  )
+        {
+              this.onSubmit();
+        }
+        //console.log("chapter-array", this.state.chapterArray)
+        this.setState({
+            chapterNumber: this.state.chapterNumber+1,
+        })
+        // console.log("total afer push",this.state.totalChapter);
+        // console.log(this.state.chapterNumber)
+        // console.log("Length",this.state.chapterArray.length)
+        if(this.state.chapterNumber == this.state.totalChapter-1)
+        {
+            this.setState({
+                isSubmit: true,
+                isAdd: false
+            })
+        }
 
     }
 
 
-    onSubmit = (b) => {
-        b.preventDefault();
+    onSubmit = () => {
+        //b.preventDefault();
 
         let book_split = {
             bookId: this.state.bookId, bookChapters: this.state.chapterArray
@@ -66,7 +95,11 @@ class AddChapterDetails extends Component {
 
         BookService.splitBookChapters(book_split).then(res => {
             // this.props.history.push('/Signin');
+            alert("Submitted Successfully!")
+            this.props.history.push({pathname:'/AdminDashboard'});
         });
+
+
     }
 
 
@@ -74,6 +107,7 @@ class AddChapterDetails extends Component {
 
 
         console.log("in add chapter", this.props.location.state.bookId)
+        console.log(this.state.totalChapter)
     }
 
     render() {
@@ -100,14 +134,18 @@ class AddChapterDetails extends Component {
 
                         <div>
                             <form>
-
+                                <label>Chapter Number:</label>
                                 <input
                                     type="number"
                                     name="chapterNumber"
                                     required="True"
                                     placeholder="Chapter Number"
-                                    //value={this.state.bookName}
-                                    onChange={this.handleChange}/>
+                                    value={this.state.chapterNumber}
+                                    // onChange={this.handleChange}/>
+                                    readOnly
+                                    />
+                                
+                                <label>Chapter Name:</label>
                                 <input
                                     type="text"
                                     name="chapterName"
@@ -115,6 +153,8 @@ class AddChapterDetails extends Component {
                                     placeholder="Chapter Name"
                                     //value={this.state.bookName}
                                     onChange={this.handleChange}/>
+
+                                <label>Price:</label>
                                 <input
                                     type="number"
                                     name="price"
@@ -122,6 +162,8 @@ class AddChapterDetails extends Component {
                                     placeholder="Chapter Price"
                                     //value={this.state.chapterPrice}
                                     onChange={this.handleChange}/>
+
+                                <label>Start Page:</label>
                                 <input
                                     type="number"
                                     name="startPage"
@@ -129,6 +171,8 @@ class AddChapterDetails extends Component {
                                     placeholder="Start Page"
                                     //value={this.state.chapterPrice}
                                     onChange={this.handleChange}/>
+
+                                <label>End Page:</label>
                                 <input
                                     type="number"
                                     name="endPage"
@@ -136,6 +180,8 @@ class AddChapterDetails extends Component {
                                     placeholder="End Page"
                                     //value={this.state.chapterPrice}
                                     onChange={this.handleChange}/>
+
+                                <label>Description: </label>
                                 <input
                                     type="text"
                                     name="description"
@@ -143,17 +189,22 @@ class AddChapterDetails extends Component {
                                     placeholder="Description"
                                     //value={this.state.chapterPrice}
                                     onChange={this.handleChange}/>
-                                <button type="submit" onClick={this.onAddChapter}>
-                                    Add Chapter!
-                                </button>
+
+                                {this.state.isAdd && (
+                                    <button type="submit" onClick={this.onAddChapter}>
+                                        Add Next Chapter!
+                                    </button>
+                                )}    
+                                
                             </form>
                         </div>
 
                         <div>
-                            <button type="submit" onClick={this.onSubmit}>
-                                Submit!
+                        {this.state.isSubmit && (
+                            <button type="submit" onClick={this.onAddChapter}>
+                                Add last Chapter!
                             </button>
-
+                        )}  
                         </div>
                     </form>
                 </div>

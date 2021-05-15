@@ -27,7 +27,7 @@ class Dashboard extends Component {
 
     async componentDidMount() {
 
-        let response = await fetch('http://localhost:8081/api/books/', {
+        let response = await fetch('http://localhost:8081/api/books', {
             method: 'GET',
             headers: {
                 'Accept': '*/*'
