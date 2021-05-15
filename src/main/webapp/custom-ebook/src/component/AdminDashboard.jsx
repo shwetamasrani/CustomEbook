@@ -15,7 +15,7 @@ class AdminDashboard extends Component {
             isbnNumber: "",
             author: "",
             yearOfRelease:"",
-            publisher: JSON.parse(localStorage.getItem('User')).companyName,
+            publisher: "",
             price: "",
             noOfChapters: "",
             description:"",
@@ -77,7 +77,7 @@ class AdminDashboard extends Component {
         console.log(this.state.pdfFile)
         console.log(this.state.pdfFile.name)
         var name=this.state.pdfFile.name;
-        var pdfFolder="/home/nihar/Desktop/Semester2/CS-605DataModeling/Project/Books/"        //set the appropriate path name to store pdf
+        var pdfFolder="/home/ubuntu/Documents/Projects/Books/"        //set the appropriate path name to store pdf
         this.state.pdfFileLocation=pdfFolder.concat(name)
 
 
@@ -138,7 +138,7 @@ class AdminDashboard extends Component {
                                 placeholder="ISBN Number"
                                 value={this.state.isbnNumber}
                                 onChange={this.handleChange}/>
-<br></br>
+
                              <label>Book Name:</label>
                             <input type="text"
                                    name="bookName"    //need to add change handler function for name
@@ -164,7 +164,6 @@ class AdminDashboard extends Component {
                                 placeholder="Publisher"
                                 value={this.state.publisher}
                                 onChange={this.handleChange}
-                                readOnly
                                 />
 
                             <label>Year Of Release</label>
@@ -194,6 +193,8 @@ class AdminDashboard extends Component {
                                 value={this.state.noOfChapters}
                                 onChange={this.handleChange}/> 
 
+                            
+                            <label>Description:</label>
                             <input
                                 type="text"
                                 name="description"

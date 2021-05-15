@@ -37,11 +37,11 @@ class SignIn extends Component {
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-                console.log("response",res);
-                console.log("Signin Component", res.data);
+                // console.log("response",res);
+                // console.log("Signin Component", res.data);
                 localStorage.setItem('User',JSON.stringify(res.data));
-                console.log(JSON.parse(localStorage.getItem('User')));
-                console.log("Publisher", res.data.publisherFlag);
+                // console.log(JSON.parse(localStorage.getItem('User')));
+                // console.log("Publisher", res.data.publisherFlag);
 
                 if(res.data.publisherFlag){
                     this.props.history.push({
@@ -100,8 +100,9 @@ class SignIn extends Component {
                             <h3 style={{display: this.state.errorMessage ? "block" : "none"}}>Incorrect
                                 Username/Password</h3>
                             <br/>
-                            <button className="registerButton" onClick={this.handleClick}>Login</button>
+                            <button className="registerButton" onClick={this.handleClick} >Login</button>
                             <p>New at the portal?<Link to="/SignUp"> Sign Up</Link></p>
+
                         </form>
                     </div>
                 </div>
