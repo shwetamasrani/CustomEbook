@@ -126,7 +126,12 @@ public class UserController {
     public ResponseEntity<CartVO> getUserCartDetails(@PathVariable Integer userId) {
         if(userId!=null) {
             CartVO cartDetails = orderService.getUserCartDetails(userId);
-            return ResponseEntity.ok(cartDetails);
+            if(cartDetails.getOrderItems().size()>0){
+                return ResponseEntity.ok(cartDetails);
+            } else {
+                return new ResponseEntity(cartDetails, HttpStatus.CREATED);
+            }
+
         }
         return null;
     }
