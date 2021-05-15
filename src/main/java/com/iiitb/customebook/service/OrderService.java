@@ -106,12 +106,14 @@ public class OrderService {
             int totalPrice = 0;
             String chapters[] = order.getChapterItems().split(",");
             for(String chapter : chapters) {
-                int chapterId = Integer.valueOf(chapter);
-                ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
-                ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
-                if(item!=null) {
-                    cartItems.add(item);
-                    totalPrice += item.getPrice();
+                if(!chapter.equals(EMPTY_STRING)) {
+                    int chapterId = Integer.valueOf(chapter);
+                    ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
+                    ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
+                    if(item!=null) {
+                        cartItems.add(item);
+                        totalPrice += item.getPrice();
+                    }
                 }
 
             }
@@ -169,14 +171,19 @@ public class OrderService {
     private void updateOrder(Integer cartOrderId, Integer userId, CartItemInputVO itemDetails) {
         Order order = orderRepository.findById(cartOrderId).orElseThrow(()
                 -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
-
+        HashSet<Integer> uniqueChapters = new HashSet<Integer>();
         String chapters[] = order.getChapterItems().split(",");
-        int initialLength = chapters.length;
-        HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
-        uniqueChapters.add(String.valueOf(getChapterId(itemDetails)));
+        for(String chapter: chapters){
+            if(!chapter.equals(EMPTY_STRING)){
+                uniqueChapters.add(Integer.parseInt(chapter));
+            }
+
+        }
+        int initialLength = uniqueChapters.size();
+        uniqueChapters.add(getChapterId(itemDetails));
 
         StringBuilder chapterItems = new StringBuilder();
-        for(String chapter: uniqueChapters) {
+        for(Integer chapter: uniqueChapters) {
             chapterItems.append(chapter+",");
         }
         chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
@@ -203,7 +210,11 @@ public class OrderService {
         if(orderItems.contains(chapterItemNumber)) {
             int index = orderItems.indexOf(chapterItemNumber);
             if(index==0){
-                order.setChapterItems(orderItems.replace(chapterItemNumber+",",""));
+                if(chapterItemNumber.length()==orderItems.length()){
+                    order.setChapterItems(EMPTY_STRING);
+                }else {
+                    order.setChapterItems(orderItems.replace(chapterItemNumber+",",""));
+                }
             } else {
                 order.setChapterItems(orderItems.replace(","+chapterItemNumber,""));
             }
