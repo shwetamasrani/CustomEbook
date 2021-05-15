@@ -88,32 +88,34 @@ class BookDetails extends Component {
                     price: chapterData[0].price
                 }
             }))
-            let response = await fetch('http://localhost:8081/api/cart/add', {
+            let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/cart', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': '*/*'
                 },
                 body: JSON.stringify({
-                    userId: this.state.userId,
-                    itemDetails: {
+                    // userId: this.state.userId,
+                    // itemDetails: {
                         bookId: this.state.bookId,
                         chapterNumber: cNum,
-                        price: chapterData[0].price
-                    }
+                        // price: chapterData[0].price
+                    // }
                 })
             })
             let status = response.status;
             if (status === 200) {
-                console.log("successful")
+                console.log("BookDetails: Success")
+            }
+            else
+            {
+                console.log("BookDetails: Failed")
             }
             let bookDetails = await response.json()
             this.setState({
                 orderId: bookDetails.orderId
             })
-
         }
-
         this.setState({
             finalCart: tempCart
         }, () => console.log(this.state.finalCart))

@@ -8,8 +8,7 @@ class PublisherProfile extends Component {
         this.state = {
             isLoading: true,
             userInfo: [],
-            userId:2
-            //userId:this.props.location.userId
+            userId:this.props.location.userId
 
         }
         this.getUserInfo = this.getUserInfo.bind(this)
@@ -50,13 +49,13 @@ class PublisherProfile extends Component {
     async componentDidMount() {
 
         if (this.state.userId === undefined) {
-            console.log("UProfile:getting UserId")
+            console.log("PProfile:getting UserId")
             this.setState({
                 userId: JSON.parse(localStorage.getItem('userId')),
             }, () => this.getUserInfo())
 
         } else {
-            console.log("UProfile: setting UserId:", this.state.userId)
+            console.log("PProfile: setting UserId:", this.state.userId)
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
             await this.getUserInfo();
         }
@@ -95,7 +94,7 @@ class PublisherProfile extends Component {
                             <ul>
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/SignUp">About</Link></li>
-                                <li><Link to="/Dashboard">Dashboard</Link></li>
+                                <li><Link to="/AdminDashboard">Dashboard</Link></li>
                                 <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                             </ul>
                         </nav>

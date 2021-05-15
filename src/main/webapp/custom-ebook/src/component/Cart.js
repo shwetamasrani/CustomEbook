@@ -102,7 +102,7 @@ class Cart extends Component {
     }
 
     async getOldCartItems() {
-        let response = await fetch('http://localhost:8081/api/cart/orders/' + this.state.orderId, {
+        let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/cart', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ class Cart extends Component {
                 chapterData: [
                     {
                         chapterNumber: orderItem.chapterNumber,
-                        chapterName: "dummy chapter name",
+                        chapterName: orderItem.chapterName,
                         price: orderItem.price,
                         startPage: orderItem.startPage,
                         endPage: orderItem.endPage,
@@ -154,13 +154,13 @@ class Cart extends Component {
             this.setState({
                     newCart: JSON.parse(localStorage.getItem('newCart')),
                     userId: JSON.parse(localStorage.getItem('userId')),
-                    orderId: JSON.parse(localStorage.getItem('orderId'))
+                    //orderId: JSON.parse(localStorage.getItem('orderId'))
                 }, () => this.getOldCartItems()
             )
         } else {
             localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
-            localStorage.setItem('orderId', JSON.stringify(this.state.orderId));
+            //localStorage.setItem('orderId', JSON.stringify(this.state.orderId));
 
             await this.getOldCartItems()
         }

@@ -37,8 +37,7 @@ class SignIn extends Component {
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-                // console.log("response",res);
-                // console.log("Signin Component", res.data);
+                console.log("Signin Component", res.data);
                 localStorage.setItem('User',JSON.stringify(res.data));
                 // console.log(JSON.parse(localStorage.getItem('User')));
                 // console.log("Publisher", res.data.publisherFlag);
@@ -46,17 +45,14 @@ class SignIn extends Component {
                 if(res.data.publisherFlag){
                     this.props.history.push({
                         pathname: "/AdminDashboard",
-                        userId: res.data.user_id
+                        userId: res.data.userId
                     })
-                    //this.props.history.push('/AdminDashboard');
                 }
                 else{
                     this.props.history.push({
                         pathname: "/Dashboard",
-                        userId: res.data.user_id
+                        userId: res.data.userId
                     })
-
-                    //this.props.history.push('/Dashboard');
                 }
                 console.log("LoggedIn");
         })
@@ -65,7 +61,6 @@ class SignIn extends Component {
                 alert("Username or Password doesn't Match!");
                 window.location.reload(true);
                 });
-        //alert("Login")
     }
     render() {
         return (
