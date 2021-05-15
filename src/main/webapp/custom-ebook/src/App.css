@@ -228,11 +228,19 @@ button:hover{
     border: 1px -o-highlight-border solid;
     background-color: rgba(255, 255, 255, 0.1);
 }
+.bookUploadEnter{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 2fr;
+    column-gap: 10px;
+}
+.bookUploadEnter input{
+    margin-top: 0;
+}
 
 .bookUpload {
     color: whitesmoke;
     position: absolute;
-    margin: 10% 10% 0% 60%;
+    margin: 7% ;
     font-size: 20px;
     width: fit-content;
     padding: 2%;
@@ -378,6 +386,14 @@ select {
     grid-template-columns: 150px 150px 150px 700px;
     color: white;
     grid-column-gap: 20px;
+    line-height: 15px;
+}
+.PublisherUploads{
+    padding: 5px 20px 5px 20px;
+    display: grid;
+    grid-template-columns: 150px 150px 250px 150px 150px 150px;
+    color: white;
+    grid-column-gap: 30px;
     line-height: 15px;
 }
 .UserOrders button{
