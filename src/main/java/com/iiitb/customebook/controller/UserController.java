@@ -107,16 +107,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users/{userId}/cart/checkout")
-    public ResponseEntity<OrderOutputVO> merge(@RequestBody CartVO orderDetails)  //mapping the JSON Body to the object directly
-    {
-        if(orderDetails!=null) {
-            OrderOutputVO orderMerged = orderService.processOrder(orderDetails);
-            return new ResponseEntity(orderMerged, HttpStatus.CREATED);
-        }
-        return null;
-    }
-
     @PostMapping("/users/{userId}/uploadBook")
     public ResponseEntity<Object> addBook(@PathVariable Integer userId, @RequestBody BookVO bookDetails)  //mapping the JSON Body to the object directly
     {
@@ -148,6 +138,26 @@ public class UserController {
             return HttpStatus.CREATED;
 
         }
+        return null;
+    }
+
+    @DeleteMapping("/users/{userId}/cart")
+    public HttpStatus deleteItemInCart(@PathVariable Integer userId, @RequestBody CartItemInputVO itemDetails) {
+        if(userId!=null) {
+            orderService.deleteItemInCart(userId, itemDetails);
+            return HttpStatus.NO_CONTENT;
+        }
+        return null;
+    }
+
+    @PostMapping("/users/{userId}/cart/checkout/{bookName}")
+    public HttpStatus checkOut(@PathVariable Integer userId, @PathVariable String bookName)
+    {
+        if(userId!=null) {
+            orderService.processOrder(userId, bookName);
+            return HttpStatus.CREATED;
+        }
+
         return null;
     }
 

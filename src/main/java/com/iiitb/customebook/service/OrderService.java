@@ -40,19 +40,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    /*public Order addItem(CartItemInputVO cartInputDetails){
-        Integer cartOrderId = orderRepository.findInCartOrderIdForUser(cartInputDetails.getUserId());
-        if(null == cartOrderId || cartOrderId==0) {
-            return orderRepository.save(createNewOrder(cartInputDetails));
-        } else {
-            Order order = orderRepository.findById(cartOrderId).orElseThrow(()
-                    -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
-            return updateOrder(cartInputDetails, order);
-
-        }
-    }*/
-
-    public Integer getChapterId(CartItemInputVO itemDetails) {
+      public Integer getChapterId(CartItemInputVO itemDetails) {
 
         if(itemDetails!=null) {
             ChapterItem chapterItem = chapterItemService.getChapterItemByBookIdAndChapterNumber(itemDetails.getBookId(),
@@ -69,42 +57,12 @@ public class OrderService {
         return null;
     }
 
-   /* public Order createNewOrder(CartItemInputVO cartInputDetails) {
-        Order order = new Order();
-        User user = userService.getUserById(cartInputDetails.getUserId());
-        order.setUser_id(user);
-        order.setChapterItems(String.valueOf(getChapterId(cartInputDetails.getItemDetails())));
-        order.setTotalPrice(cartInputDetails.getItemDetails().getPrice());
-        order.setOrderStatus(ORDER_STATUS_IN_CART);
 
-        return order;
-    }*/
-
-   /* public Order updateOrder(CartItemInputVO cartInputDetails, Order order) {
-        String chapters[] = order.getChapterItems().split(",");
-        int initialLength = chapters.length;
-
-        HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
-        uniqueChapters.add(getChapterId(cartInputDetails.getItemDetails())+"");
-        StringBuilder chapterItems = new StringBuilder();
-        for(String chapter: uniqueChapters) {
-            chapterItems.append(chapter+",");
-        }
-        chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
-        order.setChapterItems(chapterItems.toString());
-        int newLength = order.getChapterItems().split(",").length;
-        if(initialLength<newLength) {
-            order.setTotalPrice(order.getTotalPrice()+cartInputDetails.getItemDetails().getPrice());
-        }
-        return orderRepository.save(order);
-    }*/
-
-
-    public OrderOutputVO processOrder(CartVO cartDetails)
+    public OrderOutputVO processOrder(Integer userId, String customEBookName)
     {
-        Order order = orderRepository.findById(cartDetails.getOrderId()).orElseThrow(()
-                -> new ResourceNotFoundException("Order does not exists with id:"+cartDetails.getOrderId()));
-        order.setCustomEBookName(cartDetails.getCustomEBookName());
+        Order order = orderRepository.findCartOrderForUser(userId);
+        CartVO cartDetails = getUserCartDetails(userId);
+        order.setCustomEBookName(customEBookName);
         String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
@@ -201,11 +159,8 @@ public class OrderService {
         User user = userService.getUserById(userId);
         order.setUser_id(user);
 
-        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
-        if(item!=null) {
-            order.setChapterItems(String.valueOf(getChapterId(itemDetails)));
-            order.setTotalPrice(item.getPrice());
-        }
+        order.setChapterItems(String.valueOf(getChapterId(itemDetails)));
+        order.setTotalPrice(getChapterPrice(itemDetails.getBookId(), itemDetails.getChapterNumber()));
 
         order.setOrderStatus(ORDER_STATUS_IN_CART);
         return orderRepository.save(order);
@@ -219,7 +174,6 @@ public class OrderService {
         int initialLength = chapters.length;
         HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
         uniqueChapters.add(String.valueOf(getChapterId(itemDetails)));
-        ItemVO item = getBookChapterDetails(itemDetails.getBookId(), itemDetails.getChapterNumber());
 
         StringBuilder chapterItems = new StringBuilder();
         for(String chapter: uniqueChapters) {
@@ -230,9 +184,42 @@ public class OrderService {
         int newLength = order.getChapterItems().split(",").length;
         if(initialLength<newLength) {
 
-            order.setTotalPrice(order.getTotalPrice()+item.getPrice());
+            order.setTotalPrice(order.getTotalPrice()+getChapterPrice(itemDetails.getBookId(), itemDetails.getChapterNumber()));
         }
         orderRepository.save(order);
     }
 
+    public void deleteItemInCart(Integer userId, CartItemInputVO itemDetails) {
+
+        ChapterItem chapterItem = chapterItemService.getChapterItemByBookIdAndChapterNumber(itemDetails.getBookId(),
+                itemDetails.getChapterNumber());
+        if(chapterItem==null) {
+            return;
+        }
+        String chapterItemNumber = String.valueOf(chapterItem.getChapterId());
+
+        Order order = orderRepository.findCartOrderForUser(userId);
+        String orderItems = order.getChapterItems();
+        if(orderItems.contains(chapterItemNumber)) {
+            int index = orderItems.indexOf(chapterItemNumber);
+            if(index==0){
+                order.setChapterItems(orderItems.replace(chapterItemNumber+",",""));
+            } else {
+                order.setChapterItems(orderItems.replace(","+chapterItemNumber,""));
+            }
+            double chapterPrice = getChapterPrice(itemDetails.getBookId(), itemDetails.getChapterNumber());
+            double totalPrice = order.getTotalPrice() - chapterPrice;
+            order.setTotalPrice(totalPrice);
+
+        }
+        orderRepository.save(order);
+    }
+
+    public double getChapterPrice(Integer bookId, Integer chapterNumber) {
+        ItemVO item = getBookChapterDetails(bookId, chapterNumber);
+        if(item!=null) {
+            return item.getPrice();
+        } else
+            return 0.0;
+    }
 }
