@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
+import UserService from "../services/UserService";
 
 class Cart extends Component {
     constructor(props) {
@@ -61,35 +62,63 @@ class Cart extends Component {
                 customEBookName: this.state.customBookName,
                 orderId: this.state.orderId
             }
-            let response = await fetch('http://localhost:8081/api/cart/checkout', {
+            let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/cart/checkout/'+this.state.customBookName, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': '*/*'
                 },
-                body: JSON.stringify(
-                    completeCart
-                )
             })
             let status = response.status;
-            if (status === 201) {
+            if (status === 200) {
                 this.clearCart()
             }
-            let bookDetails = await response.json()
             console.log(JSON.stringify(completeCart))
             alert("Book Bought")
         }
     }
 
-    removeFromCart(chapterToRemove) {
+    async removeFromCart(chapterToRemove) {
+
         console.log("removed");
+        console.log(chapterToRemove)
+        let response = await fetch("http://localhost:8081/api/users/"+this.state.userId+"/cart", {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            },
+            body: JSON.stringify({
+                    bookId:chapterToRemove.bookId,
+                     chapterNumber:chapterToRemove.chapterData[0].chapterNumber
+            })
+        })
+        let status = response.status;
+        if (status === 200) {
+            console.log("delete: Success")
+        }
+        else
+        {
+            console.log("delete: Failed")
+        }
+        console.log("Newcart-->",this.state.newCart)
+        // let chapter={
+        //     bookId:"1",
+        //     chapterNumber:"1"
+        //     // bookId:chapterToRemove.bookId,
+        //     //  chapterNumber:chapterToRemove.chapterData[0].chapterNumber
+        // }
+        // console.log(chapter)
+        // UserService.deleteCartItem(chapter,this.state.userId).then()
         let tempCart = this.state.newCart.filter((chapter) => chapter !== chapterToRemove)
+
         this.setState({
             newCart: tempCart
         }, () => this.updateCartData())
     }
 
     updateCartData() {
+        console.log("IN update cart",this.state.newCart)
         this.getTotalSum()
         localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
     }
@@ -113,6 +142,7 @@ class Cart extends Component {
         if (status === 200) {
             console.log("successful")
         }
+
 
         let oldCart = await response.json()
         console.log("oldCart--->", oldCart)
@@ -141,7 +171,6 @@ class Cart extends Component {
         this.setState({
             newCart: formattedOldCart
         }, () => this.getTotalSum())
-
 
         //this.getTotalSum()
     }
