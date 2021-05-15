@@ -102,7 +102,7 @@ class Cart extends Component {
     }
 
     async getOldCartItems() {
-        let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/cart', {
+        let response = await fetch('http://localhost:8081/api/users/' + this.state.userId + '/cart', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,14 +189,15 @@ class Cart extends Component {
 
         let cartItems = this.state.newCart.map((chapter, idx) => {
             return (
-                <div key={idx}>
-                    <h4>BookName:{chapter.bookName}</h4>
-                    <h4>Chapter number:{chapter.chapterNum}</h4>
-                    <h4>Chapter name:{chapter.chapterData[0].chapterName}</h4>
-                    <h4>Price: Rs.{chapter.chapterData[0].price}</h4>
+                <div key={idx} className="CartItem">
+                    <h4>{chapter.bookName}</h4>
+                    <h4>{chapter.chapterNum}</h4>
+                    <h4>{chapter.chapterData[0].chapterName}</h4>
+                    <h4>Rs.{chapter.chapterData[0].price}</h4>
                     <button onClick={() => this.removeFromCart(chapter)}>
                         Remove
                     </button>
+                    <hr/>
                 </div>
             )
         })
@@ -210,9 +211,18 @@ class Cart extends Component {
                         <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                     </ul>
                 </nav>
-                <div className="Cart" style={{display: "inline-grid"}}>
-                    <h1 style={{color: "white"}}>Cart</h1>
+                <h1 style={{color: "white"}}>Cart</h1>
+                <br/>
+                <div className="Cart">
                     <div className="Chapters" style={{width: '100%'}}>
+                        <div  className="CartItem">
+                            <h4>BookName</h4>
+                            <h4>Chapter number</h4>
+                            <h4>Chapter name</h4>
+                            <h4>Price</h4>
+                            <h4>Remove</h4>
+                        </div>
+                        <hr/>
                         {this.state.newCart.length === 0 && (
                             <h3> Your cart is empty </h3>
                         )}
@@ -225,13 +235,12 @@ class Cart extends Component {
                                 <h3>Enter a book Name:</h3>
                                 <input type="text" name="customBookName" required="true"
                                        value={this.state.customBookName}
+
                                        onChange={this.handleChange}/>
                                 <button name="buy" onClick={this.buyBook}>Buy Book</button>
                             </div>)
                         }
-                        {this.state.newCart.length > 0 && (
-                            <button onClick={this.clearCart}>Clear Cart</button>
-                        )}
+
                     </div>
                 </div>
             </div>

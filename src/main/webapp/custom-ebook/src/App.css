@@ -187,25 +187,36 @@ button:hover{
     color: white;
     border-radius: 20px;
     size: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 10px;
-    width: fit-content;
-}
-
-.bookName button {
-    color: black;
 }
 
 .bookName input {
     border-radius: 10px;
     height: 30px;
+    border: 1px;
 }
-
+.Cart{
+    margin: 30px 300px 10px 300px;
+}
 .Cart button {
     margin: 10px;
-
 }
-
+.Cart .Chapters {
+    color: whitesmoke;
+    font-size: 20px;
+    width: 17%;
+    margin-bottom: 15px;
+    padding: 1% 3% 1% 3%;
+    line-height: 10px;
+    border: 1px -o-highlight-border solid;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.CartItem{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    line-height: 10px;
+}
 .Chapters {
     color: whitesmoke;
     font-size: 20px;
