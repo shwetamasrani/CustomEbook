@@ -14,6 +14,9 @@ import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,7 +61,7 @@ public class OrderService {
     }
 
 
-    public OrderOutputVO processOrder(Integer userId, String customEBookName)
+    public OrderOutputVO processOrder(Integer userId, String customEBookName) throws Exception
     {
         Order order = orderRepository.findCartOrderForUser(userId);
         CartVO cartDetails = getUserCartDetails(userId);
@@ -66,7 +69,10 @@ public class OrderService {
         String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
+        order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
+        MailBookService mailBookService = new MailBookService();
+        mailBookService.sendEmail(order);
         return new OrderOutputVO(order.getOrderId(), mergedFileLocation, order.getTotalPrice());
     }
 
@@ -232,5 +238,12 @@ public class OrderService {
             return item.getPrice();
         } else
             return 0.0;
+    }
+
+    public void mailOrder(Integer orderId) throws IOException, MessagingException {
+        Order order = orderRepository.findById(orderId).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+orderId));
+        MailBookService mailBookService = new MailBookService();
+        mailBookService.sendEmail(order);
     }
 }

@@ -126,7 +126,7 @@ public class UserController {
     public ResponseEntity<CartVO> getUserCartDetails(@PathVariable Integer userId) {
         if(userId!=null) {
             CartVO cartDetails = orderService.getUserCartDetails(userId);
-            if(cartDetails.getOrderItems().size()>0){
+            if(null != cartDetails && cartDetails.getOrderItems()!=null && cartDetails.getOrderItems().size()>0){
                 return ResponseEntity.ok(cartDetails);
             } else {
                 return new ResponseEntity(cartDetails, HttpStatus.CREATED);
@@ -159,8 +159,14 @@ public class UserController {
     public HttpStatus checkOut(@PathVariable Integer userId, @PathVariable String bookName)
     {
         if(userId!=null) {
-            orderService.processOrder(userId, bookName);
-            return HttpStatus.CREATED;
+            try{
+                orderService.processOrder(userId, bookName);
+                return HttpStatus.CREATED;
+            } catch(Exception e) {
+                e.printStackTrace();
+                return HttpStatus.BAD_REQUEST;
+            }
+
         }
 
         return null;

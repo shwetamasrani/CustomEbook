@@ -29,7 +29,7 @@ public class User {
     /*@Column( nullable = true,columnDefinition = "boolean default false")
     private boolean isPublisherFlag; //0-> user   1->Publisher*/
 
-    @Column(nullable = false)
+    @Column
     private String companyName;
 
     @OneToMany(mappedBy = "user_id")
