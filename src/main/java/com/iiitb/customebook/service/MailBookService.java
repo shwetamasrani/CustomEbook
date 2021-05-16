@@ -38,7 +38,7 @@ public class MailBookService {
 
             MimeBodyPart messageBodyPart = new MimeBodyPart();
             String text = "Hello " + order.getUser_id().getFirstName() + " ," + "\n" + "Thank you for ordering from CustomEBook. We would like to inform you " +
-                    "that your CustomEBook order with Order Number:"+order.getOrderId()+" purchased on " + order.getOrderDate() + " has now been settled.\nPlease find attached the PDF File of your book: "
+                    "that your CustomEBook order with Order Number:"+order.getOrderId()+" purchased on " + order.getOrderDate() + " has been settled processed.\nPlease find attached the PDF File of your book: "
                     +order.getCustomEBookName()+" \n\nThank You, \nCustomEBook";
             messageBodyPart.setContent(text, "text/plain");
             Multipart multipart = new MimeMultipart();
