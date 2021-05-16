@@ -1,14 +1,20 @@
 package com.iiitb.customebook.service;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 import com.iiitb.customebook.pojo.ItemVO;
 import com.iiitb.customebook.util.CustomEBookConstants;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class PDFMerge {
 
@@ -18,7 +24,8 @@ public class PDFMerge {
         makeDirectory(orderFolderPath);
         try {
             List<String> extractedChapterLocations = extractChapters(orderFolderPath, orderItems);
-            return mergePDFs(extractedChapterLocations, orderId);
+            String file_location = mergePDFs(extractedChapterLocations, orderId);
+            return generate_page_numbers(file_location);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,5 +106,41 @@ public class PDFMerge {
             extractedChapterLocation.add(splitPdf(bookLocation, item.getStartPage(), item.getEndPage(), orderFolderPath, count));
         }
         return extractedChapterLocation;
+    }
+
+    public static String generate_page_numbers(String file_name) {
+        File load_file = new File(file_name);
+        PDDocument doc=null;
+        try {
+
+            doc = PDDocument.load(load_file);
+            int page_number = 1;
+            for (PDPage page : doc.getPages()) {
+                PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, false);
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.TIMES_ITALIC, 10);
+                contentStream.setStrokingColor(Color.BLACK);
+                PDRectangle pageSize = page.getCropBox();
+                float x = pageSize.getLowerLeftX();
+                float y = pageSize.getLowerLeftY();
+                contentStream.newLineAtOffset(x + pageSize.getWidth() - 60, y + 20);
+                contentStream.showText(Integer.toString(page_number));
+                contentStream.endText();
+                contentStream.close();
+                ++page_number;
+            }
+
+            doc.save(load_file);
+            doc.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file_name;
+    }
+
+    public static String addCoverPage(){
+        return null;
     }
 }
