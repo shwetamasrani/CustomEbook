@@ -97,8 +97,7 @@ class Dashboard extends Component {
                         <div className="Navbar">
                             <nav>
                                 <ul>
-                                    <li ><Link to="/">Home</Link></li>
-                                    <li><Link to="/SignUp">About</Link></li>
+                                    <li><Link to="/Cart">Cart</Link></li>
                                     <li><Link to="/User">Profile</Link></li>
                                     <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                                 </ul>

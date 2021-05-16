@@ -12,6 +12,7 @@ import Cart from "./component/Cart.js";
 import AddChapterDetails from "./component/AddChapterDetails";
 import UserProfile from "./component/UserProfile";
 import PublisherProfile from "./component/PublisherProfile";
+import About from "./component/About";
 
 
 
@@ -33,6 +34,7 @@ class App extends Component{
                             <Route exact path='/Cart' component={Cart}/>
                             <Route exact path='/User' component={UserProfile}/>
                             <Route exact path='/Publisher' component={PublisherProfile}/>
+                            <Route exact path='/AboutUs' component={About}/>
                             <Route exact path='/AddChapterDetails' component={AddChapterDetails}/>
                         </Switch>
                     </div>

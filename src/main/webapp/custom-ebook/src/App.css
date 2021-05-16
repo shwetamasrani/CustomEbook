@@ -214,7 +214,7 @@ button:hover{
 }
 .CartItem{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
     line-height: 10px;
 }
 .Chapters {
@@ -405,7 +405,7 @@ select {
 .UserOrders{
     padding: 5px 20px 5px 20px;
     display: grid;
-    grid-template-columns: 150px 150px 150px 700px;
+    grid-template-columns: 150px 150px 150px 150px 700px;
     color: white;
     grid-column-gap: 20px;
     line-height: 15px;
@@ -417,6 +417,14 @@ select {
     color: white;
     grid-column-gap: 30px;
     line-height: 15px;
+}
+.about{
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 50px 100px 50px 100px;
+    margin: 200px 400px 50px 400px;
+    box-shadow: #a47b77;
+    position: absolute;
 }
 .UserOrders button{
     margin: 0 30% 0 30%;

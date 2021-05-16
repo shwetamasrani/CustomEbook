@@ -14,6 +14,9 @@ import com.iiitb.customebook.util.CustomEBookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,7 +61,7 @@ public class OrderService {
     }
 
 
-    public OrderOutputVO processOrder(Integer userId, String customEBookName)
+    public OrderOutputVO processOrder(Integer userId, String customEBookName) throws Exception
     {
         Order order = orderRepository.findCartOrderForUser(userId);
         CartVO cartDetails = getUserCartDetails(userId);
@@ -66,7 +69,10 @@ public class OrderService {
         String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
+        order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
+        MailBookService mailBookService = new MailBookService();
+        mailBookService.sendEmail(order);
         return new OrderOutputVO(order.getOrderId(), mergedFileLocation, order.getTotalPrice());
     }
 
@@ -106,12 +112,14 @@ public class OrderService {
             int totalPrice = 0;
             String chapters[] = order.getChapterItems().split(",");
             for(String chapter : chapters) {
-                int chapterId = Integer.valueOf(chapter);
-                ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
-                ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
-                if(item!=null) {
-                    cartItems.add(item);
-                    totalPrice += item.getPrice();
+                if(!chapter.equals(EMPTY_STRING)) {
+                    int chapterId = Integer.valueOf(chapter);
+                    ChapterItem chapterItem = chapterItemService.getChapterItemById(chapterId);
+                    ItemVO item = getBookChapterDetails(chapterItem.getBookId(), chapterItem.getChapterNumber());
+                    if(item!=null) {
+                        cartItems.add(item);
+                        totalPrice += item.getPrice();
+                    }
                 }
 
             }
@@ -169,14 +177,19 @@ public class OrderService {
     private void updateOrder(Integer cartOrderId, Integer userId, CartItemInputVO itemDetails) {
         Order order = orderRepository.findById(cartOrderId).orElseThrow(()
                 -> new ResourceNotFoundException("Order does not exists with id:"+cartOrderId));
-
+        HashSet<Integer> uniqueChapters = new HashSet<Integer>();
         String chapters[] = order.getChapterItems().split(",");
-        int initialLength = chapters.length;
-        HashSet<String> uniqueChapters = new HashSet<String>(Arrays.asList(chapters));
-        uniqueChapters.add(String.valueOf(getChapterId(itemDetails)));
+        for(String chapter: chapters){
+            if(!chapter.equals(EMPTY_STRING)){
+                uniqueChapters.add(Integer.parseInt(chapter));
+            }
+
+        }
+        int initialLength = uniqueChapters.size();
+        uniqueChapters.add(getChapterId(itemDetails));
 
         StringBuilder chapterItems = new StringBuilder();
-        for(String chapter: uniqueChapters) {
+        for(Integer chapter: uniqueChapters) {
             chapterItems.append(chapter+",");
         }
         chapterItems.deleteCharAt(chapterItems.lastIndexOf(","));
@@ -203,7 +216,11 @@ public class OrderService {
         if(orderItems.contains(chapterItemNumber)) {
             int index = orderItems.indexOf(chapterItemNumber);
             if(index==0){
-                order.setChapterItems(orderItems.replace(chapterItemNumber+",",""));
+                if(chapterItemNumber.length()==orderItems.length()){
+                    order.setChapterItems(EMPTY_STRING);
+                }else {
+                    order.setChapterItems(orderItems.replace(chapterItemNumber+",",""));
+                }
             } else {
                 order.setChapterItems(orderItems.replace(","+chapterItemNumber,""));
             }
@@ -221,5 +238,17 @@ public class OrderService {
             return item.getPrice();
         } else
             return 0.0;
+    }
+
+    public void mailOrder(Integer orderId) throws Exception {
+        Order order = orderRepository.findById(orderId).orElseThrow(()
+                -> new ResourceNotFoundException("Order does not exists with id:"+orderId));
+        if(order.getOrderStatus()==ORDER_STATUS_PROCESSED){
+            MailBookService mailBookService = new MailBookService();
+            mailBookService.sendEmail(order);
+        } else{
+            throw new Exception("Order not placed yet!");
+        }
+
     }
 }

@@ -10,18 +10,9 @@ class Cart extends Component {
             totalSum: 0,
             newCart: this.props.location.cart,   //cart passed from bookDetails component
             userId: this.props.location.userId,
-            orderId: this.props.location.orderId,
             chapterDetails: [],
             customBookName: ""
         }
-        /*
-        Contents of newCart:
-                "bookId"
-                "bookName"
-                "bookLocation"
-                "chapterNum"
-                "chapterData"(entire chapterdata in json)
-        */
         this.removeFromCart = this.removeFromCart.bind(this);
         this.clearCart = this.clearCart.bind(this);
         this.getTotalSum = this.getTotalSum.bind(this);
@@ -43,26 +34,7 @@ class Cart extends Component {
         if (this.state.customBookName === "")
             alert("Please enter your book name")
         else {
-            let chapterList = []
-            for (let i = 0; i < this.state.newCart.length; i++) {
-                let chapter = {
-                    bookId: this.state.newCart[i].bookId,
-                    chapterNumber: this.state.newCart[i].chapterNum,
-                    price: this.state.newCart[i].chapterData[0].price,
-                    chapterName: this.state.newCart[i].chapterData[0].chapterName,
-                    startPage: this.state.newCart[i].chapterData[0].startPage,
-                    endPage: this.state.newCart[i].chapterData[0].endPage,
-                    bookLocation: this.state.newCart[i].bookLocation
-                }
-                chapterList.push(chapter)
-            }
-            let completeCart = {
-                userId: this.state.userId,
-                orderItems: chapterList,
-                customEBookName: this.state.customBookName,
-                orderId: this.state.orderId
-            }
-            let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/cart/checkout/'+this.state.customBookName, {
+            let response = await fetch('http://localhost:8081/api/users/' + this.state.userId + '/cart/checkout/' + this.state.customBookName, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,8 +45,8 @@ class Cart extends Component {
             if (status === 200) {
                 this.clearCart()
             }
-            console.log(JSON.stringify(completeCart))
-            alert("Book Bought")
+
+            alert("Thank you for buying the book! Your Custom Ebook will be mailed to you shortly.")
         }
     }
 
@@ -82,26 +54,24 @@ class Cart extends Component {
 
         console.log("removed");
         console.log(chapterToRemove)
-        let response = await fetch("http://localhost:8081/api/users/"+this.state.userId+"/cart", {
+        let response = await fetch("http://localhost:8081/api/users/" + this.state.userId + "/cart", {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': '*/*'
             },
             body: JSON.stringify({
-                    bookId:chapterToRemove.bookId,
-                     chapterNumber:chapterToRemove.chapterData[0].chapterNumber
+                bookId: chapterToRemove.bookId,
+                chapterNumber: chapterToRemove.chapterData[0].chapterNumber
             })
         })
         let status = response.status;
         if (status === 200) {
             console.log("delete: Success")
-        }
-        else
-        {
+        } else {
             console.log("delete: Failed")
         }
-        console.log("Newcart-->",this.state.newCart)
+        console.log("Newcart-->", this.state.newCart)
         // let chapter={
         //     bookId:"1",
         //     chapterNumber:"1"
@@ -118,7 +88,7 @@ class Cart extends Component {
     }
 
     updateCartData() {
-        console.log("IN update cart",this.state.newCart)
+        console.log("IN update cart", this.state.newCart)
         this.getTotalSum()
         localStorage.setItem('newCart', JSON.stringify(this.state.newCart));
     }
@@ -139,45 +109,46 @@ class Cart extends Component {
             },
         })
         let status = response.status;
+        if(status===201)
+        {
+            this.clearCart()
+        }
         if (status === 200) {
             console.log("successful")
-        }
-
-
-        let oldCart = await response.json()
-        console.log("oldCart--->", oldCart)
-        let formattedOldCart = []
-        for (const orderItem of oldCart.orderItems) {
-            let cartItem = {
-                bookId: orderItem.bookId,
-                bookName: orderItem.bookName,
-                bookLocation: orderItem.bookLocation,
-                chapterNum: orderItem.chapterNumber,
-                chapterData: [
-                    {
-                        chapterNumber: orderItem.chapterNumber,
-                        chapterName: orderItem.chapterName,
-                        price: orderItem.price,
-                        startPage: orderItem.startPage,
-                        endPage: orderItem.endPage,
-                        description: orderItem.chapterDescription
-                    }
-                ]
+            let oldCart = await response.json()
+            console.log("oldCart--->", oldCart)
+            let formattedOldCart = []
+            for (const orderItem of oldCart.orderItems) {
+                let cartItem = {
+                    bookId: orderItem.bookId,
+                    bookName: orderItem.bookName,
+                    bookLocation: orderItem.bookLocation,
+                    chapterNum: orderItem.chapterNumber,
+                    chapterData: [
+                        {
+                            chapterNumber: orderItem.chapterNumber,
+                            chapterName: orderItem.chapterName,
+                            price: orderItem.price,
+                            startPage: orderItem.startPage,
+                            endPage: orderItem.endPage,
+                            description: orderItem.chapterDescription
+                        }
+                    ]
+                }
+                formattedOldCart.push(cartItem)
             }
-            formattedOldCart.push(cartItem)
+            console.log(formattedOldCart)
+            localStorage.setItem('newCart', JSON.stringify(formattedOldCart));
+            this.setState({
+                newCart: formattedOldCart
+            }, () => this.getTotalSum())
+            //this.getTotalSum()
         }
-        console.log(formattedOldCart)
-        localStorage.setItem('newCart', JSON.stringify(formattedOldCart));
-        this.setState({
-            newCart: formattedOldCart
-        }, () => this.getTotalSum())
-
-        //this.getTotalSum()
     }
 
     async componentDidMount() {
 
-        console.log("NewCart:--->", this.state.newCart)
+        console.log("NewCart:", this.state.newCart," UID:",this.state.userId)
 
         if (this.state.userId === undefined) {
             this.setState({
@@ -234,9 +205,8 @@ class Cart extends Component {
             <div>
                 <nav>
                     <ul>
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/SignUp">About</Link></li>
                         <li><Link to="/Dashboard">Dashboard</Link></li>
+                        <li><Link to="/User">Profile</Link></li>
                         <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                     </ul>
                 </nav>
@@ -244,7 +214,7 @@ class Cart extends Component {
                 <br/>
                 <div className="Cart">
                     <div className="Chapters" style={{width: '100%'}}>
-                        <div  className="CartItem">
+                        <div className="CartItem">
                             <h4>BookName</h4>
                             <h4>Chapter number</h4>
                             <h4>Chapter name</h4>

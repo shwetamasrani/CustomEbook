@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom";
-import Products from "./Products";
 
 class UserProfile extends Component {
     constructor(props) {
@@ -19,11 +18,19 @@ class UserProfile extends Component {
         localStorage.removeItem('userId');
     }
 
-    sendMail()
-    {
-        alert("Mail Sent")
+    async sendMail(orderId){
+        alert("Request Received. Your mail will be sent shortly")
+        let response = await fetch('http://localhost:8081/api/orders/' + orderId+ '/mail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            },
+        })
+        let status = response.status;
+        if(status===200)
+            console.log("Mailed")
     }
-
     async getUserInfo() {
         console.log("UProfile userId:", this.state.userId)
         let response = await fetch('http://localhost:8081/api/users/' + this.state.userId + '/orders', {
@@ -75,9 +82,13 @@ class UserProfile extends Component {
                     <div>
                     <div className="UserOrders">
                         <h3>#{order.orderId}</h3>
-                        <h3>{order.customEBookName}</h3>
+                        {order.orderStatus==="Processed"?<h3>{order.customEBookName}</h3>:<h3>Cart Item</h3>}
                         <h3>${order.totalPrice}</h3>
-                        <button onClick={this.sendMail}>Send Mail</button>
+                        <h3>{order.orderStatus}</h3>
+                        {order.orderStatus==="Processed"?
+                            <button onClick={()=>this.sendMail(order.orderId)}>Send Mail</button>:
+                        <Link to="/Cart"><button>Go To Cart</button></Link>}
+
                     </div>
                         <hr/>
                     </div>
@@ -88,8 +99,7 @@ class UserProfile extends Component {
                     <div className="Navbar">
                         <nav>
                             <ul>
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to="/SignUp">About</Link></li>
+                                <li><Link to="/Cart">Cart</Link></li>
                                 <li><Link to="/Dashboard">Dashboard</Link></li>
                                 <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                             </ul>
