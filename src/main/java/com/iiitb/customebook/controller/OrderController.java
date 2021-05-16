@@ -30,7 +30,7 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/mail")
-    public ResponseEntity<Object> mailOrder(@PathVariable Integer orderId) throws IOException, MessagingException {
+    public ResponseEntity<Object> mailOrder(@PathVariable Integer orderId) throws Exception {
         try{
             orderService.mailOrder(orderId);
             return ResponseEntity.ok("Done");

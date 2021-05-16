@@ -240,10 +240,15 @@ public class OrderService {
             return 0.0;
     }
 
-    public void mailOrder(Integer orderId) throws IOException, MessagingException {
+    public void mailOrder(Integer orderId) throws Exception {
         Order order = orderRepository.findById(orderId).orElseThrow(()
                 -> new ResourceNotFoundException("Order does not exists with id:"+orderId));
-        MailBookService mailBookService = new MailBookService();
-        mailBookService.sendEmail(order);
+        if(order.getOrderStatus()==ORDER_STATUS_PROCESSED){
+            MailBookService mailBookService = new MailBookService();
+            mailBookService.sendEmail(order);
+        } else{
+            throw new Exception("Order not placed yet!");
+        }
+
     }
 }
