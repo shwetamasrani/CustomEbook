@@ -179,13 +179,13 @@ public class PDFMerge {
             pdPageContentStream.beginText();
             pdPageContentStream.newLineAtOffset((pdPage.getMediaBox().getWidth() - titleWidth) / 2,
                     pdPage.getMediaBox().getHeight() - 30 - titleHeight);
-            pdPageContentStream.newLineAtOffset(25, 600);
             pdPageContentStream.setFont(PDType1Font.HELVETICA_BOLD, 64);
             pdPageContentStream.showText(customEBookName);
             pdPageContentStream.endText();
 
+            titleWidth = PDType1Font.COURIER.getStringWidth(fullName) / 1000 * 18;
             pdPageContentStream.beginText();
-            pdPageContentStream.newLineAtOffset(25, 200);
+            pdPageContentStream.newLineAtOffset((pdPage.getMediaBox().getWidth() - titleWidth) / 2, 50);
             pdPageContentStream.setFont(PDType1Font.COURIER, 18);
             pdPageContentStream.showText(fullName);
             pdPageContentStream.endText();
