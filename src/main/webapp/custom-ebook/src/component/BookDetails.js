@@ -111,14 +111,18 @@ class BookDetails extends Component {
             {
                 console.log("BookDetails: Failed")
             }
+            //----Probably not needed----
             let bookDetails = await response.json()
+            console.log(bookDetails.orderId)
             this.setState({
                 orderId: bookDetails.orderId
             })
+            //----till here
         }
         this.setState({
             finalCart: tempCart
         }, () => console.log(this.state.finalCart))
+
     }
 
     goToCart() {
@@ -153,8 +157,6 @@ class BookDetails extends Component {
                 <div className="Navbar">
                     <nav>
                         <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/SignUp">About</Link></li>
                             <li><Link to="/Dashboard">Dashboard</Link></li>
                             <li><Link to="/User">Profile</Link></li>
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
@@ -193,7 +195,6 @@ class BookDetails extends Component {
                                     <br/>
                                     <div className="bookButtons">
                                         <button className="addToCart" onClick={this.addToCart}> Add To Cart</button>
-                                        <button className="buyNow"> Buy Now</button>
                                     </div>
 
                                 </div>}
