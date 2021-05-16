@@ -8,8 +8,8 @@ class AddChapterDetails extends Component {
         super(props);
         this.state = {
 
-            bookId: this.props.location.state.bookId,
-            totalChapter: this.props.location.state.totalChapter,
+            bookId: this.props.location.bookId,
+            totalChapter: this.props.location.totalChapter,
             chapterNumber: 1,
             chapterName: "",
             price: "",
@@ -61,7 +61,7 @@ class AddChapterDetails extends Component {
             input => (input.value = "")
           );
 
-        if(this.state.isSubmit || this.state.totalChapter == 1  )
+        if(this.state.isSubmit  )
         {
               this.onSubmit();
         }
@@ -83,20 +83,25 @@ class AddChapterDetails extends Component {
     }
 
 
-    onSubmit = () => {
-        //b.preventDefault();
+    async onSubmit(){
+        // b.preventDefault();
 
+        console.log(this.state.bookId)
         let book_split = {
-            bookId: this.state.bookId, bookChapters: this.state.chapterArray
+            bookId: this.state.bookId, 
+            bookChapters: this.state.chapterArray
         };
         console.log('book_split => ' + JSON.stringify(book_split));
 
         // console.log('User =>' + JSON.stringify(user));
 
-        BookService.splitBookChapters(book_split).then(res => {
+       await BookService.splitBookChapters(book_split).then((res) => {
             // this.props.history.push('/Signin');
-            alert("Submitted Successfully!")
+            console.log(res.data)
+            alert("Submitted Successfully!");
             this.props.history.push({pathname:'/AdminDashboard'});
+        }).catch((err)=>{
+            alert(err)
         });
 
 
@@ -106,7 +111,7 @@ class AddChapterDetails extends Component {
     componentDidMount() {
 
 
-        console.log("in add chapter", this.props.location.state.bookId)
+        console.log("in add chapter", this.props.location.bookId)
         console.log(this.state.totalChapter)
     }
 

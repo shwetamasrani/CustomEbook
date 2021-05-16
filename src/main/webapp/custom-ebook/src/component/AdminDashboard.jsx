@@ -22,9 +22,18 @@ class AdminDashboard extends Component {
             imageLocation: "",
             pdfFileLocation: "",
             pdfFile: null,
-            userId:this.props.location.userId,
+            userId:JSON.parse(localStorage.getItem('userId')),
             bookId: null
         }
+
+        axios.get("http://localhost:8081/api/users/"+this.state.userId).then((res)=>
+        {
+            console.log(res)
+            console.log(res.data)
+            this.setState({
+                publisher: res.data.companyName
+            })
+        })
         console.log(this.state.publisher)
         this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
@@ -71,6 +80,8 @@ class AdminDashboard extends Component {
             //         totalChapter: this.state.noOfChapters
             //     }
             // });
+        }).catch((err)=>{
+            alert(err)
         });
 
     }
@@ -104,12 +115,16 @@ class AdminDashboard extends Component {
         console.log(formData.get('bookId'))
         BookService.savePdfFile(formData).then((res) => {
             console.log("response-onfileupload()", res)
-            this.props.history.push({
-                pathname: '/AddChapterDetails', state: {
-                    bookId: res.bookId,
+            console.log(this.state.noOfChapters)
+            if(this.state.noOfChapters !== 0){
+                this.props.history.push({
+                pathname: '/AddChapterDetails',
+                    bookId: this.state.bookId,
                     totalChapter: this.state.noOfChapters
-                }
-            });
+                
+                });
+            }
+            
             // this.props.history.push({pathname:'/AddChapterDetails',state: {
             //   bookId: res.bookId}});
         });
@@ -125,6 +140,13 @@ class AdminDashboard extends Component {
             console.log("AdminDashboard: setting UserId:" ,this.state.userId)
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
         }
+        // axios.get("http://localhost:8081/api/users/"+this.state.userId).then((res)=>
+        // {
+        //     this.setState({
+        //         publisher: res.companyName
+        //     })
+        // })
+        
     }
 
 
@@ -184,6 +206,7 @@ class AdminDashboard extends Component {
                                     required="True"
                                     placeholder="Publisher"
                                     value={this.state.publisher}
+                                    readOnly
                                     onChange={this.handleChange}
                                 />
 
