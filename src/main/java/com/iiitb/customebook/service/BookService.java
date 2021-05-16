@@ -28,11 +28,17 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public static void savePdfFile(MultipartFile pdfFile) {
+    public void savePdfFile(MultipartFile pdfFile, Integer bookId) {
          System.out.println("in book service");
-        System.out.println(pdfFile.getOriginalFilename());
+        System.out.println(bookId);
         System.out.println(pdfFile.getSize());
-        String pdfFolderPath = CustomEBookConstants.PATH_BOOKS+File.separator+pdfFile.getOriginalFilename();
+        Book book= bookRepository.findById(bookId).orElseThrow(()
+                -> new ResourceNotFoundException("Book does not exist with id:"+ bookId));
+        System.out.println(book.getBookId());
+        String pdfFolderPath = CustomEBookConstants.PATH_BOOKS+File.separator+bookId+".pdf";
+        System.out.println(pdfFolderPath);
+        book.setPdfFileLocation(pdfFolderPath);
+        bookRepository.save(book);
         try {
             Files.copy(pdfFile.getInputStream(), Paths.get(pdfFolderPath), StandardCopyOption.REPLACE_EXISTING);
 
@@ -41,6 +47,7 @@ public class BookService {
         {
             e.printStackTrace();
         }
+
     }
 
     public Book getBookById(Integer id){

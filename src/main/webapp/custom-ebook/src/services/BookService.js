@@ -16,11 +16,11 @@ class BookService{
     {
        return axios.put(BOOK_SPLIT_APT_BASE_URL,book_split)
     }
-    savePdfFile(pdfFile)
+    savePdfFile(request)
     {
-        console.log("in service",pdfFile)
-        console.log("in service",pdfFile.get("file"))
-        return axios.post(BOOK_API_BASE_URL_FILE,pdfFile)
+        console.log("in service",request)
+        console.log("in service",request)
+        return axios.post(BOOK_API_BASE_URL_FILE,request)
         // axios({
         //     method: "post",
         //     url: BOOK_API_BASE_URL_FILE,

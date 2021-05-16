@@ -77,14 +77,14 @@ public class BookController {
     }
 
     @PostMapping(value="/savePdfFile" ,produces= { "application/json" },
-            consumes = { "multipart/form-data" })
-    public ResponseEntity<String> savePdfFile(@RequestParam(value = "file" ) MultipartFile pdfFile)
+            consumes = { "*/*" })
+    public ResponseEntity<String> savePdfFile(@RequestParam("file") MultipartFile file, @RequestParam("bookId") Integer bookId)
     {
-        System.out.println(pdfFile.getOriginalFilename());
+        System.out.println(file.getOriginalFilename());
+        System.out.println(bookId);
 
-
-        if(pdfFile!=null) {
-            bookService.savePdfFile(pdfFile);
+        if(file!=null) {
+            bookService.savePdfFile(file,bookId);
 
         }
  return ResponseEntity.ok("working");

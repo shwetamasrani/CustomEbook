@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, {Component, Fragment} from "react"
 import productsInfo from "./Data/productInfo";
 import axios from 'axios';
 import Dashboard from "./Dashboard";
@@ -22,7 +22,8 @@ class AdminDashboard extends Component {
             imageLocation: "",
             pdfFileLocation: "",
             pdfFile: null,
-            userId:this.props.location.userId
+            userId:this.props.location.userId,
+            bookId: null
         }
         console.log(this.state.publisher)
         this.handleChange = this.handleChange.bind(this)
@@ -61,45 +62,58 @@ class AdminDashboard extends Component {
 
 
             console.log("admindash-data.bookid", res.bookId)
-            this.props.history.push({
-                pathname: '/AddChapterDetails', state: {
-                    bookId: res.bookId,
-                    totalChapter: this.state.noOfChapters
-                }
-            });
+            this.setState({
+                bookId: res.bookId
+            })
+            // this.props.history.push({
+            //     pathname: '/AddChapterDetails', state: {
+            //         bookId: res.bookId,
+            //         totalChapter: this.state.noOfChapters
+            //     }
+            // });
         });
 
     }
     onFileChange = event => {
-
+        console.log(event.target.files[0])
         // Update the state
         this.setState({pdfFile: event.target.files[0]});
 
     };
-    onFileUpload = () => {
-
+    onFileUpload = (e) => {
+        e.preventDefault();
 
         console.log(this.state.pdfFile)
         console.log(this.state.pdfFile.name)
         var name = this.state.pdfFile.name;
-        var pdfFolder = "/home/lumos/Desktop/DMProject/Books"        //set the appropriate path name to store pdf
-        this.state.pdfFileLocation = pdfFolder.concat(name)
+        // var pdfFolder = "/home/lumos/Desktop/DMProject/Books"        //set the appropriate path name to store pdf
+        // this.state.pdfFileLocation = pdfFolder.concat(name)
 
 
-        const formData = new FormData();
+        let formData = new FormData();
 
         // Update the formData object
         formData.append(
             "file",
             this.state.pdfFile
         );
-
+        formData.append(
+            "bookId", this.state.bookId
+        )
+        console.log(formData.get('file'))
+        console.log(formData.get('bookId'))
         BookService.savePdfFile(formData).then((res) => {
             console.log("response-onfileupload()", res)
+            this.props.history.push({
+                pathname: '/AddChapterDetails', state: {
+                    bookId: res.bookId,
+                    totalChapter: this.state.noOfChapters
+                }
+            });
             // this.props.history.push({pathname:'/AddChapterDetails',state: {
             //   bookId: res.bookId}});
         });
-    };
+    }
     componentDidMount() {
         if (this.state.userId === undefined) {
             console.log("AdminDashboard:getting UserId")
@@ -131,20 +145,10 @@ class AdminDashboard extends Component {
 
 
                 <div className="bookUpload">
-                    <h2>
-                        Upload the Ebook here
-                    </h2>
+                    
                     <div>
                         <form>
-                            <div className="bookUploadEnter">
-                                <label>Choose Book</label>
-                                <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" accept=".pdf"
-                                       onChange={this.onFileChange}/>
-                                       <div/>
-                                <button onClick={this.onFileUpload}>
-                                    Upload Book
-                                </button>
-                            </div><hr/>
+                            
                             <h2>
                                 Enter Book Details
                             </h2>
@@ -244,6 +248,24 @@ class AdminDashboard extends Component {
                                     Save Book details
                                 </button>
                             </div>
+                            {this.state.bookId && (
+                                <Fragment>
+                                    <hr/>
+                                    <h2>
+                                        Upload the Ebook here
+                                    </h2>
+                                    <div className="bookUploadEnter">
+                                        <label>Choose Book</label>
+                                        <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" accept=".pdf"
+                                            onChange={this.onFileChange}/>
+                                            <div/>
+                                        <button onClick={this.onFileUpload}>
+                                            Upload Book
+                                        </button>
+                                    </div>
+                                </Fragment>
+                            )}
+                            
 
                         </form>
                     </div>
