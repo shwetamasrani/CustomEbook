@@ -22,7 +22,7 @@ class AdminDashboard extends Component {
             imageLocation: "",
             pdfFileLocation: "",
             pdfFile: null,
-            userId:JSON.parse(localStorage.getItem('userId')),
+            userId:JSON.parse(localStorage.getItem('User')).userId,
             bookId: null
         }
 

@@ -8,7 +8,7 @@ class PublisherProfile extends Component {
         this.state = {
             isLoading: true,
             userInfo: [],
-            userId:this.props.location.userId
+            userId:JSON.parse(localStorage.getItem('User')).userId
 
         }
         this.getUserInfo = this.getUserInfo.bind(this)
