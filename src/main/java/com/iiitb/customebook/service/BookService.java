@@ -59,15 +59,15 @@ public class BookService {
 
     }
 
-   public  List<Book> getBookByBookName(String bookName){
+   public  List<Book> getBooksByBookName(String bookName){
         return bookRepository.findByBookName(bookName);
 
     }
 
-    public BookVO getBookByIsbnNumber(String isbnNumber){
+    public Book getBookByIsbnNumber(String isbnNumber){
         Book book =  bookRepository.findByIsbnNumber(isbnNumber);
         if(book!=null) {
-            return CustomEBookUtil.mappingBookBeanToPojo(book);
+            return book;
         }
         return null;
     }

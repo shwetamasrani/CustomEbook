@@ -50,15 +50,39 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+
     @GetMapping("isbn/{isbn}")
-    public ResponseEntity<BookVO> getBookById(@PathVariable String isbn) {
-        BookVO book = bookService.getBookByIsbnNumber(isbn);
+    public ResponseEntity<Book> getBookById(@PathVariable String isbn) {
+        Book book = bookService.getBookByIsbnNumber(isbn);
         if(null!=book) {
             return ResponseEntity.ok(book);
         }
         return null;
     }
-
+    @GetMapping("bookName/{bookName}")
+    public ResponseEntity<List<Book>> getBooksByBookName(@PathVariable String bookName) {
+        List<Book> book = bookService.getBooksByBookName(bookName);
+        if(null!=book) {
+            return ResponseEntity.ok(book);
+        }
+        return null;
+    }
+    @GetMapping("author/{author}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
+        List<Book> book = bookService.getBooksByAuthor(author);
+        if(null!=book) {
+            return ResponseEntity.ok(book);
+        }
+        return null;
+    }
+    @GetMapping("publisher/{publisher}")
+    public ResponseEntity<List<Book>> getBooksByPublisher(@PathVariable String publisher) {
+        List<Book> book = bookService.getBooksByPublisher(publisher);
+        if(null!=book) {
+            return ResponseEntity.ok(book);
+        }
+        return null;
+    }
     @PostMapping
     public ResponseEntity<BookVO> addBook(@RequestBody BookVO bookDetails)  //mapping the JSON Body to the object directly
     {
