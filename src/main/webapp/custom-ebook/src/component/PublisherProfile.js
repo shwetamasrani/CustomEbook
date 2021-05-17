@@ -16,6 +16,8 @@ class PublisherProfile extends Component {
         this.logout=this.logout.bind(this)
     }
     logout(){
+        alert("Logging out...")
+        localStorage.removeItem('User');
         localStorage.removeItem('userId');
     }
 
@@ -92,8 +94,6 @@ class PublisherProfile extends Component {
                     <div className="Navbar">
                         <nav>
                             <ul>
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to="/SignUp">About</Link></li>
                                 <li><Link to="/AdminDashboard">Dashboard</Link></li>
                                 <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                             </ul>

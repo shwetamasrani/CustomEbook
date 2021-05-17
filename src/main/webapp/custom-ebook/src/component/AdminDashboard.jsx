@@ -42,7 +42,9 @@ class AdminDashboard extends Component {
     }
 
     logout() {
-        alert("...Logging out")
+        alert("Logging out...")
+        localStorage.removeItem('userId');
+        localStorage.removeItem('User');
     }
 
     handleChange(event) {
@@ -185,8 +187,6 @@ class AdminDashboard extends Component {
                 <div className="Navbar">
                     <nav>
                         <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/AdminDashboard">About</Link></li>
                             <li><Link to="/Publisher">Profile</Link></li>
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                         </ul>
