@@ -158,6 +158,7 @@ class BookDetails extends Component {
                     <nav>
                         <ul>
                             <li><Link to="/Dashboard">Dashboard</Link></li>
+                            <li><Link to="/Cart">Cart</Link></li>
                             <li><Link to="/User">Profile</Link></li>
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                         </ul>

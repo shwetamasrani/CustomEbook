@@ -61,7 +61,7 @@ class AddChapterDetails extends Component {
             input => (input.value = "")
           );
 
-        if(this.state.isSubmit  )
+        if(this.state.isSubmit || this.state.totalChapter == 1  )
         {
               this.onSubmit();
         }
