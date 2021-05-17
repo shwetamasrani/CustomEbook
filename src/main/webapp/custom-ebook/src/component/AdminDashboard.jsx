@@ -14,6 +14,7 @@ class AdminDashboard extends Component {
             bookName: "",
             isbnNumber: "",
             author: "",
+
             yearOfRelease: "",
             publisher: "",
             price: "",
@@ -34,6 +35,7 @@ class AdminDashboard extends Component {
                 publisher: res.data.companyName
             })
         })
+
         console.log(this.state.publisher)
         this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
@@ -48,6 +50,7 @@ class AdminDashboard extends Component {
     }
 
     handleChange(event) {
+
         const {name, value} = event.target;
         this.setState({
             [name]: value
@@ -115,6 +118,7 @@ class AdminDashboard extends Component {
         //     alert(err)
         // });
 
+
     }
     onFileChange = event => {
         console.log(event.target.files[0])
@@ -130,6 +134,7 @@ class AdminDashboard extends Component {
         var name = this.state.pdfFile.name;
         // var pdfFolder = "/home/lumos/Desktop/DMProject/Books"        //set the appropriate path name to store pdf
         // this.state.pdfFileLocation = pdfFolder.concat(name)
+
 
 
         let formData = new FormData();
@@ -187,7 +192,9 @@ class AdminDashboard extends Component {
                 <div className="Navbar">
                     <nav>
                         <ul>
+
                             <li><Link to="/Publisher">Profile</Link></li>
+
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                         </ul>
                     </nav>
@@ -284,6 +291,7 @@ class AdminDashboard extends Component {
                                     onChange={this.handleChange}/>
 
                                 {/* <input
+
                                 type="text"
                                 name="pdfFileLocation"
                                 required="True"
