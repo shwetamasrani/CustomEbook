@@ -271,7 +271,7 @@ button:hover{
     width: fit-content;
     margin-bottom: 15px;
     padding: 1% 3% 1% 3%;
-    line-height: 10px;
+    line-height: 1.2;
     border-radius: 5%;
     border: 1px -o-highlight-border solid;
     background-color: rgba(255, 255, 255, 0.1);
