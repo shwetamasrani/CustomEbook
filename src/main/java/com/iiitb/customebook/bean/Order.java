@@ -1,6 +1,6 @@
 package com.iiitb.customebook.bean;
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Orders_TBL")
@@ -26,6 +26,9 @@ public class Order {
 
     @Column
     private String location;
+
+    @Column
+    private LocalDateTime orderDate;
 
     public int getOrderId() {
         return orderId;
@@ -83,15 +86,15 @@ public class Order {
         this.location = location;
     }
 
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public Order() {
     }
 
-    public Order(Character orderStatus, String customEBookName, Double totalPrice, User user_id, String chapterItems, String location) {
-        this.orderStatus = orderStatus;
-        this.customEBookName = customEBookName;
-        this.totalPrice = totalPrice;
-        this.user_id = user_id;
-        this.chapterItems = chapterItems;
-        this.location = location;
-    }
 }

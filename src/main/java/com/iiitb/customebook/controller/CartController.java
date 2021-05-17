@@ -24,7 +24,7 @@ public class CartController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/checkout")
+    /*@PostMapping("/checkout")
     public ResponseEntity<OrderOutputVO> merge(@RequestBody CartVO orderDetails)  //mapping the JSON Body to the object directly
     {
         if(orderDetails!=null) {
@@ -32,9 +32,9 @@ public class CartController {
             return new ResponseEntity(orderMerged, HttpStatus.CREATED);
         }
         return null;
-    }
+    }*/
 
-    @PostMapping("/add")
+   /* @PostMapping("/add")
     public ResponseEntity<CartOutputVO> addToCart(@RequestBody CartItemInputVO itemDetails)  //mapping the JSON Body to the object directly
     {
         if(itemDetails!=null) {
@@ -44,7 +44,7 @@ public class CartController {
             return new ResponseEntity(updatedCartDetails, HttpStatus.CREATED);
         }
         return null;
-    }
+    }*/
 
     public CartOutputVO mappingOrderToCartOutputVO(Order order) {
         CartOutputVO updatedCartDetails = new CartOutputVO();
@@ -58,7 +58,7 @@ public class CartController {
     public ResponseEntity<CartVO> getOrderDetails(@PathVariable Integer orderId) {
         CartVO cartDetails = new CartVO();
         cartDetails.setOrderId(orderId);
-        orderService.getCartDetails(cartDetails, orderId);
+        //orderService.getCartDetails(cartDetails, orderId);
         return ResponseEntity.ok(cartDetails);
     }
 }

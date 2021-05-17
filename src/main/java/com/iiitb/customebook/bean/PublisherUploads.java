@@ -9,10 +9,10 @@ public class PublisherUploads {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int upload_id;
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "user_id")
     private User user_id;
-
+*/
     @Column(nullable = false)
     private Integer book_id;
 
@@ -24,13 +24,13 @@ public class PublisherUploads {
         this.upload_id = upload_id;
     }
 
-    public User getUser_id() {
+   /* public User getUser_id() {
         return user_id;
     }
 
     public void setUser_id(User user_id) {
         this.user_id = user_id;
-    }
+    }*/
 
     public Integer getBook_id() {
         return book_id;
@@ -43,8 +43,8 @@ public class PublisherUploads {
     public PublisherUploads() {
     }
 
-    public PublisherUploads(User user_id, Integer book_id) {
+  /*  public PublisherUploads(User user_id, Integer book_id) {
         this.user_id = user_id;
         this.book_id = book_id;
-    }
+    }*/
 }

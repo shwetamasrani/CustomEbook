@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import Products from "./Products";
-import productsInfo from "./Data/productInfo";
 import {Link} from "react-router-dom";
 
 
@@ -36,17 +35,20 @@ class Dashboard extends Component {
         })
         let status = response.status;
         if (status === 200) {
-            console.log("successful")
+            console.log("Dashboard: books fetched")
         }
         let tempProductInfo = await response.json()
 
         if (this.state.userId === undefined) {
+            console.log("Dashboard:getting UserId")
             this.setState({
                 userId: JSON.parse(localStorage.getItem('userId')),
-            })
+            },()=>console.log("Dashboard userId:",this.state.userId))
+
         } else {
-            console.log("hi")
+            console.log("Dashboard: setting UserId:" ,this.state.userId)
             localStorage.setItem('userId', JSON.stringify(this.state.userId));
+
         }
 
         this.setState({
@@ -77,7 +79,6 @@ class Dashboard extends Component {
             )
         const productComponents = this.state.productInfo.map((product) => {
             return (
-
                 <Products
                     id={product.bookId}
                     bookTitle={product.bookName}
@@ -96,16 +97,16 @@ class Dashboard extends Component {
                         <div className="Navbar">
                             <nav>
                                 <ul>
-                                    <li ><Link to="/">Home</Link></li>
-                                    <li><Link to="/SignUp">About</Link></li>
-                                    <li><Link to="/Dashboard">Dashboard</Link></li>
+                                    <li><Link to="/Cart">Cart</Link></li>
+                                    <li><Link to="/User">Profile</Link></li>
                                     <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                                 </ul>
                             </nav>
                         </div>
+
                         <h1 style={{border:'10px solid rgba(255,255,255,0)',width:'fit-content'}}>Dashboard</h1>
                         <div className="box">
-                        {productComponents}
+                            {productComponents}
                         </div>
                     </div>}
             </div>
