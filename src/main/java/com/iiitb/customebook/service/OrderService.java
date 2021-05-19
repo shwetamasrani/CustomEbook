@@ -66,7 +66,7 @@ public class OrderService {
         Order order = orderRepository.findCartOrderForUser(userId);
         CartVO cartDetails = getUserCartDetails(userId);
         order.setCustomEBookName(customEBookName);
-        String mergedFileLocation = PDFMerge.merge(order.getOrderId(), cartDetails.getOrderItems());
+        String mergedFileLocation = PDFMerge.merge(order, order.getOrderId(), cartDetails.getOrderItems());
         order.setLocation(mergedFileLocation);
         order.setOrderStatus(CustomEBookConstants.ORDER_STATUS_PROCESSED);
         order.setOrderDate(LocalDateTime.now());

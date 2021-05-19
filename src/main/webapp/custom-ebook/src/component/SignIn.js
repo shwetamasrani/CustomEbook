@@ -39,8 +39,10 @@ class SignIn extends Component {
         UserService.getUser(user).then(res => {
                 console.log("Signin Component", res.data);
                 localStorage.setItem('User',JSON.stringify(res.data));
+
                 // console.log(JSON.parse(localStorage.getItem('User')));
                 // console.log("Publisher", res.data.publisherFlag);
+
 
                 if(res.data.publisherFlag){
                     this.props.history.push({

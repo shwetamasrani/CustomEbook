@@ -57,11 +57,12 @@ class AddChapterDetails extends Component {
             description: this.state.description
         });
 
+
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
           );
 
-        if(this.state.isSubmit  )
+        if(this.state.isSubmit || this.state.totalChapter == 1  )
         {
               this.onSubmit();
         }
@@ -72,6 +73,7 @@ class AddChapterDetails extends Component {
         // console.log("total afer push",this.state.totalChapter);
         // console.log(this.state.chapterNumber)
         // console.log("Length",this.state.chapterArray.length)
+
         if(this.state.chapterNumber == this.state.totalChapter-1)
         {
             this.setState({
@@ -102,6 +104,7 @@ class AddChapterDetails extends Component {
             this.props.history.push({pathname:'/AdminDashboard'});
         }).catch((err)=>{
             alert(err)
+
         });
 
 
@@ -177,6 +180,7 @@ class AddChapterDetails extends Component {
                                     //value={this.state.chapterPrice}
                                     onChange={this.handleChange}/>
 
+
                                 <label>End Page:</label>
                                 <input
                                     type="number"
@@ -187,6 +191,7 @@ class AddChapterDetails extends Component {
                                     onChange={this.handleChange}/>
 
                                 <label>Description: </label>
+
                                 <input
                                     type="text"
                                     name="description"
@@ -208,6 +213,7 @@ class AddChapterDetails extends Component {
                         {this.state.isSubmit && (
                             <button type="submit" onClick={this.onAddChapter}>
                                 Add last Chapter!
+
                             </button>
                         )}  
                         </div>

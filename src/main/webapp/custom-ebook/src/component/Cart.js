@@ -31,9 +31,13 @@ class Cart extends Component {
 
     async buyBook(e) {
         e.preventDefault();
+
         if (this.state.customBookName === "")
             alert("Please enter your book name")
         else {
+            alert("Thank you for buying the book! Your Custom Ebook will be mailed to you shortly.")
+            this.clearCart()
+
             let response = await fetch('http://localhost:8081/api/users/' + this.state.userId + '/cart/checkout/' + this.state.customBookName, {
                 method: 'POST',
                 headers: {
@@ -43,10 +47,9 @@ class Cart extends Component {
             })
             let status = response.status;
             if (status === 200) {
-                this.clearCart()
             }
 
-            alert("Thank you for buying the book! Your Custom Ebook will be mailed to you shortly.")
+
         }
     }
 

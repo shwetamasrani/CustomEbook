@@ -14,6 +14,7 @@ class AdminDashboard extends Component {
             bookName: "",
             isbnNumber: "",
             author: "",
+
             yearOfRelease: "",
             publisher: "",
             price: "",
@@ -34,55 +35,89 @@ class AdminDashboard extends Component {
                 publisher: res.data.companyName
             })
         })
+
         console.log(this.state.publisher)
         this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
+        this.onSubmit=this.onSubmit.bind(this)
+        this.temp=this.temp.bind(this)
     }
 
     logout() {
-        alert("...Logging out")
+        alert("Logging out...")
+        localStorage.removeItem('userId');
+        localStorage.removeItem('User');
     }
 
     handleChange(event) {
+
         const {name, value} = event.target;
         this.setState({
             [name]: value
         })
     }
+    async temp(){
+        let response = await fetch('http://localhost:8081/api/users/'+this.state.userId+'/uploadBook', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*'
+            },
+            body:JSON.stringify({
+                bookName: this.state.bookName,
+                isbnNumber: this.state.isbnNumber,
+                author: this.state.author,
+                publisher: this.state.publisher,
+                price: this.state.price,
+                noOfChapters: this.state.noOfChapters,
+                description: this.state.description,
+                imageLocation: this.state.imageLocation,
+                pdfFileLocation: this.state.pdfFileLocation,
+                yearOfRelease: this.state.yearOfRelease
+            })
+        })
+        let apiResults= await response.json()
+        this.setState({
+            bookId: apiResults.bookId
+        })
+        console.log(apiResults)
+    }
 
     onSubmit = (e) => {
         e.preventDefault();
-        let book = {
-            bookName: this.state.bookName,
-            isbnNumber: this.state.isbnNumber,
-            author: this.state.author,
-            publisher: this.state.publisher,
-            price: this.state.price,
-            noOfChapters: this.state.noOfChapters,
-            description: this.state.description,
-            imageLocation: this.state.imageLocation,
-            pdfFileLocation: this.state.pdfFileLocation,
-            yearOfRelease: this.state.yearOfRelease
-        }
+        this.temp().then()
+        // let book = {
+        //     bookName: this.state.bookName,
+        //     isbnNumber: this.state.isbnNumber,
+        //     author: this.state.author,
+        //     publisher: this.state.publisher,
+        //     price: this.state.price,
+        //     noOfChapters: this.state.noOfChapters,
+        //     description: this.state.description,
+        //     imageLocation: this.state.imageLocation,
+        //     pdfFileLocation: this.state.pdfFileLocation,
+        //     yearOfRelease: this.state.yearOfRelease
+        // }
+        //
+        // console.log('Book =>' + JSON.stringify(book));
+        //
+        // BookService.createBook(book).then((res) => {
+        //
+        //
+        //     console.log("admindash-data.bookid", res.bookId)
+        //     this.setState({
+        //         bookId: res.bookId
+        //     })
+        //     // this.props.history.push({
+        //     //     pathname: '/AddChapterDetails', state: {
+        //     //         bookId: res.bookId,
+        //     //         totalChapter: this.state.noOfChapters
+        //     //     }
+        //     // });
+        // }).catch((err)=>{
+        //     alert(err)
+        // });
 
-        console.log('Book =>' + JSON.stringify(book));
-
-        BookService.createBook(book).then((res) => {
-
-
-            console.log("admindash-data.bookid", res.bookId)
-            this.setState({
-                bookId: res.bookId
-            })
-            // this.props.history.push({
-            //     pathname: '/AddChapterDetails', state: {
-            //         bookId: res.bookId,
-            //         totalChapter: this.state.noOfChapters
-            //     }
-            // });
-        }).catch((err)=>{
-            alert(err)
-        });
 
     }
     onFileChange = event => {
@@ -99,6 +134,7 @@ class AdminDashboard extends Component {
         var name = this.state.pdfFile.name;
         // var pdfFolder = "/home/lumos/Desktop/DMProject/Books"        //set the appropriate path name to store pdf
         // this.state.pdfFileLocation = pdfFolder.concat(name)
+
 
 
         let formData = new FormData();
@@ -156,9 +192,9 @@ class AdminDashboard extends Component {
                 <div className="Navbar">
                     <nav>
                         <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/AdminDashboard">About</Link></li>
+
                             <li><Link to="/Publisher">Profile</Link></li>
+
                             <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                         </ul>
                     </nav>
@@ -255,6 +291,7 @@ class AdminDashboard extends Component {
                                     onChange={this.handleChange}/>
 
                                 {/* <input
+
                                 type="text"
                                 name="pdfFileLocation"
                                 required="True"
