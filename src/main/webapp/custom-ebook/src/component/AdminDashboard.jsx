@@ -157,7 +157,6 @@ class AdminDashboard extends Component {
                 pathname: '/AddChapterDetails',
                     bookId: this.state.bookId,
                     totalChapter: this.state.noOfChapters
-                
                 });
             }
             
