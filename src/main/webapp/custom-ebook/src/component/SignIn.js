@@ -37,26 +37,32 @@ class SignIn extends Component {
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-                console.log("Signin Component", res.data);
+                console.log("Signin Component", res);
                 localStorage.setItem('User',JSON.stringify(res.data));
 
                 // console.log(JSON.parse(localStorage.getItem('User')));
                 // console.log("Publisher", res.data.publisherFlag);
-
-
-                if(res.data.publisherFlag){
-                    this.props.history.push({
-                        pathname: "/AdminDashboard",
-                        userId: res.data.userId
-                    })
+                if(!res.data){
+                    alert("Username or Password doesn't Match!");
+                    window.location.reload(true);
                 }
                 else{
-                    this.props.history.push({
-                        pathname: "/Dashboard",
-                        userId: res.data.userId
-                    })
+                    if(res.data.publisherFlag){
+                        this.props.history.push({
+                            pathname: "/AdminDashboard",
+                            userId: res.data.userId
+                        })
+                    }
+                    else{
+                        this.props.history.push({
+                            pathname: "/Dashboard",
+                            userId: res.data.userId
+                        })
+                    }
+                    console.log("LoggedIn");
                 }
-                console.log("LoggedIn");
+
+                
         })
             .catch(err =>{
                 console.log(err);
@@ -73,7 +79,7 @@ class SignIn extends Component {
                     </div>
                     <div className="main">
                         <form>
-                            {/*<h4 className="name">Email Address</h4>*/}
+                            <label>Email Address:</label>
                             <input
                                 type="email"
                                 name="email"
@@ -84,7 +90,7 @@ class SignIn extends Component {
                                 onChange={this.handleChange}
                             />
                             <br/>
-                            {/*<h4 className="name">Password</h4>*/}
+                            <label>Password:</label>
                             <input
                                 type="password"
                                 name="password"

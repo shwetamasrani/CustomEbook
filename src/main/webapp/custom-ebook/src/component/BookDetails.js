@@ -167,11 +167,9 @@ class BookDetails extends Component {
                 <h1 style={{color: "white"}}>Book Details</h1>
                 <div className="BookDetailsContainer">
                     <div className="BookDetails_Info">
-                        <img src={bookComponent.imageLocation} style={{width: '20rem'}}/>
+                        <img src={bookComponent.imageLocation} style={{width: '20rem'}} alt="Image could not be fetched!"/>
                         <div>
-                            {this.state.finalCart.length > 0 && (<div className="Preview">
-                                <button onClick={this.goToCart}>Go to Cart</button>
-                            </div>)}
+                            
                             <p>Name: {bookComponent.bookName}</p>
                             <p>Description: {bookComponent.description}</p>
                             <p>Price: Rs.{bookComponent.price}</p>
@@ -197,7 +195,9 @@ class BookDetails extends Component {
                                     <div className="bookButtons">
                                         <button className="addToCart" onClick={this.addToCart}> Add To Cart</button>
                                     </div>
-
+                                    {this.state.finalCart.length > 0 && (<div className="bookButtons">
+                                        <button onClick={this.goToCart}>Go to Cart</button>
+                                    </div>)}
                                 </div>}
                         </div>
                     </div>

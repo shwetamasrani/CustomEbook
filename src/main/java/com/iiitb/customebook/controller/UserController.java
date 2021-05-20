@@ -97,7 +97,7 @@ public class UserController {
     public ResponseEntity<UserDetails> login(@RequestBody LoginDetailsVO loginDetails){
 
         User userDetails = userService.getUserByEmail(loginDetails.getEmailAddress());
-
+        System.out.println(userDetails.getEmail());
         if(userDetails.getEmail().equals(loginDetails.getEmailAddress())
                 && userDetails.getPassword().equals(loginDetails.getPassword())) {
             return ResponseEntity.ok(getUserDetails(userDetails));
