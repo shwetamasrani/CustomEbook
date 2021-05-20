@@ -37,26 +37,32 @@ class SignIn extends Component {
         console.log("HandleClick")
         console.log(user);
         UserService.getUser(user).then(res => {
-                console.log("Signin Component", res.data);
+                console.log("Signin Component", res);
                 localStorage.setItem('User',JSON.stringify(res.data));
 
                 // console.log(JSON.parse(localStorage.getItem('User')));
                 // console.log("Publisher", res.data.publisherFlag);
-
-
-                if(res.data.publisherFlag){
-                    this.props.history.push({
-                        pathname: "/AdminDashboard",
-                        userId: res.data.userId
-                    })
+                if(!res.data){
+                    alert("Username or Password doesn't Match!");
+                    window.location.reload(true);
                 }
                 else{
-                    this.props.history.push({
-                        pathname: "/Dashboard",
-                        userId: res.data.userId
-                    })
+                    if(res.data.publisherFlag){
+                        this.props.history.push({
+                            pathname: "/AdminDashboard",
+                            userId: res.data.userId
+                        })
+                    }
+                    else{
+                        this.props.history.push({
+                            pathname: "/Dashboard",
+                            userId: res.data.userId
+                        })
+                    }
+                    console.log("LoggedIn");
                 }
-                console.log("LoggedIn");
+
+                
         })
             .catch(err =>{
                 console.log(err);

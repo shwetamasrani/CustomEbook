@@ -46,11 +46,18 @@ class SignUp extends Component {
         return (
             <div>
                 <Navbar/>
+                <div className="Welcome">
+                <div className="content">
+                    <label className="logo">EBook Project</label>
+                    <h4>A platform for all your bookish needs. Choose the books and chapters you need and create your
+                        own customized books </h4>
+                </div>
+                </div>
             <div className="SignUp">
                 <div className="register">
                     <h1>Create an account</h1>
                     <p>Already have an account?<Link to="/SignIn"> Sign in</Link></p>
-                    <br/><br/><br/>
+                    
                 </div>
                 <div className="main">
                     <form onSubmit={this.handleSubmit}>
@@ -64,7 +71,7 @@ class SignUp extends Component {
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
-                        <br/><br/>
+                        <br/>
                         <div style={{display: this.state.isPublisher === "Yes" ? "block" : "none"}}>
                             {/*<h2 className="name">Company Name</h2>*/}
                             <input
@@ -132,7 +139,7 @@ class SignUp extends Component {
                             value={this.state.password}
                             onChange={this.handleChange}
                         />
-                        <br/><br/>
+                        
                         <button className="registerButton" onClick={this.saveUser}>Register</button>
                     </form>
                 </div>

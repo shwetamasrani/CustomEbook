@@ -99,8 +99,9 @@ class UserProfile extends Component {
                     <div className="Navbar">
                         <nav>
                             <ul>
-                                <li><Link to="/Cart">Cart</Link></li>
                                 <li><Link to="/Dashboard">Dashboard</Link></li>
+                                <li><Link to="/Cart">Cart</Link></li>
+                                
                                 <li><Link to="/" onClick={this.logout}>Logout</Link></li>
                             </ul>
                         </nav>
