@@ -423,7 +423,7 @@ select {
 .PublisherUploads{
     padding: 5px 20px 5px 20px;
     display: grid;
-    grid-template-columns: 60px 90px 250px 80px 70px 140px;
+    grid-template-columns: 60px 90px 250px 80px 60px 140px;
     color: white;
     grid-column-gap: 20px;
     line-height: 15px;

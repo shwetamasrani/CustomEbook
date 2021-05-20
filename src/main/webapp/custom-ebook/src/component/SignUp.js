@@ -72,8 +72,10 @@ class SignUp extends Component {
                             <option value="Yes">Yes</option>
                         </select>
                         <br/>
+                        <br></br>
                         <div style={{display: this.state.isPublisher === "Yes" ? "block" : "none"}}>
                             {/*<h2 className="name">Company Name</h2>*/}
+                            <label>Company Name:</label>
                             <input
                                 type="text"
                                 name="companyName"
@@ -82,12 +84,13 @@ class SignUp extends Component {
                                 value={this.state.companyName}
                                 onChange={this.handleChange}
                             />
-                            {/*<br/><br/>*/}
+                            
                         </div>
+                        <br/>
                         <div style={{display: this.state.isPublisher === "No" ? "block" : "none"}} id="name">
                             {/*<h2 className="name">Name</h2>*/}
                             {/*<label className="firstLabel">First Name: </label>*/}
-
+                            <label>First Name:</label>
                             <input
                                 type="text"
                                 name="firstName"
@@ -96,8 +99,10 @@ class SignUp extends Component {
                                 value={this.state.firstName}
                                 onChange={this.handleChange}
                             />
+                            <br/><br/>
                             {/*<br/>*/}
                             {/*<label className="lastLabel">Last Name: </label>*/}
+                            <label>Last Name:</label>
                             <input
                                 type="text"
                                 name="lastName"
@@ -107,7 +112,9 @@ class SignUp extends Component {
                                 onChange={this.handleChange}
                             />
                         </div>
+                        <br/><br/>
                         {/*<h2 className="name">Email Address</h2>*/}
+                        <label>Email Address:</label>
                         <input
                             type="email"
                             name="email"
@@ -117,8 +124,10 @@ class SignUp extends Component {
                             value={this.state.email}
                             onChange={this.handleChange}
                         />
+                        <br/><br/>
                         {/*<br/>*/}
                         {/*<h2 className="name">Phone</h2>*/}
+                        <label>Contact Number:</label>
                         <input
                             type="number"
                             name="contactNumber"
@@ -128,8 +137,10 @@ class SignUp extends Component {
                             value={this.state.contactNumber}
                             onChange={this.handleChange}
                         />
+                        <br/><br/>
                         {/*<br/>*/}
                         {/*<h2 className="name">Password</h2>*/}
+                        <label>Password:</label>
                         <input
                             type="password"
                             name="password"
